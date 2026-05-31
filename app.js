@@ -323,12 +323,20 @@ function refreshNotePanel(key) {
 
 // ─── REGULATORY ────────────────────────────────────────────────────────────
 function renderRegulatory() {
-  const sc = (key, title, body) => `
+  const xref = (label, tags) => tags.length ? `
+    <div class="std-links">
+      <span class="std-links-label">${label}:</span>
+      ${tags.map(t => `<span class="std-tag">${t}</span>`).join('')}
+    </div>` : '';
+
+  const sc = (key, title, body, overlaps = [], includes = []) => `
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
       <div class="card-title">${title}</div>
       <p>${body}</p>
+      ${xref(t('Overlaps with', 'Пересекается с'), overlaps)}
+      ${xref(t('Includes / required by', 'Включает / требуется'), includes)}
     </div>
     ${renderNotePanel('reg_' + key)}
   </div>
@@ -346,76 +354,76 @@ function renderRegulatory() {
 ${sc('iso13485', 'ISO 13485 — Quality Management System', t(
   'The organisational foundation for all regulated medical device work. Defines how design, development, production, and post-market activities are managed — from writing requirements through to closing defects. Every other standard operates within this framework. QA provides the data; quality management owns the system.',
   'Организационная основа для всей регулируемой работы с медицинскими устройствами. Определяет как управляются проектирование, разработка, производство и пост-маркетинговые активности — от написания требований до закрытия дефектов. Все остальные стандарты работают внутри этой системы. QA предоставляет данные; quality management владеет системой.'
-))}
+), ['21 CFR Part 820', 'EU MDR 2017/745'], ['IEC 62304', 'ISO 14971', 'IEC 62366'])}
 
 ${sc('iec62304', 'IEC 62304 — Medical Device Software Lifecycle', t(
   'The primary standard governing how medical software is developed and tested. Classifies software by safety risk, requires traceability from requirements through architecture to test results, and mandates structured defect management. This is where QA work lives most directly: test plans, test cases, and verification reports must all align with IEC 62304.',
   'Основной стандарт, регулирующий разработку и тестирование медицинского ПО. Классифицирует ПО по уровню риска безопасности, требует трассируемости от требований через архитектуру к результатам тестов, регламентирует структурированное управление дефектами. Именно здесь наиболее непосредственно работает QA: тест-планы, тест-кейсы и отчёты верификации должны соответствовать IEC 62304.'
-))}
+), ['ISO 14971', '21 CFR Part 820', 'FDA 510(k)'])}
 
 ${sc('iso14971', 'ISO 14971 — Risk Management', t(
   'Requires identifying all hazards, analysing failure modes, defining mitigations, and documenting residual risk throughout the product lifecycle. For AI systems this includes incorrect predictions, dataset bias, edge case behaviour, and automation bias. The risk file directly drives QA priorities: higher risk means more rigorous test coverage.',
   'Требует идентификации всех опасностей, анализа режимов отказов, определения мер по снижению рисков и документирования остаточного риска на протяжении всего жизненного цикла продукта. Для AI-систем это включает неверные предсказания, смещение датасета, граничные случаи и автоматизационное смещение. Risk file напрямую определяет приоритеты QA: выше риск — строже тестовое покрытие.'
-))}
+), ['IEC 62304', 'IEC 62366', 'EU AI Act', 'FDA Cybersecurity Guidance'])}
 
 ${sc('iec62366', 'IEC 62366 — Usability Engineering', t(
   'Addresses how users interact with the system under real clinical conditions. For NV-Sight: can a physician correctly interpret AI output under time pressure? Can they recognise when the system is uncertain? Does the display avoid creating false confidence? Requires documented formative and summative usability studies — QA designs and executes the test scenarios.',
   'Охватывает то, как пользователи взаимодействуют с системой в реальных клинических условиях. Для NV-Sight: может ли врач правильно интерпретировать AI-вывод под давлением времени? Может ли он распознать когда система неуверена? Избегает ли дисплей создания ложной уверенности? Требует задокументированных формативных и суммативных юзабилити-исследований — QA проектирует и выполняет тестовые сценарии.'
-))}
+), ['ISO 14971', 'EU AI Act', 'FDA 510(k)'])}
 
 <h2>${t('United States — FDA', 'США — FDA')}</h2>
 
 ${sc('cfr820', '21 CFR Part 820 — Quality System Regulation', t(
   'The FDA\'s QMS requirements, increasingly harmonised with ISO 13485. Covers design controls, CAPA process, supplier qualification, document control, and production records. Assumed to be in place for any 510(k) submission.',
   'QMS-требования FDA, всё более гармонизированные с ISO 13485. Охватывают design controls, процесс CAPA, квалификацию поставщиков, контроль документации и производственные записи. Предполагается соответствие для любой 510(k) подачи.'
-))}
+), ['ISO 13485', 'IEC 62304'])}
 
 ${sc('fda510k', 'FDA 510(k) — Premarket Notification', t(
   'The primary regulatory pathway for CoPilotMD as a Class II medical device. Requires demonstrating substantial equivalence to predicate devices — AiDOC, Viz.ai, and RapidAI are the relevant comparators. QA provides the performance test evidence package that forms the technical core of the submission.',
   'Основной регуляторный путь для CoPilotMD как медицинского устройства класса II. Требует демонстрации существенной эквивалентности предикатным устройствам — AiDOC, Viz.ai и RapidAI являются релевантными компараторами. QA предоставляет пакет доказательств производительности, который формирует техническое ядро submission.'
-))}
+), ['IEC 62304', 'ISO 14971', 'IEC 62366', 'FDA AI/ML SaMD', 'FDA Cybersecurity Guidance', 'PCCP'])}
 
 ${sc('fdaaiml', 'FDA AI/ML SaMD Guidance', t(
   'The FDA\'s framework for AI-enabled Software as a Medical Device. Sets expectations around model transparency, performance thresholds, clinical validation, and lifecycle management. Defines what the validation evidence package must contain and how it should be structured.',
   'Руководство FDA по AI-enabled Software as a Medical Device. Определяет ожидания относительно прозрачности модели, порогов производительности, клинической валидации и управления жизненным циклом. Задаёт структуру и содержание пакета доказательств валидации.'
-))}
+), ['FDA 510(k)', 'EU AI Act', 'ISO 14971'])}
 
 ${sc('fdacyber', 'FDA Cybersecurity Guidance', t(
   'Mandatory for all new device submissions since 2023. Requires threat modelling, a Software Bill of Materials (SBOM), a vulnerability management plan, and post-market monitoring protocols. QA contributes security test cases and validates that controls perform as specified.',
   'Обязательно для всех новых подач устройств с 2023 года. Требует моделирование угроз, Software Bill of Materials (SBOM), план управления уязвимостями и протоколы пост-маркетингового мониторинга. QA вносит тест-кейсы безопасности и валидирует что контроли работают как заявлено.'
-))}
+), ['FDA 510(k)', 'ISO 14971', 'EU MDR 2017/745'])}
 
 ${sc('pccp', 'PCCP — Predetermined Change Control Plan', t(
   'Required when the AI model will be updated or retrained after market clearance. Defines in advance which types of changes are permitted without a new 510(k) submission. If model updates are part of the product roadmap — and for an AI medical device they almost certainly are — the PCCP must be built into the QA framework from day one.',
   'Требуется когда AI-модель будет обновляться или переобучаться после получения market clearance. Заранее определяет какие типы изменений разрешены без новой подачи 510(k). Если обновления модели являются частью roadmap — а для AI медицинского устройства это почти наверняка так — PCCP необходимо встроить в QA-фреймворк с первого дня.'
-))}
+), ['FDA 510(k)', 'EU AI Act'])}
 
 ${sc('hipaa', 'HIPAA', t(
   'Governs the use of US patient data. All clinical data from Mount Sinai and St. Vincent must be properly de-identified before it can enter the validation pipeline. Not a QA deliverable, but a hard prerequisite: testing cannot start on US data until HIPAA compliance is confirmed.',
   'Регулирует использование данных пациентов США. Все клинические данные из Mount Sinai и St. Vincent должны быть надлежащим образом деидентифицированы до входа в тестовый pipeline. Не является QA-deliverable, но является жёстким prerequisite: тестирование на US-данных не может начаться пока не подтверждено соответствие HIPAA.'
-))}
+), ['GDPR', 'FDA 510(k)'])}
 
 <h2>${t('Europe — CE Mark', 'Европа — CE Mark')}</h2>
 
 ${sc('mdr', 'EU MDR 2017/745 — Medical Device Regulation', t(
   'The primary European regulatory framework, replacing the older MDD directive. More demanding than FDA in several respects — particularly around clinical evidence requirements and post-market surveillance obligations. Meeting MDR requirements typically simplifies subsequent FDA compliance, not the reverse.',
   'Основная европейская регуляторная система, заменившая старую директиву MDD. Более требовательная чем FDA в ряде аспектов — особенно в части требований к клиническим доказательствам и обязательствам по пост-маркетинговому надзору. Соответствие требованиям MDR, как правило, упрощает последующее соответствие FDA, а не наоборот.'
-))}
+), ['ISO 13485', 'IEC 62304', 'ISO 14971', 'IEC 62366', 'FDA 510(k)'], ['MDR Annex I (GSPR)'])}
 
 ${sc('gspr', 'MDR Annex I — General Safety and Performance Requirements (GSPR)', t(
   'The technical checklist every device must satisfy to receive CE Mark. Each requirement must be mapped to specific evidence — test reports, standards compliance, clinical data. QA produces a substantial portion of this evidence through verification and validation testing.',
   'Технический чеклист который каждое устройство должно выполнить для получения CE Mark. Каждое требование должно быть привязано к конкретным доказательствам — тестовые отчёты, соответствие стандартам, клинические данные. QA производит значительную часть этих доказательств через верификационное и валидационное тестирование.'
-))}
+), ['EU MDR 2017/745', 'IEC 62304', 'ISO 14971'])}
 
 ${sc('gdpr', 'GDPR — General Data Protection Regulation', t(
   'The European equivalent of HIPAA, with stricter consent and data minimisation requirements. Applies to any clinical data from EU patients used in training or validation. Must be confirmed before any EU patient data enters the testing pipeline.',
   'Европейский эквивалент HIPAA, с более строгими требованиями к согласию и минимизации данных. Применяется к любым клиническим данным пациентов ЕС используемым в обучении или валидации. Должно быть подтверждено до того как любые данные пациентов ЕС войдут в тестовый pipeline.'
-))}
+), ['HIPAA', 'EU MDR 2017/745'])}
 
 ${sc('euaiact', 'EU AI Act', t(
   'New regulation entering into force 2024–2026, classifying medical AI as high-risk by definition. Adds requirements beyond MDR: transparency of AI decision logic, human oversight mechanisms, robustness testing, bias assessment, and conformity assessment. Overlaps significantly with MDR but cannot be satisfied by MDR compliance alone.',
   'Новый регламент, вступающий в силу в 2024–2026 годах, классифицирующий медицинский AI как высокорисковый по определению. Добавляет требования сверх MDR: прозрачность логики AI-решений, механизмы человеческого надзора, тестирование на устойчивость, оценка смещения и оценка соответствия. Существенно пересекается с MDR, но не покрывается только соответствием MDR.'
-))}
+), ['EU MDR 2017/745', 'FDA AI/ML SaMD', 'ISO 14971', 'IEC 62366'])}
 
 <h2>${t('QA Approach', 'Принцип работы QA')}</h2>
 
