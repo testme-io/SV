@@ -45,16 +45,18 @@ const NAV = [
   { id: 'risks',       icon: '⚠️' },
   { id: 'questions',   icon: '❓' },
   { id: 'plan',        icon: '📋' },
+  { id: 'docs',        icon: '📄' },
   { id: 'needs',       icon: '🛠️' },
 ];
 
 const LABELS = {
-  overview:   ['Product Overview',      'Обзор продукта'],
-  regulatory: ['Regulatory Standards',  'Регуляторные стандарты'],
-  risks:      ['Key Risks',             'Ключевые риски'],
-  questions:  ['Questions for CTO',     'Вопросы к CTO'],
-  plan:       ['Engagement Plan',       'План работы'],
-  needs:      ['What I Need',           'Что мне нужно'],
+  overview:   ['Product Overview',           'Обзор продукта'],
+  regulatory: ['Regulatory Standards',       'Регуляторные стандарты'],
+  risks:      ['Key Risks',                  'Ключевые риски'],
+  questions:  ['Questions for CTO',          'Вопросы к CTO'],
+  plan:       ['Preliminary Work Plan',      'Предварительный план работы'],
+  docs:       ['QA Documents',               'Документы QA'],
+  needs:      ['What I Need',                'Что мне нужно'],
 };
 
 function label(id) { return LABELS[id][L === 'en' ? 0 : 1]; }
@@ -85,6 +87,7 @@ function showSection(id) {
     risks:      renderRisks,
     questions:  renderQuestions,
     plan:       renderPlan,
+    docs:       renderDocs,
     needs:      renderNeeds,
   };
   main.innerHTML = (renders[id] || (() => ''))();
@@ -836,10 +839,10 @@ ${nice.map((q,i) => qCard(q, 'nice', t('NICE TO KNOW','ХОРОШО БЫ'), `q_n
 // ─── PLAN ──────────────────────────────────────────────────────────────────
 function renderPlan() {
   return `
-<h1>${t('Engagement Plan', 'План работы')}</h1>
+<h1>${t('Preliminary Work Plan', 'Предварительный план работы')}</h1>
 <p class="section-desc">${t(
-  'Three variants — selected based on what they actually need. Variant B eliminated: too slow to FDA.',
-  'Три варианта — выбирается исходя из того что им реально нужно. Вариант B исключён: слишком долго до FDA.'
+  'Three variants analysed — selected based on what they actually need and what resources are available. Variant B eliminated: pushes FDA submission to month 9–10.',
+  'Три варианта проанализированы — выбирается исходя из реальных потребностей и доступных ресурсов. Вариант B исключён: сдвигает FDA submission на месяц 9–10.'
 )}</p>
 
 <div class="variant-tabs">
@@ -924,21 +927,25 @@ function renderPlan() {
 <!-- VARIANT B -->
 <div id="variant-B" class="variant-content">
   <div class="highlight-box" style="background:#fee2e2;border-color:#fca5a5;color:#7f1d1d">
-    <strong style="color:#7f1d1d">⛔ ${t('Eliminated — Too Slow', 'Исключён — Слишком долго')}</strong>
-    ${t(
-      'This variant (QA process maturity first, regulatory second) pushes FDA submission to month 9–10. For a company that needs US market entry, that is not viable. Shown here for completeness only — not a proposal.',
-      'Этот вариант (сначала зрелость QA-процесса, потом regulatory) сдвигает FDA submission на месяц 9–10. Для компании которой нужен выход на US рынок — это неприемлемо. Показан для полноты — не предложение.'
-    )}
+    <strong style="color:#7f1d1d">⛔ ${t('Eliminated — Too Slow to FDA', 'Исключён — Слишком медленный путь к FDA')}</strong>
+    <p style="margin:12px 0 8px">${t(
+      'What Variant B was: build internal QA maturity first — processes, culture, full test coverage across all modules — before turning attention to regulatory. Proper QA governance, then regulatory preparation.',
+      'Что представлял собой Вариант B: сначала выстроить внутреннюю зрелость QA — процессы, культуру, полное тестовое покрытие всех модулей — и только потом переходить к regulatory. Сначала правильная QA-система, потом регуляторная подготовка.'
+    )}</p>
+    <p style="margin:0">${t(
+      'Why eliminated: this sequence pushes the FDA 510(k) submission to month 9–10 at minimum. For a company whose primary goal is US market entry, that timeline is not viable. QA process maturity must be built in parallel with regulatory preparation — not before it.',
+      'Почему исключён: такая последовательность сдвигает FDA 510(k) submission минимум на месяц 9–10. Для компании, чья основная цель — выход на рынок США, этот срок неприемлем. Зрелость QA-процессов должна строиться параллельно с регуляторной подготовкой — не до неё.'
+    )}</p>
   </div>
 </div>
 
 <!-- VARIANT C -->
 <div id="variant-C" class="variant-content">
   <div class="highlight-box" style="background:#f0fdf4;border-color:#86efac;color:#14532d">
-    <strong style="color:#14532d">✅ ${t('Recommended — With a Junior QA', 'Рекомендуется — с Junior QA')}</strong>
+    <strong style="color:#14532d">✅ ${t('Optimal — With a Junior QA (ideal scenario)', 'Оптимальный — с Junior QA (идеальный сценарий)')}</strong>
     ${t(
-      'I own the regulatory track and strategic QA direction. A junior QA engineer handles test execution, documentation, and defect tracking under my direct guidance. Fastest path to FDA submission with proper quality coverage on both tracks simultaneously.',
-      'Я отвечаю за regulatory трек и стратегическое направление QA. Junior QA инженер выполняет тесты, ведёт документацию и трекинг дефектов под моим прямым руководством. Самый быстрый путь к FDA submission с правильным QA покрытием на обоих треках одновременно.'
+      'I own the regulatory track and strategic QA direction. A junior QA engineer handles test execution, documentation, and defect tracking under my direct guidance. Fastest path to FDA submission with proper quality coverage on both tracks simultaneously. Note: if a junior is not available initially, this variant reverts to Variant A until headcount is approved.',
+      'Я отвечаю за regulatory трек и стратегическое направление QA. Junior QA инженер выполняет тесты, ведёт документацию и трекинг дефектов под моим прямым руководством. Самый быстрый путь к FDA submission с правильным покрытием на обоих треках. Примечание: если junior недоступен сразу — вариант C фактически совпадает с вариантом A до момента найма.'
     )}
   </div>
 
@@ -1003,6 +1010,172 @@ function showVariant(v) {
   });
 }
 
+// ─── QA DOCUMENTS ──────────────────────────────────────────────────────────
+const DOC_STATUSES = ['', 'required', 'in-progress', 'done', 'skip'];
+const DOC_STATUS_LABELS = {
+  '':           ['❓ To confirm',   '❓ Уточнить'],
+  'required':   ['✅ Required',     '✅ Нужен'],
+  'in-progress':['⏳ In progress',  '⏳ В работе'],
+  'done':       ['✔️ Done',         '✔️ Готов'],
+  'skip':       ['⛔ Not needed',   '⛔ Не нужен'],
+};
+const DOC_STATUS_COLORS = {
+  '':           'background:#f1f5f9;color:#64748b;border-color:#cbd5e1',
+  'required':   'background:#eff6ff;color:#1d4ed8;border-color:#93c5fd',
+  'in-progress':'background:#fffbeb;color:#92400e;border-color:#fcd34d',
+  'done':       'background:#f0fdf4;color:#166534;border-color:#86efac',
+  'skip':       'background:#fef2f2;color:#991b1b;border-color:#fca5a5',
+};
+
+function getDocStatus(key) { return localStorage.getItem('docstatus_' + key) || ''; }
+function cycleDocStatus(key) {
+  const cur = getDocStatus(key);
+  const idx = DOC_STATUSES.indexOf(cur);
+  const next = DOC_STATUSES[(idx + 1) % DOC_STATUSES.length];
+  next ? localStorage.setItem('docstatus_' + key, next) : localStorage.removeItem('docstatus_' + key);
+  // Re-render the status button in place
+  const btn = document.getElementById('docstatus-' + key);
+  if (btn) {
+    const lbl = DOC_STATUS_LABELS[next] || DOC_STATUS_LABELS[''];
+    btn.textContent = lbl[L === 'en' ? 0 : 1];
+    btn.setAttribute('style', 'cursor:pointer;border:1px solid;border-radius:20px;padding:4px 14px;font-size:0.82rem;font-weight:600;' + (DOC_STATUS_COLORS[next] || DOC_STATUS_COLORS['']));
+  }
+}
+
+function renderDocCard(key, icon, title, enBody, ruBody) {
+  const st  = getDocStatus(key);
+  const lbl = DOC_STATUS_LABELS[st] || DOC_STATUS_LABELS[''];
+  const col = DOC_STATUS_COLORS[st] || DOC_STATUS_COLORS[''];
+  return `
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        ${icon} ${title}
+        <button id="docstatus-${key}" onclick="cycleDocStatus('${key}')"
+          style="cursor:pointer;border:1px solid;border-radius:20px;padding:4px 14px;font-size:0.82rem;font-weight:600;${col}">
+          ${lbl[L === 'en' ? 0 : 1]}
+        </button>
+      </div>
+      <p>${t(enBody, ruBody)}</p>
+    </div>
+    ${renderNotePanel('doc_' + key)}
+  </div>
+</div>`;
+}
+
+function renderDocs() {
+  return `
+<h1>${t('QA Documents', 'Документы QA')}</h1>
+<p class="section-desc">${t(
+  'All QA documents to be created. Status can be set per document — click the badge to cycle through states. Notes field available on each card.',
+  'Все QA-документы которые будут созданы. Статус устанавливается на каждом документе — нажмите значок для переключения. На каждой карточке есть поле заметок.'
+)}</p>
+
+<h2>📐 ${t('Foundation — Build First', 'Фундамент — создаётся первым')}</h2>
+
+${renderDocCard('teststrategy', '🗺️',
+  t('Test Strategy', 'Test Strategy'),
+  'The master QA framework document. Defines scope, testing approach, risk classification, severity matrix, tools selection, automation stance, and definition of done. Required for 510(k) and IEC 62304 compliance. Produced in Month 1 — everything else depends on it.',
+  'Главный QA-документ верхнего уровня. Определяет scope, подход к тестированию, классификацию рисков, severity матрицу, выбор инструментов, позицию по автоматизации и definition of done. Необходим для 510(k) и IEC 62304. Создаётся в месяц 1 — всё остальное зависит от него.'
+)}
+
+${renderDocCard('testmatrix', '🔢',
+  t('Test Matrix', 'Test Matrix'),
+  'Features × Platforms × Risk levels. Shows what gets tested, how (manual/automated), at what coverage level, and in what priority order. Makes coverage gaps visible and drives resource allocation.',
+  'Функции × Платформы × Уровни риска. Показывает что тестируется, как (вручную/автоматизировано), с каким уровнем покрытия и в каком порядке приоритетов. Делает пробелы в покрытии видимыми и управляет распределением ресурсов.'
+)}
+
+${renderDocCard('bugreporting', '🐛',
+  t('Bug Reporting Standards', 'Стандарты репортинга дефектов'),
+  'Severity definitions (Critical / High / Medium / Low), priority levels, mandatory Jira fields, SLA per severity, escalation rules, and bug report template. Without this, defects are filed inconsistently and triage is guesswork.',
+  'Определения severity (Critical / High / Medium / Low), уровни приоритета, обязательные поля Jira, SLA по severity, правила эскалации и шаблон баг-репорта. Без этого дефекты фиксируются непоследовательно и триаж становится угадыванием.'
+)}
+
+${renderDocCard('metrics', '📊',
+  t('QA Metrics & Quality Gates', 'QA-метрики и Quality Gates'),
+  'Which metrics are tracked (test coverage, defect density, pass rate, open critical count, mean time to fix), reporting cadence, and quality gate thresholds that must pass before any release. Establishes QA visibility across the team.',
+  'Какие метрики отслеживаются (test coverage, defect density, pass rate, количество открытых критических, mean time to fix), периодичность репортинга и пороги quality gate которые должны быть пройдены перед любым релизом. Обеспечивает видимость QA для всей команды.'
+)}
+
+<h2>📋 ${t('Operational — Maintained Throughout', 'Операционные — ведутся постоянно')}</h2>
+
+${renderDocCard('testplans', '📝',
+  t('Test Plans', 'Тест-планы'),
+  'Per-module and per-release test plans. Separate plans for Module 1a, Module 1b, Module 2, integration testing, and regression. Each plan defines scope, entry/exit criteria, test environment, data requirements, and schedule.',
+  'Тест-планы по модулям и по релизам. Отдельные планы для Module 1a, Module 1b, Module 2, интеграционного тестирования и регрессии. Каждый план определяет scope, entry/exit критерии, тестовую среду, требования к данным и расписание.'
+)}
+
+${renderDocCard('testcases', '✅',
+  t('Test Cases', 'Тест-кейсы'),
+  'Actual test scenarios — organized by module, risk level, and test type (functional, performance, usability, security, regression). Written with enough detail that any tester can execute them consistently. Linked to requirements for traceability.',
+  'Сами тестовые сценарии — организованы по модулям, уровням риска и типам тестирования (функциональные, производительность, юзабилити, безопасность, регрессия). Написаны достаточно подробно чтобы любой тестировщик мог выполнить их последовательно. Привязаны к требованиям для трассируемости.'
+)}
+
+${renderDocCard('defectworkflow', '🔄',
+  t('Defect Tracking Workflow', 'Workflow трекинга дефектов'),
+  'How defects are filed, triaged, assigned, resolved, verified, and closed. Jira configuration guide: statuses, transitions, fields, dashboards, and filters. Defines who owns what at each stage.',
+  'Как дефекты фиксируются, проходят триаж, назначаются, исправляются, верифицируются и закрываются. Руководство по настройке Jira: статусы, переходы, поля, дашборды и фильтры. Определяет владельцев на каждом этапе.'
+)}
+
+${renderDocCard('releasereadiness', '🚦',
+  t('Release Readiness Criteria', 'Критерии готовности к релизу'),
+  'Go/no-go checklist per release. Metrics snapshot, open critical and high defect count, regression status, sign-off requirements. Makes release decisions transparent and defensible — especially important for a regulated product.',
+  'Go/no-go чеклист для каждого релиза. Снапшот метрик, количество открытых критических и высоких дефектов, статус регрессии, требования к подписям. Делает решения о релизе прозрачными и обоснованными — особенно важно для регулируемого продукта.'
+)}
+
+${renderDocCard('qualityreport', '📈',
+  t('Quality Report', 'Quality Report'),
+  'Periodic QA status report — sprint or monthly. Summarizes test execution progress, defect trends, coverage status, risks, and blockers. The primary QA communication artefact for product and engineering leadership.',
+  'Периодический QA статус-отчёт — спринтовый или ежемесячный. Суммирует прогресс выполнения тестов, тренды дефектов, статус покрытия, риски и блокеры. Основной артефакт QA-коммуникации для руководства продукта и разработки.'
+)}
+
+<h2>⚖️ ${t('Regulatory — Required for 510(k) / CE Mark', 'Регуляторные — обязательны для 510(k) / CE Mark')}</h2>
+
+${renderDocCard('traceability', '🔗',
+  t('Traceability Matrix', 'Матрица трассируемости'),
+  'Requirements → Test Cases → Test Results. Required by IEC 62304 and FDA. Proves that every stated requirement is covered by at least one test case, and every test case maps to a result. The auditor\'s first request.',
+  'Требования → Тест-кейсы → Результаты тестов. Требуется IEC 62304 и FDA. Доказывает что каждое заявленное требование покрыто хотя бы одним тест-кейсом, и каждый тест-кейс привязан к результату. Первый запрос аудитора.'
+)}
+
+${renderDocCard('vnvreport', '📑',
+  t('Verification & Validation Report', 'Отчёт верификации и валидации'),
+  'Summary of all V&V testing — the technical core of the 510(k) submission package. Covers system performance on the independent validation dataset, comparison with predicate devices, statistical analysis, and overall safety/performance conclusions.',
+  'Сводный отчёт всего V&V-тестирования — техническое ядро пакета 510(k) submission. Охватывает производительность системы на независимом validation датасете, сравнение с предикатными устройствами, статистический анализ и общие выводы по безопасности/производительности.'
+)}
+
+${renderDocCard('riskcontrib', '⚠️',
+  t('Risk Assessment Contributions (ISO 14971)', 'Вклад в оценку рисков (ISO 14971)'),
+  'QA contribution to the product risk file: failure modes identified during testing, evidence that mitigations work as intended, residual risk data. Not the full risk file (that is owned by the engineering team) — but QA provides the test evidence that populates it.',
+  'Вклад QA в risk file продукта: режимы отказов выявленные при тестировании, доказательства что меры снижения работают как задумано, данные остаточного риска. Не весь risk file (им владеет команда разработки) — но QA предоставляет тестовые доказательства которые его наполняют.'
+)}
+
+${renderDocCard('dhf', '🗂️',
+  t('Design History File (DHF) — QA Section', 'Design History File (DHF) — раздел QA'),
+  'The master regulatory evidence dossier. QA owns the test-related sections: Test Strategy, test plans, test cases, test results, defect records, and V&V report. Ensures nothing produced is lost and everything is traceable to a specific requirement or risk.',
+  'Главный регуляторный доказательный досье. QA владеет разделами связанными с тестированием: Test Strategy, тест-планы, тест-кейсы, результаты тестов, записи о дефектах и V&V отчёт. Обеспечивает что ничто произведённое не теряется и всё трассируется к конкретному требованию или риску.'
+)}
+
+${renderDocCard('sat', '🏥',
+  t('Site Acceptance Testing Protocol', 'Протокол приёмочного тестирования на сайте'),
+  'Standardised deployment checklist for each clinical site (Sheba, Mount Sinai, St. Vincent). Ensures consistent installation, configuration, and sign-off at every site. Validated once on Sheba, then replicated. Critical for multi-site submissions.',
+  'Стандартизированный чеклист развёртывания для каждого клинического сайта (Sheba, Mount Sinai, St. Vincent). Обеспечивает последовательную установку, конфигурацию и подпись на каждом сайте. Валидируется на Sheba, затем тиражируется. Критичен для multi-site submissions.'
+)}
+
+${renderDocCard('usability', '👁️',
+  t('Usability Testing Report (IEC 62366)', 'Отчёт юзабилити-тестирования (IEC 62366)'),
+  'Formative and summative usability study documentation. Can the physician correctly interpret AI output under time pressure? Does the UI avoid creating false confidence? QA designs and executes the test scenarios; the report documents findings and residual usability risks.',
+  'Документация формативных и суммативных юзабилити-исследований. Может ли врач правильно интерпретировать AI-вывод под давлением времени? Избегает ли UI создания ложной уверенности? QA проектирует и выполняет тестовые сценарии; отчёт документирует результаты и остаточные юзабилити-риски.'
+)}
+
+${renderDocCard('pccp', '🔁',
+  t('PCCP — Predetermined Change Control Plan', 'PCCP — Predetermined Change Control Plan'),
+  'Required if the AI model will be updated or retrained after market clearance. Defines in advance which types of changes are permitted without a new 510(k) submission. If model updates are on the roadmap — for an AI medical device they almost certainly are — the PCCP must be scoped and included in the original submission.',
+  'Требуется если AI-модель будет обновляться или переобучаться после получения market clearance. Заранее определяет какие типы изменений разрешены без новой подачи 510(k). Если обновления модели есть в roadmap — для AI медицинского устройства это почти наверняка так — PCCP необходимо включить в исходный submission.'
+)}
+`;
+}
+
 // ─── NEEDS ─────────────────────────────────────────────────────────────────
 function renderNeeds() {
   return `
@@ -1030,8 +1203,8 @@ function renderNeeds() {
 </div>${renderNotePanel('need_dev')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
-  <div class="card-title">👶 ${t('Junior QA (Variant C)', 'Junior QA (Вариант C)')}</div>
-  <p>${t('For Variant C: handles test execution and documentation under my direction. Frees me for regulatory and strategic work. Fastest path to submission.','Для Варианта C: выполняет тесты и ведёт документацию под моим руководством. Освобождает меня для regulatory и стратегической работы. Самый быстрый путь к submission.')}</p>
+  <div class="card-title">👶 ${t('Junior QA — Later', 'Junior QA — Позже')}</div>
+  <p>${t('Not expected initially — understood. When the time comes: handles test execution and documentation under my direction, freeing me for regulatory and strategic work. This is what unlocks Variant C and the fastest path to submission. Worth raising after the first 30–60 days once the scope is visible.','Изначально не ожидается — понято. Когда придёт время: выполняет тесты и ведёт документацию под моим руководством, освобождая меня для regulatory и стратегической работы. Именно это открывает Вариант C и самый быстрый путь к submission. Стоит поднять после первых 30–60 дней когда объём работ станет очевиден.')}</p>
 </div>${renderNotePanel('need_junior')}</div></div>
 
 <h2>📊 ${t('Data', 'Данные')}</h2>
