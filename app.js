@@ -177,6 +177,61 @@ function renderOverview() {
 </div>`;
 }
 
+// ─── RISK ANSWERS ──────────────────────────────────────────────────────────
+function getAnswer(i) {
+  return localStorage.getItem('risk_answer_' + i) || '';
+}
+
+function renderAnswerPanel(i) {
+  const saved   = getAnswer(i);
+  const label   = t('CTO Answer', 'Ответ CTO');
+  const ph      = t('Type the answer here…', 'Введите ответ здесь…');
+  const saveBtn = t('Save', 'Сохранить');
+  const editBtn = t('Edit', 'Изменить');
+
+  if (saved) {
+    return `<div class="risk-answer" id="ra-panel-${i}">
+  <div class="answer-label">${label}</div>
+  <div class="answer-text">${saved.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>
+  <button class="answer-btn edit" onclick="editRiskAnswer(${i})">${editBtn}</button>
+</div>`;
+  }
+  return `<div class="risk-answer" id="ra-panel-${i}">
+  <div class="answer-label">${label}</div>
+  <textarea id="ra-input-${i}" placeholder="${ph}"></textarea>
+  <button class="answer-btn save" onclick="saveRiskAnswer(${i})">${saveBtn}</button>
+</div>`;
+}
+
+function saveRiskAnswer(i) {
+  const input = document.getElementById('ra-input-' + i);
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) return;
+  localStorage.setItem('risk_answer_' + i, val);
+  refreshAnswerPanel(i);
+}
+
+function editRiskAnswer(i) {
+  const panel = document.getElementById('ra-panel-' + i);
+  if (!panel) return;
+  const saved = getAnswer(i);
+  panel.innerHTML = `
+  <div class="answer-label">${t('CTO Answer', 'Ответ CTO')}</div>
+  <textarea id="ra-input-${i}">${saved}</textarea>
+  <button class="answer-btn save" onclick="saveRiskAnswer(${i})">${t('Save', 'Сохранить')}</button>`;
+}
+
+function refreshAnswerPanel(i) {
+  const panel = document.getElementById('ra-panel-' + i);
+  if (!panel) return;
+  const saved = getAnswer(i);
+  panel.innerHTML = `
+  <div class="answer-label">${t('CTO Answer', 'Ответ CTO')}</div>
+  <div class="answer-text">${saved.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>
+  <button class="answer-btn edit" onclick="editRiskAnswer(${i})">${t('Edit', 'Изменить')}</button>`;
+}
+
 // ─── RISKS ─────────────────────────────────────────────────────────────────
 function renderRisks() {
   const risks = [
@@ -273,16 +328,21 @@ function renderRisks() {
   'Риски, которые я вижу до первого разговора — только на основе case study.'
 )}</p>
 
-${risks.map(r => `
+${risks.map((r, i) => `
 <div class="card risk-card ${r.level}">
-  <div class="card-title">
-    <span class="badge ${r.level}">${r.level.toUpperCase()}</span>
-    ${r.title}
-  </div>
-  <p>${r.body}</p>
-  <div class="expect-box">
-    <strong>${t('Expected answer / action', 'Ожидаемый ответ / действие')}</strong>
-    ${r.expect}
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title">
+        <span class="badge ${r.level}">${r.level.toUpperCase()}</span>
+        ${r.title}
+      </div>
+      <p>${r.body}</p>
+      <div class="expect-box">
+        <strong>${t('Expected answer / action', 'Ожидаемый ответ / действие')}</strong>
+        ${r.expect}
+      </div>
+    </div>
+    ${renderAnswerPanel(i)}
   </div>
 </div>
 `).join('')}`;
