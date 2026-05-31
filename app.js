@@ -80,6 +80,7 @@ function buildNav() {
 function showSection(id) {
   currentSection = id;
   buildNav();
+  history.replaceState(null, '', '#' + id);
   const main = document.getElementById('main');
   const renders = {
     overview:   renderOverview,
@@ -98,8 +99,8 @@ function renderOverview() {
   return `
 <h1>CoPilotMD NV-Sight</h1>
 <p class="section-desc">${t(
-  'AI system for neuro-endovascular procedures — what I understood before the meeting.',
-  'AI-система для нейроэндоваскулярных процедур — что я понял до встречи.'
+  'AI system for neuro-endovascular procedures -what I understood before the meeting.',
+  'AI-система для нейроэндоваскулярных процедур -что я понял до встречи.'
 )}</p>
 
 <h2>${t('What the Product Does', 'Что делает продукт')}</h2>
@@ -108,7 +109,7 @@ function renderOverview() {
     <div class="risk-main">
       <p>${t(
         'CoPilotMD NV-Sight is a real-time AI assistant for interventional neuro-radiology. It analyzes angiographic X-ray images during minimally invasive stroke procedures and provides the physician with real-time guidance: vessel anomaly detection, functional brain mapping, and automated clinical reporting.',
-        'CoPilotMD NV-Sight — AI-ассистент реального времени для интервенционной нейрорадиологии. Анализирует ангиографические рентгеновские изображения во время малоинвазивных процедур лечения инсульта и предоставляет врачу помощь в реальном времени: детекция сосудистых аномалий, функциональное картирование мозга, автоматизированные клинические отчёты.'
+        'CoPilotMD NV-Sight -AI-ассистент реального времени для интервенционной нейрорадиологии. Анализирует ангиографические рентгеновские изображения во время малоинвазивных процедур лечения инсульта и предоставляет врачу помощь в реальном времени: детекция сосудистых аномалий, функциональное картирование мозга, автоматизированные клинические отчёты.'
       )}</p>
     </div>
     ${renderNotePanel('ov_product')}
@@ -125,11 +126,11 @@ function renderOverview() {
         CoPilotMD Workstation<br>
         &nbsp;&nbsp;&nbsp;&nbsp;(Receiver → Organizer → AI Classifier)<br>
         &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
-        ${t('INR Display — laptop in hospital network', 'INR Display — ноутбук в сети госпиталя')}
+        ${t('INR Display -laptop in hospital network', 'INR Display -ноутбук в сети госпиталя')}
       </p>
       <p style="margin-top:12px;font-size:13px;color:#6b7a99">${t(
-        '⚠ Currently runs on a laptop in the hospital domain. Likely a temporary architecture — QA must be designed to survive infrastructure changes.',
-        '⚠ Сейчас работает на ноутбуке в домене госпиталя. Вероятно временная архитектура — QA нужно строить с расчётом на изменения инфраструктуры.'
+        '⚠ Currently runs on a laptop in the hospital domain. Likely a temporary architecture -QA must be designed to survive infrastructure changes.',
+        '⚠ Сейчас работает на ноутбуке в домене госпиталя. Вероятно временная архитектура -QA нужно строить с расчётом на изменения инфраструктуры.'
       )}</p>
     </div>
     ${renderNotePanel('ov_arch')}
@@ -141,8 +142,8 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
-      <div class="card-title"><span class="status-pill done" style="margin-right:8px">${t('Live pilot','Живой пилот')}</span> Module 1a — DETECT</div>
-      <p>${t('Real-time detection of vessel anomalies — occlusions, vasospasms, emboli. Live pilot at Sheba Medical Center, Israel.','Детекция сосудистых аномалий в реальном времени — окклюзии, вазоспазмы, эмболии. Живой пилот в Sheba Medical Center, Израиль.')}</p>
+      <div class="card-title"><span class="status-pill done" style="margin-right:8px">${t('Live pilot','Живой пилот')}</span> Module 1a -DETECT</div>
+      <p>${t('Real-time detection of vessel anomalies -occlusions, vasospasms, emboli. Live pilot at Sheba Medical Center, Israel.','Детекция сосудистых аномалий в реальном времени -окклюзии, вазоспазмы, эмболии. Живой пилот в Sheba Medical Center, Израиль.')}</p>
     </div>
     ${renderNotePanel('ov_mod1a')}
   </div>
@@ -151,8 +152,8 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
-      <div class="card-title"><span class="status-pill feasibility" style="margin-right:8px">Feasibility</span> Module 1b — UNDERSTAND</div>
-      <p>${t('Functional brain mapping — identifies eloquent brain zones at risk during the procedure. Currently at feasibility stage.','Функциональное картирование мозга — выявляет зоны элоквентного мозга под угрозой во время процедуры. Сейчас на стадии feasibility.')}</p>
+      <div class="card-title"><span class="status-pill feasibility" style="margin-right:8px">Feasibility</span> Module 1b -UNDERSTAND</div>
+      <p>${t('Functional brain mapping -identifies eloquent brain zones at risk during the procedure. Currently at feasibility stage.','Функциональное картирование мозга -выявляет зоны элоквентного мозга под угрозой во время процедуры. Сейчас на стадии feasibility.')}</p>
     </div>
     ${renderNotePanel('ov_mod1b')}
   </div>
@@ -161,7 +162,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
-      <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 2 — INSIGHT</div>
+      <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 2 -INSIGHT</div>
       <p>${t('Real-time risk analysis and procedural recommendations. Planned after MVP.','Анализ рисков и рекомендации в реальном времени. После MVP.')}</p>
     </div>
     ${renderNotePanel('ov_mod2')}
@@ -171,7 +172,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
-      <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 3 — REPORT</div>
+      <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 3 -REPORT</div>
       <p>${t('Automated post-procedure clinical reporting. Planned after MVP.','Автоматические клинические отчёты после процедуры. После MVP.')}</p>
     </div>
     ${renderNotePanel('ov_mod3')}
@@ -348,42 +349,42 @@ function renderRegulatory() {
   return `
 <h1>${t('Regulatory Standards', 'Регуляторные стандарты')}</h1>
 <p class="section-desc">${t(
-  'Standards applicable to CoPilotMD NV-Sight — by market and by function. To confirm: which markets are in scope and in what order?',
-  'Стандарты применимые к CoPilotMD NV-Sight — по рынкам и по функциям. Уточнить: какие рынки в приоритете и в какой последовательности?'
+  'Standards applicable to CoPilotMD NV-Sight -by market and by function. To confirm: which markets are in scope and in what order?',
+  'Стандарты применимые к CoPilotMD NV-Sight -по рынкам и по функциям. Уточнить: какие рынки в приоритете и в какой последовательности?'
 )}</p>
 
 <h2>${t('Common to Both Markets', 'Общие для обоих рынков')}</h2>
 
-${sc('iso13485', 'ISO 13485 — Quality Management System', t(
-  'The organisational foundation for all regulated medical device work. Defines how design, development, production, and post-market activities are managed — from writing requirements through to closing defects. Every other standard operates within this framework. QA provides the data; quality management owns the system.',
-  'Организационная основа для всей регулируемой работы с медицинскими устройствами. Определяет как управляются проектирование, разработка, производство и пост-маркетинговые активности — от написания требований до закрытия дефектов. Все остальные стандарты работают внутри этой системы. QA предоставляет данные; quality management владеет системой.'
+${sc('iso13485', 'ISO 13485 -Quality Management System', t(
+  'The organisational foundation for all regulated medical device work. Defines how design, development, production, and post-market activities are managed -from writing requirements through to closing defects. Every other standard operates within this framework. QA provides the data; quality management owns the system.',
+  'Организационная основа для всей регулируемой работы с медицинскими устройствами. Определяет как управляются проектирование, разработка, производство и пост-маркетинговые активности -от написания требований до закрытия дефектов. Все остальные стандарты работают внутри этой системы. QA предоставляет данные; quality management владеет системой.'
 ), ['21 CFR Part 820', 'EU MDR 2017/745'], ['IEC 62304', 'ISO 14971', 'IEC 62366'])}
 
-${sc('iec62304', 'IEC 62304 — Medical Device Software Lifecycle', t(
+${sc('iec62304', 'IEC 62304 -Medical Device Software Lifecycle', t(
   'The primary standard governing how medical software is developed and tested. Classifies software by safety risk, requires traceability from requirements through architecture to test results, and mandates structured defect management. This is where QA work lives most directly: test plans, test cases, and verification reports must all align with IEC 62304.',
   'Основной стандарт, регулирующий разработку и тестирование медицинского ПО. Классифицирует ПО по уровню риска безопасности, требует трассируемости от требований через архитектуру к результатам тестов, регламентирует структурированное управление дефектами. Именно здесь наиболее непосредственно работает QA: тест-планы, тест-кейсы и отчёты верификации должны соответствовать IEC 62304.'
 ), ['ISO 14971', '21 CFR Part 820', 'FDA 510(k)'])}
 
-${sc('iso14971', 'ISO 14971 — Risk Management', t(
+${sc('iso14971', 'ISO 14971 -Risk Management', t(
   'Requires identifying all hazards, analysing failure modes, defining mitigations, and documenting residual risk throughout the product lifecycle. For AI systems this includes incorrect predictions, dataset bias, edge case behaviour, and automation bias. The risk file directly drives QA priorities: higher risk means more rigorous test coverage.',
-  'Требует идентификации всех опасностей, анализа режимов отказов, определения мер по снижению рисков и документирования остаточного риска на протяжении всего жизненного цикла продукта. Для AI-систем это включает неверные предсказания, смещение датасета, граничные случаи и автоматизационное смещение. Risk file напрямую определяет приоритеты QA: выше риск — строже тестовое покрытие.'
+  'Требует идентификации всех опасностей, анализа режимов отказов, определения мер по снижению рисков и документирования остаточного риска на протяжении всего жизненного цикла продукта. Для AI-систем это включает неверные предсказания, смещение датасета, граничные случаи и автоматизационное смещение. Risk file напрямую определяет приоритеты QA: выше риск -строже тестовое покрытие.'
 ), ['IEC 62304', 'IEC 62366', 'EU AI Act', 'FDA Cybersecurity Guidance'])}
 
-${sc('iec62366', 'IEC 62366 — Usability Engineering', t(
-  'Addresses how users interact with the system under real clinical conditions. For NV-Sight: can a physician correctly interpret AI output under time pressure? Can they recognise when the system is uncertain? Does the display avoid creating false confidence? Requires documented formative and summative usability studies — QA designs and executes the test scenarios.',
-  'Охватывает то, как пользователи взаимодействуют с системой в реальных клинических условиях. Для NV-Sight: может ли врач правильно интерпретировать AI-вывод под давлением времени? Может ли он распознать когда система неуверена? Избегает ли дисплей создания ложной уверенности? Требует задокументированных формативных и суммативных юзабилити-исследований — QA проектирует и выполняет тестовые сценарии.'
+${sc('iec62366', 'IEC 62366 -Usability Engineering', t(
+  'Addresses how users interact with the system under real clinical conditions. For NV-Sight: can a physician correctly interpret AI output under time pressure? Can they recognise when the system is uncertain? Does the display avoid creating false confidence? Requires documented formative and summative usability studies -QA designs and executes the test scenarios.',
+  'Охватывает то, как пользователи взаимодействуют с системой в реальных клинических условиях. Для NV-Sight: может ли врач правильно интерпретировать AI-вывод под давлением времени? Может ли он распознать когда система неуверена? Избегает ли дисплей создания ложной уверенности? Требует задокументированных формативных и суммативных юзабилити-исследований -QA проектирует и выполняет тестовые сценарии.'
 ), ['ISO 14971', 'EU AI Act', 'FDA 510(k)'])}
 
-<h2>${t('United States — FDA', 'США — FDA')}</h2>
+<h2>${t('United States -FDA', 'США -FDA')}</h2>
 
-${sc('cfr820', '21 CFR Part 820 — Quality System Regulation', t(
+${sc('cfr820', '21 CFR Part 820 -Quality System Regulation', t(
   'The FDA\'s QMS requirements, increasingly harmonised with ISO 13485. Covers design controls, CAPA process, supplier qualification, document control, and production records. Assumed to be in place for any 510(k) submission.',
   'QMS-требования FDA, всё более гармонизированные с ISO 13485. Охватывают design controls, процесс CAPA, квалификацию поставщиков, контроль документации и производственные записи. Предполагается соответствие для любой 510(k) подачи.'
 ), ['ISO 13485', 'IEC 62304'])}
 
-${sc('fda510k', 'FDA 510(k) — Premarket Notification', t(
-  'The primary regulatory pathway for CoPilotMD as a Class II medical device. Requires demonstrating substantial equivalence to predicate devices — AiDOC, Viz.ai, and RapidAI are the relevant comparators. QA provides the performance test evidence package that forms the technical core of the submission.',
-  'Основной регуляторный путь для CoPilotMD как медицинского устройства класса II. Требует демонстрации существенной эквивалентности предикатным устройствам — AiDOC, Viz.ai и RapidAI являются релевантными компараторами. QA предоставляет пакет доказательств производительности, который формирует техническое ядро submission.'
+${sc('fda510k', 'FDA 510(k) -Premarket Notification', t(
+  'The primary regulatory pathway for CoPilotMD as a Class II medical device. Requires demonstrating substantial equivalence to predicate devices -AiDOC, Viz.ai, and RapidAI are the relevant comparators. QA provides the performance test evidence package that forms the technical core of the submission.',
+  'Основной регуляторный путь для CoPilotMD как медицинского устройства класса II. Требует демонстрации существенной эквивалентности предикатным устройствам -AiDOC, Viz.ai и RapidAI являются релевантными компараторами. QA предоставляет пакет доказательств производительности, который формирует техническое ядро submission.'
 ), ['IEC 62304', 'ISO 14971', 'IEC 62366', 'FDA AI/ML SaMD', 'FDA Cybersecurity Guidance', 'PCCP'])}
 
 ${sc('fdaaiml', 'FDA AI/ML SaMD Guidance', t(
@@ -396,9 +397,9 @@ ${sc('fdacyber', 'FDA Cybersecurity Guidance', t(
   'Обязательно для всех новых подач устройств с 2023 года. Требует моделирование угроз, Software Bill of Materials (SBOM), план управления уязвимостями и протоколы пост-маркетингового мониторинга. QA вносит тест-кейсы безопасности и валидирует что контроли работают как заявлено.'
 ), ['FDA 510(k)', 'ISO 14971', 'EU MDR 2017/745'])}
 
-${sc('pccp', 'PCCP — Predetermined Change Control Plan', t(
-  'Required when the AI model will be updated or retrained after market clearance. Defines in advance which types of changes are permitted without a new 510(k) submission. If model updates are part of the product roadmap — and for an AI medical device they almost certainly are — the PCCP must be built into the QA framework from day one.',
-  'Требуется когда AI-модель будет обновляться или переобучаться после получения market clearance. Заранее определяет какие типы изменений разрешены без новой подачи 510(k). Если обновления модели являются частью roadmap — а для AI медицинского устройства это почти наверняка так — PCCP необходимо встроить в QA-фреймворк с первого дня.'
+${sc('pccp', 'PCCP -Predetermined Change Control Plan', t(
+  'Required when the AI model will be updated or retrained after market clearance. Defines in advance which types of changes are permitted without a new 510(k) submission. If model updates are part of the product roadmap -and for an AI medical device they almost certainly are -the PCCP must be built into the QA framework from day one.',
+  'Требуется когда AI-модель будет обновляться или переобучаться после получения market clearance. Заранее определяет какие типы изменений разрешены без новой подачи 510(k). Если обновления модели являются частью roadmap -а для AI медицинского устройства это почти наверняка так -PCCP необходимо встроить в QA-фреймворк с первого дня.'
 ), ['FDA 510(k)', 'EU AI Act'])}
 
 ${sc('hipaa', 'HIPAA', t(
@@ -406,19 +407,19 @@ ${sc('hipaa', 'HIPAA', t(
   'Регулирует использование данных пациентов США. Все клинические данные из Mount Sinai и St. Vincent должны быть надлежащим образом деидентифицированы до входа в тестовый pipeline. Не является QA-deliverable, но является жёстким prerequisite: тестирование на US-данных не может начаться пока не подтверждено соответствие HIPAA.'
 ), ['GDPR', 'FDA 510(k)'])}
 
-<h2>${t('Europe — CE Mark', 'Европа — CE Mark')}</h2>
+<h2>${t('Europe -CE Mark', 'Европа -CE Mark')}</h2>
 
-${sc('mdr', 'EU MDR 2017/745 — Medical Device Regulation', t(
-  'The primary European regulatory framework, replacing the older MDD directive. More demanding than FDA in several respects — particularly around clinical evidence requirements and post-market surveillance obligations. Meeting MDR requirements typically simplifies subsequent FDA compliance, not the reverse.',
-  'Основная европейская регуляторная система, заменившая старую директиву MDD. Более требовательная чем FDA в ряде аспектов — особенно в части требований к клиническим доказательствам и обязательствам по пост-маркетинговому надзору. Соответствие требованиям MDR, как правило, упрощает последующее соответствие FDA, а не наоборот.'
+${sc('mdr', 'EU MDR 2017/745 -Medical Device Regulation', t(
+  'The primary European regulatory framework, replacing the older MDD directive. More demanding than FDA in several respects -particularly around clinical evidence requirements and post-market surveillance obligations. Meeting MDR requirements typically simplifies subsequent FDA compliance, not the reverse.',
+  'Основная европейская регуляторная система, заменившая старую директиву MDD. Более требовательная чем FDA в ряде аспектов -особенно в части требований к клиническим доказательствам и обязательствам по пост-маркетинговому надзору. Соответствие требованиям MDR, как правило, упрощает последующее соответствие FDA, а не наоборот.'
 ), ['ISO 13485', 'IEC 62304', 'ISO 14971', 'IEC 62366', 'FDA 510(k)'], ['MDR Annex I (GSPR)'])}
 
-${sc('gspr', 'MDR Annex I — General Safety and Performance Requirements (GSPR)', t(
-  'The technical checklist every device must satisfy to receive CE Mark. Each requirement must be mapped to specific evidence — test reports, standards compliance, clinical data. QA produces a substantial portion of this evidence through verification and validation testing.',
-  'Технический чеклист который каждое устройство должно выполнить для получения CE Mark. Каждое требование должно быть привязано к конкретным доказательствам — тестовые отчёты, соответствие стандартам, клинические данные. QA производит значительную часть этих доказательств через верификационное и валидационное тестирование.'
+${sc('gspr', 'MDR Annex I -General Safety and Performance Requirements (GSPR)', t(
+  'The technical checklist every device must satisfy to receive CE Mark. Each requirement must be mapped to specific evidence -test reports, standards compliance, clinical data. QA produces a substantial portion of this evidence through verification and validation testing.',
+  'Технический чеклист который каждое устройство должно выполнить для получения CE Mark. Каждое требование должно быть привязано к конкретным доказательствам -тестовые отчёты, соответствие стандартам, клинические данные. QA производит значительную часть этих доказательств через верификационное и валидационное тестирование.'
 ), ['EU MDR 2017/745', 'IEC 62304', 'ISO 14971'])}
 
-${sc('gdpr', 'GDPR — General Data Protection Regulation', t(
+${sc('gdpr', 'GDPR -General Data Protection Regulation', t(
   'The European equivalent of HIPAA, with stricter consent and data minimisation requirements. Applies to any clinical data from EU patients used in training or validation. Must be confirmed before any EU patient data enters the testing pipeline.',
   'Европейский эквивалент HIPAA, с более строгими требованиями к согласию и минимизации данных. Применяется к любым клиническим данным пациентов ЕС используемым в обучении или валидации. Должно быть подтверждено до того как любые данные пациентов ЕС войдут в тестовый pipeline.'
 ), ['HIPAA', 'EU MDR 2017/745'])}
@@ -432,17 +433,17 @@ ${sc('euaiact', 'EU AI Act', t(
 
 ${sc('approach1', t('Standards Define Structure, Not Additional Work', 'Стандарты определяют структуру, а не дополнительную работу'), t(
   'These standards do not require creating separate documentation for regulators alongside regular QA work. They define how that work should be organised from the start. A test case written to IEC 62304 is still a test case. A defect logged with CAPA traceability is still a defect report. The difference is that every artefact is structured, linked, and stored in a way that can be audited on demand.',
-  'Эти стандарты не требуют создания отдельной документации для регуляторов параллельно с обычной QA-работой. Они определяют как эта работа должна быть организована с самого начала. Тест-кейс написанный по IEC 62304 — это всё ещё тест-кейс. Дефект занесённый с CAPA-трассируемостью — это всё ещё отчёт о дефекте. Разница в том что каждый артефакт структурирован, связан и хранится так, что может быть проверен по требованию.'
+  'Эти стандарты не требуют создания отдельной документации для регуляторов параллельно с обычной QA-работой. Они определяют как эта работа должна быть организована с самого начала. Тест-кейс написанный по IEC 62304 -это всё ещё тест-кейс. Дефект занесённый с CAPA-трассируемостью -это всё ещё отчёт о дефекте. Разница в том что каждый артефакт структурирован, связан и хранится так, что может быть проверен по требованию.'
 ))}
 
 ${sc('approach2', t('QA Contributes, But Does Not Own Everything', 'QA участвует, но не владеет всем'), t(
-  'QA owns: test plans, test cases, verification reports, defect management, and usability test execution. QA contributes to: risk assessments, Design History File assembly, CAPA records. Regulatory consultant owns: submission strategy, final documentation, and direct FDA/MDR communication. These boundaries matter — attempting to cover all three without the appropriate expertise is a common reason medical device programmes stall.',
-  'QA владеет: тест-планами, тест-кейсами, отчётами верификации, управлением дефектами и выполнением юзабилити-тестов. QA участвует в: оценках рисков, сборке Design History File, записях CAPA. Regulatory consultant владеет: стратегией подачи, финальной документацией и прямой коммуникацией с FDA/MDR. Эти границы важны — попытка покрыть все три без нужной экспертизы является распространённой причиной стагнации программ медицинских устройств.'
+  'QA owns: test plans, test cases, verification reports, defect management, and usability test execution. QA contributes to: risk assessments, Design History File assembly, CAPA records. Regulatory consultant owns: submission strategy, final documentation, and direct FDA/MDR communication. These boundaries matter -attempting to cover all three without the appropriate expertise is a common reason medical device programmes stall.',
+  'QA владеет: тест-планами, тест-кейсами, отчётами верификации, управлением дефектами и выполнением юзабилити-тестов. QA участвует в: оценках рисков, сборке Design History File, записях CAPA. Regulatory consultant владеет: стратегией подачи, финальной документацией и прямой коммуникацией с FDA/MDR. Эти границы важны -попытка покрыть все три без нужной экспертизы является распространённой причиной стагнации программ медицинских устройств.'
 ))}
 
 ${sc('approach3', t('Everything Feeds the Design History File', 'Всё входит в Design History File'), t(
-  'The DHF is the primary evidence package for any regulatory submission. It accumulates everything produced during development: requirements, risk assessments, architectural decisions, test results, defect records, and corrective actions. The QA role is to ensure that nothing produced is lost — and that what is produced is specific enough to be meaningful to a reviewer who was not present when the work was done.',
-  'DHF — основной доказательный пакет для любой регуляторной подачи. Он накапливает всё произведённое в процессе разработки: требования, оценки рисков, архитектурные решения, результаты тестов, записи о дефектах и корректирующие действия. Роль QA — обеспечить чтобы ничто произведённое не было потеряно, и чтобы произведённое было достаточно конкретным, чтобы быть значимым для проверяющего, который не присутствовал при этой работе.'
+  'The DHF is the primary evidence package for any regulatory submission. It accumulates everything produced during development: requirements, risk assessments, architectural decisions, test results, defect records, and corrective actions. The QA role is to ensure that nothing produced is lost -and that what is produced is specific enough to be meaningful to a reviewer who was not present when the work was done.',
+  'DHF -основной доказательный пакет для любой регуляторной подачи. Он накапливает всё произведённое в процессе разработки: требования, оценки рисков, архитектурные решения, результаты тестов, записи о дефектах и корректирующие действия. Роль QA -обеспечить чтобы ничто произведённое не было потеряно, и чтобы произведённое было достаточно конкретным, чтобы быть значимым для проверяющего, который не присутствовал при этой работе.'
 ))}
 `;
 }
@@ -512,32 +513,32 @@ function renderRisks() {
       level: 'critical',
       title: t('Training = Validation Dataset', 'Training = Validation датасет'),
       body: t(
-        'The claimed >80% accuracy may have been measured on data the model was trained on — not an independent set. This is a showstopper for FDA: validating on training data proves nothing. US data (Mount Sinai, St. Vincent) must become the independent validation set. Must clarify on day one.',
-        'Заявленные >80% точности могут быть измерены на тех же данных, на которых обучали — не независимом датасете. Это стоп-фактор для FDA: валидация на обучающих данных ничего не доказывает. US данные (Mount Sinai, St. Vincent) должны стать независимым validation set. Уточнить в первый день.'
+        'The claimed >80% accuracy may have been measured on data the model was trained on -not an independent set. This is a showstopper for FDA: validating on training data proves nothing. US data (Mount Sinai, St. Vincent) must become the independent validation set. Must clarify on day one.',
+        'Заявленные >80% точности могут быть измерены на тех же данных, на которых обучали -не независимом датасете. Это стоп-фактор для FDA: валидация на обучающих данных ничего не доказывает. US данные (Mount Sinai, St. Vincent) должны стать независимым validation set. Уточнить в первый день.'
       ),
       expect: t(
-        'Expected: possible overlap. Action: US dataset becomes independent validation set — first QA priority.',
-        'Ожидаем: возможно пересекаются. Действие: US датасет становится независимым validation set — первый приоритет QA.'
+        'Expected: possible overlap. Action: US dataset becomes independent validation set -first QA priority.',
+        'Ожидаем: возможно пересекаются. Действие: US датасет становится независимым validation set -первый приоритет QA.'
       ),
     },
     {
       level: 'critical',
       title: t('System Live in Clinic Without QA', 'Система работает в клинике без QA'),
       body: t(
-        'The Sheba pilot is running in an active OR with no formal QA process, no documented test coverage, no structured issue log. Any incident right now is a reputational and regulatory liability. First action: audit current state, document as baseline, capture all known issues from the pilot. This is not a criticism — it is the starting point.',
-        'Пилот в Sheba работает в операционной без формального QA-процесса, без задокументированного покрытия тестами, без структурированного лога проблем. Любой инцидент сейчас — репутационный и регуляторный риск. Первое действие: аудит текущего состояния, фиксация как baseline, запись всех известных проблем из пилота. Это не критика — это отправная точка.'
+        'The Sheba pilot is running in an active OR with no formal QA process, no documented test coverage, no structured issue log. Any incident right now is a reputational and regulatory liability. First action: audit current state, document as baseline, capture all known issues from the pilot. This is not a criticism -it is the starting point.',
+        'Пилот в Sheba работает в операционной без формального QA-процесса, без задокументированного покрытия тестами, без структурированного лога проблем. Любой инцидент сейчас -репутационный и регуляторный риск. Первое действие: аудит текущего состояния, фиксация как baseline, запись всех известных проблем из пилота. Это не критика -это отправная точка.'
       ),
       expect: t(
-        'Expected: informal feedback notes. Action: formal baseline audit — this is day-1 work.',
-        'Ожидаем: неформальные заметки. Действие: формальный baseline аудит — это работа первого дня.'
+        'Expected: informal feedback notes. Action: formal baseline audit -this is day-1 work.',
+        'Ожидаем: неформальные заметки. Действие: формальный baseline аудит -это работа первого дня.'
       ),
     },
     {
       level: 'high',
       title: t('Module 2 at Feasibility Stage', 'Module 2 на стадии Feasibility'),
       body: t(
-        'MVP requires both modules. If Module 2 (UNDERSTAND — functional brain mapping) does not stabilize on schedule, the entire FDA timeline shifts. Need a realistic development forecast before committing to any engagement plan.',
-        'MVP требует оба модуля. Если Module 2 (UNDERSTAND — функциональное картирование мозга) не стабилизируется в срок — весь FDA timeline сдвигается. Нужен реалистичный прогноз разработки до принятия любого плана работы.'
+        'MVP requires both modules. If Module 2 (UNDERSTAND -functional brain mapping) does not stabilize on schedule, the entire FDA timeline shifts. Need a realistic development forecast before committing to any engagement plan.',
+        'MVP требует оба модуля. Если Module 2 (UNDERSTAND -функциональное картирование мозга) не стабилизируется в срок -весь FDA timeline сдвигается. Нужен реалистичный прогноз разработки до принятия любого плана работы.'
       ),
       expect: t(
         'Expected: 1-2 months to stable version. Directly affects the 90-day plan structure.',
@@ -549,11 +550,11 @@ function renderRisks() {
       title: t('Laptop as Production Hardware', 'Ноутбук как Production-оборудование'),
       body: t(
         'A laptop in the OR is a risk vector: overheating during long procedures, network drops, system crash mid-procedure. Need to know: is this the permanent production architecture, or a temporary workaround? The answer changes the QA strategy significantly.',
-        'Ноутбук в операционной — вектор риска: перегрев во время длинных процедур, потеря сети, зависание посреди процедуры. Нужно знать: постоянная production архитектура или временное решение? Ответ значительно меняет QA-стратегию.'
+        'Ноутбук в операционной -вектор риска: перегрев во время длинных процедур, потеря сети, зависание посреди процедуры. Нужно знать: постоянная production архитектура или временное решение? Ответ значительно меняет QA-стратегию.'
       ),
       expect: t(
-        'Expected: temporary. If permanent — performance and reliability testing become critical path.',
-        'Ожидаем: временное. Если постоянное — performance и reliability testing становятся критическим путём.'
+        'Expected: temporary. If permanent -performance and reliability testing become critical path.',
+        'Ожидаем: временное. Если постоянное -performance и reliability testing становятся критическим путём.'
       ),
     },
     {
@@ -561,7 +562,7 @@ function renderRisks() {
       title: t('Each New Hospital = New Integration', 'Каждый новый госпиталь = новая интеграция'),
       body: t(
         '"No hardware changes" is a thesis, not a guarantee. Different PACS systems, different angiograph vendors, different network configurations at every US site. Without a standardized site acceptance testing protocol, every new hospital connection is an uncontrolled risk.',
-        '"Без изменений железа" — тезис, не гарантия. Разные PACS системы, разные ангиографы, разные сетевые конфигурации на каждом US-сайте. Без стандартизированного site acceptance testing protocol каждое новое подключение — неконтролируемый риск.'
+        '"Без изменений железа" -тезис, не гарантия. Разные PACS системы, разные ангиографы, разные сетевые конфигурации на каждом US-сайте. Без стандартизированного site acceptance testing protocol каждое новое подключение -неконтролируемый риск.'
       ),
       expect: t(
         'Expected: only Sheba configuration tested. Deliverable: standardized site acceptance checklist.',
@@ -572,24 +573,24 @@ function renderRisks() {
       level: 'medium',
       title: t('Ground Truth Annotation Status Unknown', 'Статус Ground Truth разметки неизвестен'),
       body: t(
-        'Clinical expert-annotated data is the foundation of any model validation. If annotation is incomplete — validation is blocked. Key questions: who annotated, what protocol was used, what is the inter-annotator agreement score, is it finished?',
-        'Данные с разметкой клинических экспертов — основа любой валидации модели. Если разметка не завершена — валидация заблокирована. Ключевые вопросы: кто размечал, по какому протоколу, inter-annotator agreement, завершена ли разметка?'
+        'Clinical expert-annotated data is the foundation of any model validation. If annotation is incomplete -validation is blocked. Key questions: who annotated, what protocol was used, what is the inter-annotator agreement score, is it finished?',
+        'Данные с разметкой клинических экспертов -основа любой валидации модели. Если разметка не завершена -валидация заблокирована. Ключевые вопросы: кто размечал, по какому протоколу, inter-annotator agreement, завершена ли разметка?'
       ),
       expect: t(
-        'Expected: partially done. If not complete — this becomes the #1 bottleneck blocking everything else.',
-        'Ожидаем: частично завершена. Если нет — становится узким местом #1, блокирующим всё остальное.'
+        'Expected: partially done. If not complete -this becomes the #1 bottleneck blocking everything else.',
+        'Ожидаем: частично завершена. Если нет -становится узким местом #1, блокирующим всё остальное.'
       ),
     },
     {
       level: 'high',
       title: t('No Formal Requirements Documentation', 'Нет формальных требований'),
       body: t(
-        'The system was built without documented product requirements. Jira tickets and informal notes cannot serve as a traceability baseline for FDA submission — a regulator needs to see a clear chain: requirement → test case → result. Without this chain, test coverage cannot be formally demonstrated, and the Design History File cannot be assembled.',
-        'Система построена без задокументированных product requirements. Jira-тикеты и неформальные заметки не могут служить baseline трассируемости для FDA submission — регулятор должен видеть чёткую цепочку: требование → тест-кейс → результат. Без этой цепочки тестовое покрытие нельзя формально доказать, а Design History File нельзя собрать.'
+        'The system was built without documented product requirements. Jira tickets and informal notes cannot serve as a traceability baseline for FDA submission -a regulator needs to see a clear chain: requirement → test case → result. Without this chain, test coverage cannot be formally demonstrated, and the Design History File cannot be assembled.',
+        'Система построена без задокументированных product requirements. Jira-тикеты и неформальные заметки не могут служить baseline трассируемости для FDA submission -регулятор должен видеть чёткую цепочку: требование → тест-кейс → результат. Без этой цепочки тестовое покрытие нельзя формально доказать, а Design History File нельзя собрать.'
       ),
       expect: t(
-        'Expected: no formal requirements exist. Action: retrospective requirements documentation in first 30 days — QA extracts requirements from existing system behaviour, Jira, and dev conversations, then gets sign-off from CTO and clinical expert. No BA is needed; this is standard practice in early-stage medical device companies.',
-        'Ожидаем: формальных требований нет. Действие: ретроспективная документация требований в первые 30 дней — QA извлекает требования из существующего поведения системы, Jira и разговоров с разработчиками, затем получает sign-off от CTO и клинического эксперта. BA для этого не нужен — это стандартная практика в ранних медицинских стартапах.'
+        'Expected: no formal requirements exist. Action: retrospective requirements documentation in first 30 days -QA extracts requirements from existing system behaviour, Jira, and dev conversations, then gets sign-off from CTO and clinical expert. No BA is needed; this is standard practice in early-stage medical device companies.',
+        'Ожидаем: формальных требований нет. Действие: ретроспективная документация требований в первые 30 дней -QA извлекает требования из существующего поведения системы, Jira и разговоров с разработчиками, затем получает sign-off от CTO и клинического эксперта. BA для этого не нужен -это стандартная практика в ранних медицинских стартапах.'
       ),
     },
     {
@@ -597,7 +598,7 @@ function renderRisks() {
       title: t('No Regulatory Consultant Identified', 'Нет регуляторного консультанта'),
       body: t(
         'Without a regulatory consultant we are guessing what FDA actually requires. Building a QA system without knowing the exact target is expensive and risky. Engaging a regulatory consultant must be a parallel track to QA setup from day one.',
-        'Без регуляторного консультанта мы гадаем что на самом деле требует FDA. Строить QA-систему не зная точной цели — дорого и рискованно. Привлечение регуляторного консультанта должно быть параллельным треком к QA с первого дня.'
+        'Без регуляторного консультанта мы гадаем что на самом деле требует FDA. Строить QA-систему не зная точной цели -дорого и рискованно. Привлечение регуляторного консультанта должно быть параллельным треком к QA с первого дня.'
       ),
       expect: t(
         'Expected: not yet engaged. Action: identify and engage in parallel with QA setup.',
@@ -609,8 +610,8 @@ function renderRisks() {
   return `
 <h1>${t('Key Risks', 'Ключевые риски')}</h1>
 <p class="section-desc">${t(
-  'Risks I can see before the first conversation — based on the case study only.',
-  'Риски, которые я вижу до первого разговора — только на основе case study.'
+  'Risks I can see before the first conversation -based on the case study only.',
+  'Риски, которые я вижу до первого разговора -только на основе case study.'
 )}</p>
 
 ${risks.map((r, i) => `
@@ -638,8 +639,8 @@ function renderQuestions() {
   const must = [
     {
       q: t(
-        '"What format do you expect for the test assignment — slides, document, live discussion?"',
-        '"В каком формате вы ожидаете тестовое задание — слайды, документ, живой разговор?"'
+        '"What format do you expect for the test assignment -slides, document, live discussion?"',
+        '"В каком формате вы ожидаете тестовое задание -слайды, документ, живой разговор?"'
       ),
       a: t(
         'Expected: slides. Need this to spend preparation time correctly.',
@@ -648,8 +649,8 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Who is the presentation for — CTO only, or is the CEO also present?"',
-        '"На кого рассчитана презентация — только CTO или CEO тоже присутствует?"'
+        '"Who is the presentation for -CTO only, or is the CEO also present?"',
+        '"На кого рассчитана презентация -только CTO или CEO тоже присутствует?"'
       ),
       a: t(
         'Expected: panel with CTO + CEO minimum. Need to balance technical and business language.',
@@ -662,8 +663,8 @@ function renderQuestions() {
         '"Модель валидировалась на независимом датасете или пересекается с обучающими данными?"'
       ),
       a: t(
-        'Expected: possible overlap. This is the first critical gap for FDA — US data must become the independent validation set.',
-        'Ожидаем: возможно пересекаются. Это первый критический gap для FDA — US данные должны стать независимым validation set.'
+        'Expected: possible overlap. This is the first critical gap for FDA -US data must become the independent validation set.',
+        'Ожидаем: возможно пересекаются. Это первый критический gap для FDA -US данные должны стать независимым validation set.'
       ),
     },
     {
@@ -688,12 +689,12 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Is there a log of issues from the Sheba pilot — what physicians reported, what didn\'t work?"',
-        '"Есть ли лог проблем из Sheba пилота — что сообщали врачи, что не работало?"'
+        '"Is there a log of issues from the Sheba pilot -what physicians reported, what didn\'t work?"',
+        '"Есть ли лог проблем из Sheba пилота -что сообщали врачи, что не работало?"'
       ),
       a: t(
-        'Expected: informal notes. This is a ready-made QA backlog — real problems from real production usage.',
-        'Ожидаем: неформальные заметки. Это готовый QA backlog — реальные проблемы реального использования.'
+        'Expected: informal notes. This is a ready-made QA backlog -real problems from real production usage.',
+        'Ожидаем: неформальные заметки. Это готовый QA backlog -реальные проблемы реального использования.'
       ),
     },
   ];
@@ -712,7 +713,7 @@ function renderQuestions() {
     {
       q: t(
         '"Is the laptop a temporary solution or the final production architecture?"',
-        '"Ноутбук — временное решение или финальная production архитектура?"'
+        '"Ноутбук -временное решение или финальная production архитектура?"'
       ),
       a: t(
         'Expected: temporary. Affects what to test now versus what to defer.',
@@ -721,8 +722,8 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Module 2 is at feasibility — is there a timeline to a stable, testable version?"',
-        '"Module 2 на feasibility — есть ли timeline до stable, тестируемой версии?"'
+        '"Module 2 is at feasibility -is there a timeline to a stable, testable version?"',
+        '"Module 2 на feasibility -есть ли timeline до stable, тестируемой версии?"'
       ),
       a: t(
         'Expected: 1-2 months. Directly affects the 90-day plan.',
@@ -735,8 +736,8 @@ function renderQuestions() {
         '"Клинические данные уже размечены ground truth метками или разметка продолжается?"'
       ),
       a: t(
-        'Expected: partially done. If not complete — this is the bottleneck that blocks all validation.',
-        'Ожидаем: частично завершена. Если нет — это bottleneck который блокирует всю валидацию.'
+        'Expected: partially done. If not complete -this is the bottleneck that blocks all validation.',
+        'Ожидаем: частично завершена. Если нет -это bottleneck который блокирует всю валидацию.'
       ),
     },
     {
@@ -765,7 +766,7 @@ function renderQuestions() {
     {
       q: t(
         '"Is the 12mm from GT an internal accuracy requirement, or does it come from the regulator?"',
-        '"12mm from GT — внутреннее требование к точности или от регулятора?"'
+        '"12mm from GT -внутреннее требование к точности или от регулятора?"'
       ),
       a: t(
         'Expected: internal. Need to understand if this is sufficient for FDA.',
@@ -822,14 +823,14 @@ function renderQuestions() {
   return `
 <h1>${t('Questions for CTO', 'Вопросы к CTO')}</h1>
 <p class="section-desc">${t(
-  'Prioritized — what to ask and why. Each question serves a purpose.',
-  'Приоритизированные — что спросить и зачем. Каждый вопрос имеет цель.'
+  'Prioritized -what to ask and why. Each question serves a purpose.',
+  'Приоритизированные -что спросить и зачем. Каждый вопрос имеет цель.'
 )}</p>
 
 <h2>🔴 ${t('Must Ask', 'Задать обязательно')}</h2>
 ${must.map((q,i) => qCard(q, 'must', t('MUST ASK','ОБЯЗАТЕЛЬНО'), `q_must_${i}`)).join('')}
 
-<h2>🟡 ${t('Important — If Time Allows', 'Важные — если есть время')}</h2>
+<h2>🟡 ${t('Important -If Time Allows', 'Важные -если есть время')}</h2>
 ${important.map((q,i) => qCard(q, 'important', t('IMPORTANT','ВАЖНО'), `q_imp_${i}`)).join('')}
 
 <h2>🟢 ${t('Nice to Know', 'Хорошо бы узнать')}</h2>
@@ -841,19 +842,19 @@ function renderPlan() {
   return `
 <h1>${t('Preliminary Work Plan', 'Предварительный план работы')}</h1>
 <p class="section-desc">${t(
-  'Three variants analysed — selected based on what they actually need and what resources are available. Variant B eliminated: pushes FDA submission to month 9–10.',
-  'Три варианта проанализированы — выбирается исходя из реальных потребностей и доступных ресурсов. Вариант B исключён: сдвигает FDA submission на месяц 9–10.'
+  'Three variants analysed -selected based on what they actually need and what resources are available. Variant B eliminated: pushes FDA submission to month 9–10.',
+  'Три варианта проанализированы -выбирается исходя из реальных потребностей и доступных ресурсов. Вариант B исключён: сдвигает FDA submission на месяц 9–10.'
 )}</p>
 
 <div class="variant-tabs">
   <button class="vtab active" onclick="showVariant('A')">
-    ${t('Variant A — Regulatory First', 'Вариант A — Regulatory First')}
+    ${t('Variant A -Regulatory First', 'Вариант A -Regulatory First')}
   </button>
   <button class="vtab" onclick="showVariant('B')">
-    ${t('Variant B — Eliminated', 'Вариант B — Исключён')}
+    ${t('Variant B -Eliminated', 'Вариант B -Исключён')}
   </button>
   <button class="vtab" onclick="showVariant('C')">
-    ${t('Variant C — Parallel ✅', 'Вариант C — Параллельно ✅')}
+    ${t('Variant C -Parallel ✅', 'Вариант C -Параллельно ✅')}
   </button>
 </div>
 
@@ -873,9 +874,9 @@ function renderPlan() {
       <div class="risk-card-inner">
         <div class="risk-main">
           <ul>
-            <li>${t('Baseline audit of Sheba pilot — document current state, all known issues, all user feedback', 'Baseline аудит Sheba пилота — документируем текущее состояние, все известные проблемы, весь feedback')}</li>
-            <li>${t('Study FDA 510(k) pathway with regulatory consultant — understand exact deliverables required', 'Изучаем FDA 510(k) с регуляторным консультантом — понимаем точные требуемые deliverables')}</li>
-            <li>${t('Map predicate devices (AiDOC, Viz.ai, RapidAI) — identify most relevant comparison points', 'Маппинг предикатных устройств (AiDOC, Viz.ai, RapidAI) — наиболее релевантные точки сравнения')}</li>
+            <li>${t('Baseline audit of Sheba pilot -document current state, all known issues, all user feedback', 'Baseline аудит Sheba пилота -документируем текущее состояние, все известные проблемы, весь feedback')}</li>
+            <li>${t('Study FDA 510(k) pathway with regulatory consultant -understand exact deliverables required', 'Изучаем FDA 510(k) с регуляторным консультантом -понимаем точные требуемые deliverables')}</li>
+            <li>${t('Map predicate devices (AiDOC, Viz.ai, RapidAI) -identify most relevant comparison points', 'Маппинг предикатных устройств (AiDOC, Viz.ai, RapidAI) -наиболее релевантные точки сравнения')}</li>
             <li>${t('Set up defect tracking, documentation space, QA tooling', 'Настраиваем дефект-трекинг, место для документации, QA-инструменты')}</li>
             <li>${t('Test Strategy v1: scope, risk matrix, severity thresholds (false negative = Critical by default), definition of done', 'Test Strategy v1: scope, risk матрица, severity пороги (false negative = Critical по умолчанию), definition of done')}</li>
           </ul>
@@ -891,13 +892,13 @@ function renderPlan() {
       <div class="risk-card-inner">
         <div class="risk-main">
           <ul>
-            <li>${t('Data pipeline testing first — garbage in, garbage out. All stages before AI input verified', 'Тестирование data pipeline первым — garbage in, garbage out. Все стадии до AI верифицированы')}</li>
-            <li>${t('Module 1a end-to-end: AI accuracy layer → real-time performance → clinical display — each independently, then integrated', 'Module 1a end-to-end: AI accuracy → real-time performance → clinical display — каждый независимо, потом вместе')}</li>
-            <li>${t('Independent validation dataset established from US sites — separate from training data', 'Независимый validation датасет из US сайтов — отдельный от обучающих данных')}</li>
-            <li>${t('Site acceptance testing protocol v1 — standardized checklist, tested and validated on Sheba', 'Site acceptance testing protocol v1 — стандартный чеклист, протестирован и валидирован на Sheba')}</li>
+            <li>${t('Data pipeline testing first -garbage in, garbage out. All stages before AI input verified', 'Тестирование data pipeline первым -garbage in, garbage out. Все стадии до AI верифицированы')}</li>
+            <li>${t('Module 1a end-to-end: AI accuracy layer → real-time performance → clinical display -each independently, then integrated', 'Module 1a end-to-end: AI accuracy → real-time performance → clinical display -каждый независимо, потом вместе')}</li>
+            <li>${t('Independent validation dataset established from US sites -separate from training data', 'Независимый validation датасет из US сайтов -отдельный от обучающих данных')}</li>
+            <li>${t('Site acceptance testing protocol v1 -standardized checklist, tested and validated on Sheba', 'Site acceptance testing protocol v1 -стандартный чеклист, протестирован и валидирован на Sheba')}</li>
             <li>${t('DHF documentation starts: requirements → test cases → results, full traceability', 'Начало DHF документации: требования → тест-кейсы → результаты, полная трассируемость')}</li>
           </ul>
-          <p class="phase-note">${t('Module 2 test framework prepared in parallel — ready to execute as soon as dev stabilizes.','Framework для Module 2 готов параллельно — выполняется как только dev стабилизируется.')}</p>
+          <p class="phase-note">${t('Module 2 test framework prepared in parallel -ready to execute as soon as dev stabilizes.','Framework для Module 2 готов параллельно -выполняется как только dev стабилизируется.')}</p>
         </div>
         ${renderNotePanel('plan_a_90')}
       </div>
@@ -911,7 +912,7 @@ function renderPlan() {
         <div class="risk-main">
           <ul>
             <li>${t('Module 2 full test cycle (conditional on stability by day 90)', 'Полный тест-цикл Module 2 (при условии стабильности к дню 90)')}</li>
-            <li>${t('Full regression — both modules integrated end-to-end', 'Полная регрессия — оба модуля интегрированы end-to-end')}</li>
+            <li>${t('Full regression -both modules integrated end-to-end', 'Полная регрессия -оба модуля интегрированы end-to-end')}</li>
             <li>${t('Performance benchmarking on production-equivalent hardware', 'Performance benchmarking на production-эквивалентном оборудовании')}</li>
             <li>${t('Predicate device comparison testing documented for 510(k)', 'Сравнительное тестирование с предикатными устройствами задокументировано для 510(k)')}</li>
             <li>${t('510(k) submission package assembled together with regulatory consultant', '510(k) submission package собран вместе с регуляторным консультантом')}</li>
@@ -927,14 +928,14 @@ function renderPlan() {
 <!-- VARIANT B -->
 <div id="variant-B" class="variant-content">
   <div class="highlight-box" style="background:#fee2e2;border-color:#fca5a5;color:#7f1d1d">
-    <strong style="color:#7f1d1d">⛔ ${t('Eliminated — Too Slow to FDA', 'Исключён — Слишком медленный путь к FDA')}</strong>
+    <strong style="color:#7f1d1d">⛔ ${t('Eliminated -Too Slow to FDA', 'Исключён -Слишком медленный путь к FDA')}</strong>
     <p style="margin:12px 0 8px">${t(
-      'What Variant B was: build internal QA maturity first — processes, culture, full test coverage across all modules — before turning attention to regulatory. Proper QA governance, then regulatory preparation.',
-      'Что представлял собой Вариант B: сначала выстроить внутреннюю зрелость QA — процессы, культуру, полное тестовое покрытие всех модулей — и только потом переходить к regulatory. Сначала правильная QA-система, потом регуляторная подготовка.'
+      'What Variant B was: build internal QA maturity first -processes, culture, full test coverage across all modules -before turning attention to regulatory. Proper QA governance, then regulatory preparation.',
+      'Что представлял собой Вариант B: сначала выстроить внутреннюю зрелость QA -процессы, культуру, полное тестовое покрытие всех модулей -и только потом переходить к regulatory. Сначала правильная QA-система, потом регуляторная подготовка.'
     )}</p>
     <p style="margin:0">${t(
-      'Why eliminated: this sequence pushes the FDA 510(k) submission to month 9–10 at minimum. For a company whose primary goal is US market entry, that timeline is not viable. QA process maturity must be built in parallel with regulatory preparation — not before it.',
-      'Почему исключён: такая последовательность сдвигает FDA 510(k) submission минимум на месяц 9–10. Для компании, чья основная цель — выход на рынок США, этот срок неприемлем. Зрелость QA-процессов должна строиться параллельно с регуляторной подготовкой — не до неё.'
+      'Why eliminated: this sequence pushes the FDA 510(k) submission to month 9–10 at minimum. For a company whose primary goal is US market entry, that timeline is not viable. QA process maturity must be built in parallel with regulatory preparation -not before it.',
+      'Почему исключён: такая последовательность сдвигает FDA 510(k) submission минимум на месяц 9–10. Для компании, чья основная цель -выход на рынок США, этот срок неприемлем. Зрелость QA-процессов должна строиться параллельно с регуляторной подготовкой -не до неё.'
     )}</p>
   </div>
 </div>
@@ -942,10 +943,10 @@ function renderPlan() {
 <!-- VARIANT C -->
 <div id="variant-C" class="variant-content">
   <div class="highlight-box" style="background:#f0fdf4;border-color:#86efac;color:#14532d">
-    <strong style="color:#14532d">✅ ${t('Optimal — With a Junior QA (ideal scenario)', 'Оптимальный — с Junior QA (идеальный сценарий)')}</strong>
+    <strong style="color:#14532d">✅ ${t('Optimal -With a Junior QA (ideal scenario)', 'Оптимальный -с Junior QA (идеальный сценарий)')}</strong>
     ${t(
       'I own the regulatory track and strategic QA direction. A junior QA engineer handles test execution, documentation, and defect tracking under my direct guidance. Fastest path to FDA submission with proper quality coverage on both tracks simultaneously. Note: if a junior is not available initially, this variant reverts to Variant A until headcount is approved.',
-      'Я отвечаю за regulatory трек и стратегическое направление QA. Junior QA инженер выполняет тесты, ведёт документацию и трекинг дефектов под моим прямым руководством. Самый быстрый путь к FDA submission с правильным покрытием на обоих треках. Примечание: если junior недоступен сразу — вариант C фактически совпадает с вариантом A до момента найма.'
+      'Я отвечаю за regulatory трек и стратегическое направление QA. Junior QA инженер выполняет тесты, ведёт документацию и трекинг дефектов под моим прямым руководством. Самый быстрый путь к FDA submission с правильным покрытием на обоих треках. Примечание: если junior недоступен сразу -вариант C фактически совпадает с вариантом A до момента найма.'
     )}
   </div>
 
@@ -990,7 +991,7 @@ function renderPlan() {
           <ul>
             <li>${t('Module 2 full cycle + integration testing with Module 1', 'Полный цикл Module 2 + интеграционное тестирование с Module 1')}</li>
             <li>${t('Final regression, performance benchmarking, predicate device comparison', 'Финальная регрессия, performance benchmarking, сравнение с предикатными устройствами')}</li>
-            <li>${t('510(k) submission package — assembled with regulatory consultant', '510(k) submission package — собирается с регуляторным консультантом')}</li>
+            <li>${t('510(k) submission package -assembled with regulatory consultant', '510(k) submission package -собирается с регуляторным консультантом')}</li>
           </ul>
           <p class="phase-note">${t('Target: submission-ready at month 6. Main risk: Module 2 development timeline.','Цель: готовность к submission на месяце 6. Главный риск: timeline разработки Module 2.')}</p>
         </div>
@@ -1011,20 +1012,16 @@ function showVariant(v) {
 }
 
 // ─── QA DOCUMENTS ──────────────────────────────────────────────────────────
-const DOC_STATUSES = ['', 'required', 'in-progress', 'done', 'skip'];
+const DOC_STATUSES = ['', 'required', 'skip'];
 const DOC_STATUS_LABELS = {
-  '':           ['❓ To confirm',   '❓ Уточнить'],
-  'required':   ['✅ Required',     '✅ Нужен'],
-  'in-progress':['⏳ In progress',  '⏳ В работе'],
-  'done':       ['✔️ Done',         '✔️ Готов'],
-  'skip':       ['⛔ Not needed',   '⛔ Не нужен'],
+  '':         ['❓ To confirm', '❓ Уточнить'],
+  'required': ['✅ Required',   '✅ Нужен'],
+  'skip':     ['⛔ Not needed', '⛔ Не нужен'],
 };
 const DOC_STATUS_COLORS = {
-  '':           'background:#f1f5f9;color:#64748b;border-color:#cbd5e1',
-  'required':   'background:#eff6ff;color:#1d4ed8;border-color:#93c5fd',
-  'in-progress':'background:#fffbeb;color:#92400e;border-color:#fcd34d',
-  'done':       'background:#f0fdf4;color:#166534;border-color:#86efac',
-  'skip':       'background:#fef2f2;color:#991b1b;border-color:#fca5a5',
+  '':         'background:#f1f5f9;color:#64748b;border-color:#cbd5e1',
+  'required': 'background:#eff6ff;color:#1d4ed8;border-color:#93c5fd',
+  'skip':     'background:#fef2f2;color:#991b1b;border-color:#fca5a5',
 };
 
 function getDocStatus(key) { return localStorage.getItem('docstatus_' + key) || ''; }
@@ -1068,16 +1065,16 @@ function renderDocs() {
   return `
 <h1>${t('QA Documents', 'Документы QA')}</h1>
 <p class="section-desc">${t(
-  'All QA documents to be created. Status can be set per document — click the badge to cycle through states. Notes field available on each card.',
-  'Все QA-документы которые будут созданы. Статус устанавливается на каждом документе — нажмите значок для переключения. На каждой карточке есть поле заметок.'
+  'All QA documents to be created. Status can be set per document -click the badge to cycle through states. Notes field available on each card.',
+  'Все QA-документы которые будут созданы. Статус устанавливается на каждом документе -нажмите значок для переключения. На каждой карточке есть поле заметок.'
 )}</p>
 
-<h2>📐 ${t('Foundation — Build First', 'Фундамент — создаётся первым')}</h2>
+<h2>📐 ${t('Foundation -Build First', 'Фундамент -создаётся первым')}</h2>
 
 ${renderDocCard('teststrategy', '🗺️',
   t('Test Strategy', 'Test Strategy'),
-  'The master QA framework document. Defines scope, testing approach, risk classification, severity matrix, tools selection, automation stance, and definition of done. Required for 510(k) and IEC 62304 compliance. Produced in Month 1 — everything else depends on it.',
-  'Главный QA-документ верхнего уровня. Определяет scope, подход к тестированию, классификацию рисков, severity матрицу, выбор инструментов, позицию по автоматизации и definition of done. Необходим для 510(k) и IEC 62304. Создаётся в месяц 1 — всё остальное зависит от него.'
+  'The master QA framework document. Defines scope, testing approach, risk classification, severity matrix, tools selection, automation stance, and definition of done. Required for 510(k) and IEC 62304 compliance. Produced in Month 1 -everything else depends on it.',
+  'Главный QA-документ верхнего уровня. Определяет scope, подход к тестированию, классификацию рисков, severity матрицу, выбор инструментов, позицию по автоматизации и definition of done. Необходим для 510(k) и IEC 62304. Создаётся в месяц 1 -всё остальное зависит от него.'
 )}
 
 ${renderDocCard('testmatrix', '🔢',
@@ -1098,7 +1095,7 @@ ${renderDocCard('metrics', '📊',
   'Какие метрики отслеживаются (test coverage, defect density, pass rate, количество открытых критических, mean time to fix), периодичность репортинга и пороги quality gate которые должны быть пройдены перед любым релизом. Обеспечивает видимость QA для всей команды.'
 )}
 
-<h2>📋 ${t('Operational — Maintained Throughout', 'Операционные — ведутся постоянно')}</h2>
+<h2>📋 ${t('Operational -Maintained Throughout', 'Операционные -ведутся постоянно')}</h2>
 
 ${renderDocCard('testplans', '📝',
   t('Test Plans', 'Тест-планы'),
@@ -1108,8 +1105,8 @@ ${renderDocCard('testplans', '📝',
 
 ${renderDocCard('testcases', '✅',
   t('Test Cases', 'Тест-кейсы'),
-  'Actual test scenarios — organized by module, risk level, and test type (functional, performance, usability, security, regression). Written with enough detail that any tester can execute them consistently. Linked to requirements for traceability.',
-  'Сами тестовые сценарии — организованы по модулям, уровням риска и типам тестирования (функциональные, производительность, юзабилити, безопасность, регрессия). Написаны достаточно подробно чтобы любой тестировщик мог выполнить их последовательно. Привязаны к требованиям для трассируемости.'
+  'Actual test scenarios -organized by module, risk level, and test type (functional, performance, usability, security, regression). Written with enough detail that any tester can execute them consistently. Linked to requirements for traceability.',
+  'Сами тестовые сценарии -организованы по модулям, уровням риска и типам тестирования (функциональные, производительность, юзабилити, безопасность, регрессия). Написаны достаточно подробно чтобы любой тестировщик мог выполнить их последовательно. Привязаны к требованиям для трассируемости.'
 )}
 
 ${renderDocCard('defectworkflow', '🔄',
@@ -1120,17 +1117,17 @@ ${renderDocCard('defectworkflow', '🔄',
 
 ${renderDocCard('releasereadiness', '🚦',
   t('Release Readiness Criteria', 'Критерии готовности к релизу'),
-  'Go/no-go checklist per release. Metrics snapshot, open critical and high defect count, regression status, sign-off requirements. Makes release decisions transparent and defensible — especially important for a regulated product.',
-  'Go/no-go чеклист для каждого релиза. Снапшот метрик, количество открытых критических и высоких дефектов, статус регрессии, требования к подписям. Делает решения о релизе прозрачными и обоснованными — особенно важно для регулируемого продукта.'
+  'Go/no-go checklist per release. Metrics snapshot, open critical and high defect count, regression status, sign-off requirements. Makes release decisions transparent and defensible -especially important for a regulated product.',
+  'Go/no-go чеклист для каждого релиза. Снапшот метрик, количество открытых критических и высоких дефектов, статус регрессии, требования к подписям. Делает решения о релизе прозрачными и обоснованными -особенно важно для регулируемого продукта.'
 )}
 
 ${renderDocCard('qualityreport', '📈',
   t('Quality Report', 'Quality Report'),
-  'Periodic QA status report — sprint or monthly. Summarizes test execution progress, defect trends, coverage status, risks, and blockers. The primary QA communication artefact for product and engineering leadership.',
-  'Периодический QA статус-отчёт — спринтовый или ежемесячный. Суммирует прогресс выполнения тестов, тренды дефектов, статус покрытия, риски и блокеры. Основной артефакт QA-коммуникации для руководства продукта и разработки.'
+  'Periodic QA status report -sprint or monthly. Summarizes test execution progress, defect trends, coverage status, risks, and blockers. The primary QA communication artefact for product and engineering leadership.',
+  'Периодический QA статус-отчёт -спринтовый или ежемесячный. Суммирует прогресс выполнения тестов, тренды дефектов, статус покрытия, риски и блокеры. Основной артефакт QA-коммуникации для руководства продукта и разработки.'
 )}
 
-<h2>⚖️ ${t('Regulatory — Required for 510(k) / CE Mark', 'Регуляторные — обязательны для 510(k) / CE Mark')}</h2>
+<h2>⚖️ ${t('Regulatory -Required for 510(k) / CE Mark', 'Регуляторные -обязательны для 510(k) / CE Mark')}</h2>
 
 ${renderDocCard('traceability', '🔗',
   t('Traceability Matrix', 'Матрица трассируемости'),
@@ -1140,18 +1137,18 @@ ${renderDocCard('traceability', '🔗',
 
 ${renderDocCard('vnvreport', '📑',
   t('Verification & Validation Report', 'Отчёт верификации и валидации'),
-  'Summary of all V&V testing — the technical core of the 510(k) submission package. Covers system performance on the independent validation dataset, comparison with predicate devices, statistical analysis, and overall safety/performance conclusions.',
-  'Сводный отчёт всего V&V-тестирования — техническое ядро пакета 510(k) submission. Охватывает производительность системы на независимом validation датасете, сравнение с предикатными устройствами, статистический анализ и общие выводы по безопасности/производительности.'
+  'Summary of all V&V testing -the technical core of the 510(k) submission package. Covers system performance on the independent validation dataset, comparison with predicate devices, statistical analysis, and overall safety/performance conclusions.',
+  'Сводный отчёт всего V&V-тестирования -техническое ядро пакета 510(k) submission. Охватывает производительность системы на независимом validation датасете, сравнение с предикатными устройствами, статистический анализ и общие выводы по безопасности/производительности.'
 )}
 
 ${renderDocCard('riskcontrib', '⚠️',
   t('Risk Assessment Contributions (ISO 14971)', 'Вклад в оценку рисков (ISO 14971)'),
-  'QA contribution to the product risk file: failure modes identified during testing, evidence that mitigations work as intended, residual risk data. Not the full risk file (that is owned by the engineering team) — but QA provides the test evidence that populates it.',
-  'Вклад QA в risk file продукта: режимы отказов выявленные при тестировании, доказательства что меры снижения работают как задумано, данные остаточного риска. Не весь risk file (им владеет команда разработки) — но QA предоставляет тестовые доказательства которые его наполняют.'
+  'QA contribution to the product risk file: failure modes identified during testing, evidence that mitigations work as intended, residual risk data. Not the full risk file (that is owned by the engineering team) -but QA provides the test evidence that populates it.',
+  'Вклад QA в risk file продукта: режимы отказов выявленные при тестировании, доказательства что меры снижения работают как задумано, данные остаточного риска. Не весь risk file (им владеет команда разработки) -но QA предоставляет тестовые доказательства которые его наполняют.'
 )}
 
 ${renderDocCard('dhf', '🗂️',
-  t('Design History File (DHF) — QA Section', 'Design History File (DHF) — раздел QA'),
+  t('Design History File (DHF) -QA Section', 'Design History File (DHF) -раздел QA'),
   'The master regulatory evidence dossier. QA owns the test-related sections: Test Strategy, test plans, test cases, test results, defect records, and V&V report. Ensures nothing produced is lost and everything is traceable to a specific requirement or risk.',
   'Главный регуляторный доказательный досье. QA владеет разделами связанными с тестированием: Test Strategy, тест-планы, тест-кейсы, результаты тестов, записи о дефектах и V&V отчёт. Обеспечивает что ничто произведённое не теряется и всё трассируется к конкретному требованию или риску.'
 )}
@@ -1169,9 +1166,9 @@ ${renderDocCard('usability', '👁️',
 )}
 
 ${renderDocCard('pccp', '🔁',
-  t('PCCP — Predetermined Change Control Plan', 'PCCP — Predetermined Change Control Plan'),
-  'Required if the AI model will be updated or retrained after market clearance. Defines in advance which types of changes are permitted without a new 510(k) submission. If model updates are on the roadmap — for an AI medical device they almost certainly are — the PCCP must be scoped and included in the original submission.',
-  'Требуется если AI-модель будет обновляться или переобучаться после получения market clearance. Заранее определяет какие типы изменений разрешены без новой подачи 510(k). Если обновления модели есть в roadmap — для AI медицинского устройства это почти наверняка так — PCCP необходимо включить в исходный submission.'
+  t('PCCP -Predetermined Change Control Plan', 'PCCP -Predetermined Change Control Plan'),
+  'Required if the AI model will be updated or retrained after market clearance. Defines in advance which types of changes are permitted without a new 510(k) submission. If model updates are on the roadmap -for an AI medical device they almost certainly are -the PCCP must be scoped and included in the original submission.',
+  'Требуется если AI-модель будет обновляться или переобучаться после получения market clearance. Заранее определяет какие типы изменений разрешены без новой подачи 510(k). Если обновления модели есть в roadmap -для AI медицинского устройства это почти наверняка так -PCCP необходимо включить в исходный submission.'
 )}
 `;
 }
@@ -1181,20 +1178,20 @@ function renderNeeds() {
   return `
 <h1>${t('What I Need', 'Что мне нужно')}</h1>
 <p class="section-desc">${t(
-  'Resources and access I will ask for — organized by category.',
-  'Ресурсы и доступы которые запрошу — сгруппированы по категориям.'
+  'Resources and access I will ask for -organized by category.',
+  'Ресурсы и доступы которые запрошу -сгруппированы по категориям.'
 )}</p>
 
 <h2>👥 ${t('People', 'Люди')}</h2>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">🩺 ${t('Clinical Expert', 'Клинический эксперт')}</div>
-  <p>${t('A physician or radiologist who is the single source of truth on clinical correctness. Who approves that a functional zone mapping is correct — not algorithmically, but clinically?','Врач или радиолог — единственный источник правды по клинической корректности. Кто апрувит что маппинг функциональной зоны корректен — не алгоритмически, а клинически?')}</p>
+  <p>${t('A physician or radiologist who is the single source of truth on clinical correctness. Who approves that a functional zone mapping is correct -not algorithmically, but clinically?','Врач или радиолог -единственный источник правды по клинической корректности. Кто апрувит что маппинг функциональной зоны корректен -не алгоритмически, а клинически?')}</p>
 </div>${renderNotePanel('need_clinical')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">⚖️ ${t('Regulatory Consultant', 'Регуляторный консультант')}</div>
-  <p>${t('Defines exactly what FDA requires for 510(k) submission. Already engaged or needs to be found? Without this, QA direction is a guess.','Определяет что именно требует FDA для 510(k) submission. Уже есть или нужно найти? Без этого направление QA — это догадки.')}</p>
+  <p>${t('Defines exactly what FDA requires for 510(k) submission. Already engaged or needs to be found? Without this, QA direction is a guess.','Определяет что именно требует FDA для 510(k) submission. Уже есть или нужно найти? Без этого направление QA -это догадки.')}</p>
 </div>${renderNotePanel('need_reg')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
@@ -1203,8 +1200,8 @@ function renderNeeds() {
 </div>${renderNotePanel('need_dev')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
-  <div class="card-title">👶 ${t('Junior QA — Later', 'Junior QA — Позже')}</div>
-  <p>${t('Not expected initially — understood. When the time comes: handles test execution and documentation under my direction, freeing me for regulatory and strategic work. This is what unlocks Variant C and the fastest path to submission. Worth raising after the first 30–60 days once the scope is visible.','Изначально не ожидается — понято. Когда придёт время: выполняет тесты и ведёт документацию под моим руководством, освобождая меня для regulatory и стратегической работы. Именно это открывает Вариант C и самый быстрый путь к submission. Стоит поднять после первых 30–60 дней когда объём работ станет очевиден.')}</p>
+  <div class="card-title">👶 ${t('Junior QA -Later', 'Junior QA -Позже')}</div>
+  <p>${t('Not expected initially -understood. When the time comes: handles test execution and documentation under my direction, freeing me for regulatory and strategic work. This is what unlocks Variant C and the fastest path to submission. Worth raising after the first 30–60 days once the scope is visible.','Изначально не ожидается -понято. Когда придёт время: выполняет тесты и ведёт документацию под моим руководством, освобождая меня для regulatory и стратегической работы. Именно это открывает Вариант C и самый быстрый путь к submission. Стоит поднять после первых 30–60 дней когда объём работ станет очевиден.')}</p>
 </div>${renderNotePanel('need_junior')}</div></div>
 
 <h2>📊 ${t('Data', 'Данные')}</h2>
@@ -1216,24 +1213,24 @@ function renderNeeds() {
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">${t('Ground Truth Annotation Details', 'Детали Ground Truth разметки')}</div>
-  <p>${t('Who annotated, what protocol, inter-annotator agreement score, completion status. If incomplete — validation is blocked.','Кто размечал, по какому протоколу, inter-annotator agreement, статус завершённости. Если не завершена — валидация заблокирована.')}</p>
+  <p>${t('Who annotated, what protocol, inter-annotator agreement score, completion status. If incomplete -validation is blocked.','Кто размечал, по какому протоколу, inter-annotator agreement, статус завершённости. Если не завершена -валидация заблокирована.')}</p>
 </div>${renderNotePanel('need_gt')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">${t('Sheba Pilot Issue Log', 'Лог проблем Sheba пилота')}</div>
-  <p>${t('All physician feedback and technical issues from the live pilot. This is our ready-made QA backlog — real problems from real usage.','Весь feedback врачей и технические проблемы из живого пилота. Это готовый QA backlog — реальные проблемы реального использования.')}</p>
+  <p>${t('All physician feedback and technical issues from the live pilot. This is our ready-made QA backlog -real problems from real usage.','Весь feedback врачей и технические проблемы из живого пилота. Это готовый QA backlog -реальные проблемы реального использования.')}</p>
 </div>${renderNotePanel('need_log')}</div></div>
 
 <h2>💻 ${t('Systems & Tools', 'Системы и инструменты')}</h2>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">${t('Test Environment', 'Тестовая среда')}</div>
-  <p>${t('Access to the product in a test environment — not in production Sheba. Testing safely in a live OR is not possible.','Доступ к продукту в тестовой среде — не в продакшне Sheba. Безопасное тестирование в живой операционной невозможно.')}</p>
+  <p>${t('Access to the product in a test environment -not in production Sheba. Testing safely in a live OR is not possible.','Доступ к продукту в тестовой среде -не в продакшне Sheba. Безопасное тестирование в живой операционной невозможно.')}</p>
 </div>${renderNotePanel('need_env')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">${t('Bug Tracking', 'Баг-трекинг')}</div>
-  <p>${t('Jira or equivalent — with proper workflows, fields, priorities, and severity definitions. Starting point for QA visibility across the team.','Jira или аналог — с правильными workflows, полями, приоритетами и определениями severity. Отправная точка для видимости QA в команде.')}</p>
+  <p>${t('Jira or equivalent -with proper workflows, fields, priorities, and severity definitions. Starting point for QA visibility across the team.','Jira или аналог -с правильными workflows, полями, приоритетами и определениями severity. Отправная точка для видимости QA в команде.')}</p>
 </div>${renderNotePanel('need_bugs')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
@@ -1250,12 +1247,12 @@ function renderNeeds() {
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">${t('Product Requirements & Architecture', 'Product Requirements и архитектура')}</div>
-  <p>${t('Everything already written — PRD, architecture diagrams, any existing specs. Starting from scratch is preventable.','Всё что уже написано — PRD, архитектурные схемы, любые существующие specs. Начинать с нуля необязательно.')}</p>
+  <p>${t('Everything already written -PRD, architecture diagrams, any existing specs. Starting from scratch is preventable.','Всё что уже написано -PRD, архитектурные схемы, любые существующие specs. Начинать с нуля необязательно.')}</p>
 </div>${renderNotePanel('need_prd')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
   <div class="card-title">${t('Clinical Trial Protocols', 'Протоколы клинических исследований')}</div>
-  <p>${t('Protocols from all three sites — Sheba, Mount Sinai, St. Vincent Indiana.','Протоколы из всех трёх сайтов — Sheba, Mount Sinai, St. Vincent Indiana.')}</p>
+  <p>${t('Protocols from all three sites -Sheba, Mount Sinai, St. Vincent Indiana.','Протоколы из всех трёх сайтов -Sheba, Mount Sinai, St. Vincent Indiana.')}</p>
 </div>${renderNotePanel('need_protocols')}</div></div>
 
 <div class="card"><div class="risk-card-inner"><div class="risk-main">
@@ -1272,7 +1269,8 @@ function renderNeeds() {
   if (checkAuth()) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-layout').style.display  = 'flex';
-    showSection('overview');
+    const startSection = location.hash.slice(1);
+    showSection(startSection && startSection in { overview:1, regulatory:1, risks:1, questions:1, plan:1, docs:1, needs:1 } ? startSection : 'overview');
   } else {
     document.getElementById('login-user').focus();
   }
