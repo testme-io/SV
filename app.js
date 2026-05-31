@@ -1,5 +1,29 @@
 'use strict';
 
+// ─── AUTH ──────────────────────────────────────────────────────────────────
+const AUTH_KEY = 'nvsight_auth';
+
+function checkAuth() {
+  return localStorage.getItem(AUTH_KEY) === '1';
+}
+
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (user === 'admin' && pass === 'sightendo') {
+    localStorage.setItem(AUTH_KEY, '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-layout').style.display  = 'flex';
+    showSection('overview');
+  } else {
+    const err = document.getElementById('login-error');
+    err.textContent = 'Invalid login or password';
+    err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+  }
+}
+
 // ─── LANGUAGE ──────────────────────────────────────────────────────────────
 let L = localStorage.getItem('lang') || 'en';
 const t = (en, ru) => L === 'en' ? en : ru;
@@ -207,8 +231,11 @@ function saveRiskAnswer(i) {
   const input = document.getElementById('ra-input-' + i);
   if (!input) return;
   const val = input.value.trim();
-  if (!val) return;
-  localStorage.setItem('risk_answer_' + i, val);
+  if (val) {
+    localStorage.setItem('risk_answer_' + i, val);
+  } else {
+    localStorage.removeItem('risk_answer_' + i);
+  }
   refreshAnswerPanel(i);
 }
 
@@ -826,5 +853,12 @@ function renderNeeds() {
 (function init() {
   document.getElementById('btn-en').classList.toggle('active', L === 'en');
   document.getElementById('btn-ru').classList.toggle('active', L === 'ru');
-  showSection('overview');
+
+  if (checkAuth()) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-layout').style.display  = 'flex';
+    showSection('overview');
+  } else {
+    document.getElementById('login-user').focus();
+  }
 })();
