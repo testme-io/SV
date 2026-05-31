@@ -190,7 +190,7 @@ nav ul li a.active {
 main {
   flex: 1;
   padding: 40px 48px;
-  max-width: 960px;
+  max-width: 1280px;
 }
 
 h1 { font-size: 26px; font-weight: 700; color: #0f3460; margin-bottom: 8px; }

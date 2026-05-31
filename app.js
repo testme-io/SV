@@ -518,6 +518,18 @@ function renderRisks() {
       ),
     },
     {
+      level: 'high',
+      title: t('No Formal Requirements Documentation', 'Нет формальных требований'),
+      body: t(
+        'The system was built without documented product requirements. Jira tickets and informal notes cannot serve as a traceability baseline for FDA submission — a regulator needs to see a clear chain: requirement → test case → result. Without this chain, test coverage cannot be formally demonstrated, and the Design History File cannot be assembled.',
+        'Система построена без задокументированных product requirements. Jira-тикеты и неформальные заметки не могут служить baseline трассируемости для FDA submission — регулятор должен видеть чёткую цепочку: требование → тест-кейс → результат. Без этой цепочки тестовое покрытие нельзя формально доказать, а Design History File нельзя собрать.'
+      ),
+      expect: t(
+        'Expected: no formal requirements exist. Action: retrospective requirements documentation in first 30 days — QA extracts requirements from existing system behaviour, Jira, and dev conversations, then gets sign-off from CTO and clinical expert. No BA is needed; this is standard practice in early-stage medical device companies.',
+        'Ожидаем: формальных требований нет. Действие: ретроспективная документация требований в первые 30 дней — QA извлекает требования из существующего поведения системы, Jira и разговоров с разработчиками, затем получает sign-off от CTO и клинического эксперта. BA для этого не нужен — это стандартная практика в ранних медицинских стартапах.'
+      ),
+    },
+    {
       level: 'medium',
       title: t('No Regulatory Consultant Identified', 'Нет регуляторного консультанта'),
       body: t(
