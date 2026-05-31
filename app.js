@@ -101,112 +101,159 @@ function renderOverview() {
 
 <h2>${t('What the Product Does', 'Что делает продукт')}</h2>
 <div class="card">
-  <p>${t(
-    'CoPilotMD NV-Sight is a real-time AI assistant for interventional neuro-radiology. It analyzes angiographic X-ray images during minimally invasive stroke procedures and provides the physician with real-time guidance: vessel anomaly detection, functional brain mapping, and automated clinical reporting.',
-    'CoPilotMD NV-Sight — AI-ассистент реального времени для интервенционной нейрорадиологии. Анализирует ангиографические рентгеновские изображения во время малоинвазивных процедур лечения инсульта и предоставляет врачу помощь в реальном времени: детекция сосудистых аномалий, функциональное картирование мозга, автоматизированные клинические отчёты.'
-  )}</p>
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <p>${t(
+        'CoPilotMD NV-Sight is a real-time AI assistant for interventional neuro-radiology. It analyzes angiographic X-ray images during minimally invasive stroke procedures and provides the physician with real-time guidance: vessel anomaly detection, functional brain mapping, and automated clinical reporting.',
+        'CoPilotMD NV-Sight — AI-ассистент реального времени для интервенционной нейрорадиологии. Анализирует ангиографические рентгеновские изображения во время малоинвазивных процедур лечения инсульта и предоставляет врачу помощь в реальном времени: детекция сосудистых аномалий, функциональное картирование мозга, автоматизированные клинические отчёты.'
+      )}</p>
+    </div>
+    ${renderNotePanel('ov_product')}
+  </div>
 </div>
 
 <h2>${t('System Architecture', 'Архитектура системы')}</h2>
 <div class="card">
-  <p style="font-family:monospace;font-size:13px;color:#374151;line-height:2.2">
-    X-Ray Angio + PACS<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
-    CoPilotMD Workstation<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;(Receiver → Organizer → AI Classifier)<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
-    ${t('INR Display — laptop in hospital network', 'INR Display — ноутбук в сети госпиталя')}
-  </p>
-  <p style="margin-top:12px;font-size:13px;color:#6b7a99">${t(
-    '⚠ Currently runs on a laptop in the hospital domain. Likely a temporary architecture — QA must be designed to survive infrastructure changes.',
-    '⚠ Сейчас работает на ноутбуке в домене госпиталя. Вероятно временная архитектура — QA нужно строить с расчётом на изменения инфраструктуры.'
-  )}</p>
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <p style="font-family:monospace;font-size:13px;color:#374151;line-height:2.2">
+        X-Ray Angio + PACS<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        CoPilotMD Workstation<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;(Receiver → Organizer → AI Classifier)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        ${t('INR Display — laptop in hospital network', 'INR Display — ноутбук в сети госпиталя')}
+      </p>
+      <p style="margin-top:12px;font-size:13px;color:#6b7a99">${t(
+        '⚠ Currently runs on a laptop in the hospital domain. Likely a temporary architecture — QA must be designed to survive infrastructure changes.',
+        '⚠ Сейчас работает на ноутбуке в домене госпиталя. Вероятно временная архитектура — QA нужно строить с расчётом на изменения инфраструктуры.'
+      )}</p>
+    </div>
+    ${renderNotePanel('ov_arch')}
+  </div>
 </div>
 
 <h2>${t('Product Modules', 'Модули продукта')}</h2>
-<div class="module-grid">
-  <div class="module-card mvp">
-    <div class="num">Module 1a · MVP</div>
-    <h3>DETECT</h3>
-    <p>${t(
-      'Real-time detection of vessel anomalies — occlusions, vasospasms, emboli. Live pilot at Sheba Medical Center, Israel.',
-      'Детекция сосудистых аномалий в реальном времени — окклюзии, вазоспазмы, эмболии. Живой пилот в Sheba Medical Center, Израиль.'
-    )}</p>
-    <span class="status-pill done">${t('Live pilot', 'Живой пилот')}</span>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title"><span class="status-pill done" style="margin-right:8px">${t('Live pilot','Живой пилот')}</span> Module 1a — DETECT</div>
+      <p>${t('Real-time detection of vessel anomalies — occlusions, vasospasms, emboli. Live pilot at Sheba Medical Center, Israel.','Детекция сосудистых аномалий в реальном времени — окклюзии, вазоспазмы, эмболии. Живой пилот в Sheba Medical Center, Израиль.')}</p>
+    </div>
+    ${renderNotePanel('ov_mod1a')}
   </div>
-  <div class="module-card roadmap">
-    <div class="num">Module 1b</div>
-    <h3>UNDERSTAND</h3>
-    <p>${t(
-      'Functional brain mapping — identifies eloquent brain zones at risk during the procedure. Currently at feasibility stage.',
-      'Функциональное картирование мозга — выявляет зоны элоквентного мозга под угрозой во время процедуры. Сейчас на стадии feasibility.'
-    )}</p>
-    <span class="status-pill feasibility">Feasibility</span>
+</div>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title"><span class="status-pill feasibility" style="margin-right:8px">Feasibility</span> Module 1b — UNDERSTAND</div>
+      <p>${t('Functional brain mapping — identifies eloquent brain zones at risk during the procedure. Currently at feasibility stage.','Функциональное картирование мозга — выявляет зоны элоквентного мозга под угрозой во время процедуры. Сейчас на стадии feasibility.')}</p>
+    </div>
+    ${renderNotePanel('ov_mod1b')}
   </div>
-  <div class="module-card roadmap">
-    <div class="num">Module 2</div>
-    <h3>INSIGHT</h3>
-    <p>${t(
-      'Real-time risk analysis and procedural recommendations. Planned after MVP.',
-      'Анализ рисков и рекомендации в реальном времени. После MVP.'
-    )}</p>
-    <span class="status-pill after">${t('Post-MVP', 'После MVP')}</span>
+</div>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 2 — INSIGHT</div>
+      <p>${t('Real-time risk analysis and procedural recommendations. Planned after MVP.','Анализ рисков и рекомендации в реальном времени. После MVP.')}</p>
+    </div>
+    ${renderNotePanel('ov_mod2')}
   </div>
-  <div class="module-card roadmap">
-    <div class="num">Module 3</div>
-    <h3>REPORT</h3>
-    <p>${t(
-      'Automated post-procedure clinical reporting. Planned after MVP.',
-      'Автоматические клинические отчёты после процедуры. После MVP.'
-    )}</p>
-    <span class="status-pill after">${t('Post-MVP', 'После MVP')}</span>
+</div>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 3 — REPORT</div>
+      <p>${t('Automated post-procedure clinical reporting. Planned after MVP.','Автоматические клинические отчёты после процедуры. После MVP.')}</p>
+    </div>
+    ${renderNotePanel('ov_mod3')}
   </div>
 </div>
 
 <h2>${t('Clinical Data', 'Клинические данные')}</h2>
-<div class="needs-grid">
-  <div class="card">
-    <div class="card-title">🇮🇱 Sheba Medical Center</div>
-    <p>${t(
-      '3,000+ patients · 600 stroke cases · Live pilot running. Primary training data source.',
-      '3 000+ пациентов · 600 инсультных случаев · Пилот работает. Основной источник обучающих данных.'
-    )}</p>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title">🇮🇱 Sheba Medical Center</div>
+      <p>${t('3,000+ patients · 600 stroke cases · Live pilot running. Primary training data source.','3 000+ пациентов · 600 инсультных случаев · Пилот работает. Основной источник обучающих данных.')}</p>
+    </div>
+    ${renderNotePanel('ov_sheba')}
   </div>
-  <div class="card">
-    <div class="card-title">🇺🇸 Mount Sinai, New York</div>
-    <p>${t(
-      '~500 US patients. Must become the independent validation set for FDA submission.',
-      '~500 пациентов США. Должен стать независимым validation set для FDA submission.'
-    )}</p>
+</div>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title">🇺🇸 Mount Sinai, New York</div>
+      <p>${t('~500 US patients. Must become the independent validation set for FDA submission.','~500 пациентов США. Должен стать независимым validation set для FDA submission.')}</p>
+    </div>
+    ${renderNotePanel('ov_sinai')}
   </div>
-  <div class="card">
-    <div class="card-title">🇺🇸 St. Vincent, Indiana</div>
-    <p>${t(
-      '~400 US patients. Part of the FDA submission evidence package.',
-      '~400 пациентов США. Часть доказательного пакета для FDA.'
-    )}</p>
+</div>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title">🇺🇸 St. Vincent, Indiana</div>
+      <p>${t('~400 US patients. Part of the FDA submission evidence package.','~400 пациентов США. Часть доказательного пакета для FDA.')}</p>
+    </div>
+    ${renderNotePanel('ov_vincent')}
   </div>
-  <div class="card">
-    <div class="card-title">📊 ${t('Performance Claims', 'Заявленные показатели')}</div>
-    <p>${t(
-      '>80% accuracy (95% CI) · 12mm spatial accuracy from Ground Truth · ❓ Validated on which dataset?',
-      '>80% точность (95% CI) · 12мм пространственная точность от Ground Truth · ❓ Проверено на каких данных?'
-    )}</p>
+</div>
+
+<div class="card">
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="card-title">📊 ${t('Performance Claims', 'Заявленные показатели')}</div>
+      <p>${t('>80% accuracy (95% CI) · 12mm spatial accuracy from Ground Truth · ❓ Validated on which dataset?','>80% точность (95% CI) · 12мм пространственная точность от Ground Truth · ❓ Проверено на каких данных?')}</p>
+    </div>
+    ${renderNotePanel('ov_perf')}
   </div>
 </div>
 
 <h2>${t('Regulatory Context', 'Регуляторный контекст')}</h2>
 <div class="card">
-  <p>${t(
-    'Target market: United States → FDA clearance required. Path: 510(k) submission using predicate devices AiDOC, Viz.ai, RapidAI. Key standards: 21 CFR Part 820, IEC 62304 (software lifecycle), ISO 14971 (risk management), IEC 62366 (usability), FDA SaMD guidance. Requires a Quality Management System (QMS) and a Design History File (DHF) with full traceability.',
-    'Целевой рынок: США → требуется FDA clearance. Путь: подача 510(k) используя предикатные устройства AiDOC, Viz.ai, RapidAI. Ключевые стандарты: 21 CFR Part 820, IEC 62304 (жизненный цикл ПО), ISO 14971 (управление рисками), IEC 62366 (юзабилити), руководство FDA по SaMD. Требуется QMS и Design History File (DHF) с полной трассируемостью.'
-  )}</p>
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <p>${t(
+        'Target market: United States → FDA clearance required. Path: 510(k) submission using predicate devices AiDOC, Viz.ai, RapidAI. Key standards: 21 CFR Part 820, IEC 62304 (software lifecycle), ISO 14971 (risk management), IEC 62366 (usability), FDA SaMD guidance. Requires a Quality Management System (QMS) and a Design History File (DHF) with full traceability.',
+        'Целевой рынок: США → требуется FDA clearance. Путь: подача 510(k) используя предикатные устройства AiDOC, Viz.ai, RapidAI. Ключевые стандарты: 21 CFR Part 820, IEC 62304 (жизненный цикл ПО), ISO 14971 (управление рисками), IEC 62366 (юзабилити), руководство FDA по SaMD. Требуется QMS и Design History File (DHF) с полной трассируемостью.'
+      )}</p>
+    </div>
+    ${renderNotePanel('ov_reg')}
+  </div>
 </div>`;
 }
 
 // ─── NOTES (generic, keyed by string id) ───────────────────────────────────
 function getNoteValue(key) {
   return localStorage.getItem('note_' + key) || '';
+}
+
+function renderNoteInline(key) {
+  const saved   = getNoteValue(key);
+  const label   = t('Notes', 'Заметки');
+  const ph      = t('Add a note…', 'Добавить заметку…');
+  const saveBtn = t('Save', 'Сохранить');
+  const editBtn = t('Edit', 'Изменить');
+  if (saved) {
+    return `<div class="note-inline" id="np-${key}" data-type="inline">
+  <div class="answer-label">${label}</div>
+  <div class="answer-text">${saved.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>
+  <button class="answer-btn edit" onclick="editNote('${key}')">${editBtn}</button>
+</div>`;
+  }
+  return `<div class="note-inline" id="np-${key}" data-type="inline">
+  <div class="answer-label">${label}</div>
+  <textarea id="ni-${key}" placeholder="${ph}" rows="2"></textarea>
+  <button class="answer-btn save" onclick="saveNote('${key}')">${saveBtn}</button>
+</div>`;
 }
 
 function renderNotePanel(key) {
@@ -245,17 +292,22 @@ function saveNote(key) {
 function editNote(key) {
   const panel = document.getElementById('np-' + key);
   if (!panel) return;
-  const saved = getNoteValue(key);
+  const saved   = getNoteValue(key);
+  const isInline = panel.dataset.type === 'inline';
+  const rows    = isInline ? ' rows="2"' : '';
   panel.innerHTML = `
   <div class="answer-label">${t('Notes', 'Заметки')}</div>
-  <textarea id="ni-${key}">${saved}</textarea>
+  <textarea id="ni-${key}"${rows}>${saved}</textarea>
   <button class="answer-btn save" onclick="saveNote('${key}')">${t('Save', 'Сохранить')}</button>`;
 }
 
 function refreshNotePanel(key) {
   const panel = document.getElementById('np-' + key);
   if (!panel) return;
-  const saved = getNoteValue(key);
+  const saved    = getNoteValue(key);
+  const isInline = panel.dataset.type === 'inline';
+  const ph       = t('Add a note…','Добавить заметку…');
+  const rows     = isInline ? ' rows="2"' : '';
   if (saved) {
     panel.innerHTML = `
   <div class="answer-label">${t('Notes', 'Заметки')}</div>
@@ -264,7 +316,7 @@ function refreshNotePanel(key) {
   } else {
     panel.innerHTML = `
   <div class="answer-label">${t('Notes', 'Заметки')}</div>
-  <textarea id="ni-${key}" placeholder="${t('Add a note…','Добавить заметку…')}"></textarea>
+  <textarea id="ni-${key}"${rows} placeholder="${ph}"></textarea>
   <button class="answer-btn save" onclick="saveNote('${key}')">${t('Save', 'Сохранить')}</button>`;
   }
 }
@@ -741,13 +793,18 @@ function renderQuestions() {
     },
   ];
 
-  const qCard = (item, cls, clsLabel) => `
+  const qCard = (item, cls, clsLabel, key) => `
 <div class="q-card">
-  <div class="q-label ${cls}">${clsLabel}</div>
-  <div class="question">${item.q}</div>
-  <div class="expect-box">
-    <strong>${t('Expected', 'Ожидаем')}</strong>
-    ${item.a}
+  <div class="risk-card-inner">
+    <div class="risk-main">
+      <div class="q-label ${cls}">${clsLabel}</div>
+      <div class="question">${item.q}</div>
+      <div class="expect-box">
+        <strong>${t('Expected', 'Ожидаем')}</strong>
+        ${item.a}
+      </div>
+    </div>
+    ${renderNotePanel(key)}
   </div>
 </div>`;
 
@@ -759,13 +816,13 @@ function renderQuestions() {
 )}</p>
 
 <h2>🔴 ${t('Must Ask', 'Задать обязательно')}</h2>
-${must.map(q => qCard(q, 'must', t('MUST ASK', 'ОБЯЗАТЕЛЬНО'))).join('')}
+${must.map((q,i) => qCard(q, 'must', t('MUST ASK','ОБЯЗАТЕЛЬНО'), `q_must_${i}`)).join('')}
 
 <h2>🟡 ${t('Important — If Time Allows', 'Важные — если есть время')}</h2>
-${important.map(q => qCard(q, 'important', t('IMPORTANT', 'ВАЖНО'))).join('')}
+${important.map((q,i) => qCard(q, 'important', t('IMPORTANT','ВАЖНО'), `q_imp_${i}`)).join('')}
 
 <h2>🟢 ${t('Nice to Know', 'Хорошо бы узнать')}</h2>
-${nice.map(q => qCard(q, 'nice', t('NICE TO KNOW', 'ХОРОШО БЫ'))).join('')}`;
+${nice.map((q,i) => qCard(q, 'nice', t('NICE TO KNOW','ХОРОШО БЫ'), `q_nice_${i}`)).join('')}`;
 }
 
 // ─── PLAN ──────────────────────────────────────────────────────────────────
@@ -802,47 +859,56 @@ function renderPlan() {
   <div class="phase">
     <div class="phase-header d30">${t('Days 1–30 · Foundation', 'Дни 1–30 · Фундамент')}</div>
     <div class="phase-body">
-      <ul>
-        <li>${t('Baseline audit of Sheba pilot — document current state, all known issues, all user feedback', 'Baseline аудит Sheba пилота — документируем текущее состояние, все известные проблемы, весь feedback')}</li>
-        <li>${t('Study FDA 510(k) pathway with regulatory consultant — understand exact deliverables required', 'Изучаем FDA 510(k) с регуляторным консультантом — понимаем точные требуемые deliverables')}</li>
-        <li>${t('Map predicate devices (AiDOC, Viz.ai, RapidAI) — identify most relevant comparison points', 'Маппинг предикатных устройств (AiDOC, Viz.ai, RapidAI) — наиболее релевантные точки сравнения')}</li>
-        <li>${t('Set up defect tracking, documentation space, QA tooling', 'Настраиваем дефект-трекинг, место для документации, QA-инструменты')}</li>
-        <li>${t('Test Strategy v1: scope, risk matrix, severity thresholds (false negative = Critical by default), definition of done', 'Test Strategy v1: scope, risk матрица, severity пороги (false negative = Critical по умолчанию), definition of done')}</li>
-      </ul>
+      <div class="risk-card-inner">
+        <div class="risk-main">
+          <ul>
+            <li>${t('Baseline audit of Sheba pilot — document current state, all known issues, all user feedback', 'Baseline аудит Sheba пилота — документируем текущее состояние, все известные проблемы, весь feedback')}</li>
+            <li>${t('Study FDA 510(k) pathway with regulatory consultant — understand exact deliverables required', 'Изучаем FDA 510(k) с регуляторным консультантом — понимаем точные требуемые deliverables')}</li>
+            <li>${t('Map predicate devices (AiDOC, Viz.ai, RapidAI) — identify most relevant comparison points', 'Маппинг предикатных устройств (AiDOC, Viz.ai, RapidAI) — наиболее релевантные точки сравнения')}</li>
+            <li>${t('Set up defect tracking, documentation space, QA tooling', 'Настраиваем дефект-трекинг, место для документации, QA-инструменты')}</li>
+            <li>${t('Test Strategy v1: scope, risk matrix, severity thresholds (false negative = Critical by default), definition of done', 'Test Strategy v1: scope, risk матрица, severity пороги (false negative = Critical по умолчанию), definition of done')}</li>
+          </ul>
+        </div>
+        ${renderNotePanel('plan_a_30')}
+      </div>
     </div>
   </div>
 
   <div class="phase">
     <div class="phase-header d90">${t('Days 31–90 · Validation Core', 'Дни 31–90 · Ядро валидации')}</div>
     <div class="phase-body">
-      <ul>
-        <li>${t('Data pipeline testing first — garbage in, garbage out. All stages before AI input verified', 'Тестирование data pipeline первым — garbage in, garbage out. Все стадии до AI верифицированы')}</li>
-        <li>${t('Module 1a end-to-end: AI accuracy layer → real-time performance → clinical display — each independently, then integrated', 'Module 1a end-to-end: AI accuracy → real-time performance → clinical display — каждый независимо, потом вместе')}</li>
-        <li>${t('Independent validation dataset established from US sites — separate from training data', 'Независимый validation датасет из US сайтов — отдельный от обучающих данных')}</li>
-        <li>${t('Site acceptance testing protocol v1 — standardized checklist, tested and validated on Sheba', 'Site acceptance testing protocol v1 — стандартный чеклист, протестирован и валидирован на Sheba')}</li>
-        <li>${t('DHF documentation starts: requirements → test cases → results, full traceability', 'Начало DHF документации: требования → тест-кейсы → результаты, полная трассируемость')}</li>
-      </ul>
-      <p class="phase-note">${t(
-        'Module 2 test framework prepared in parallel — ready to execute as soon as dev stabilizes.',
-        'Framework для Module 2 готов параллельно — выполняется как только dev стабилизируется.'
-      )}</p>
+      <div class="risk-card-inner">
+        <div class="risk-main">
+          <ul>
+            <li>${t('Data pipeline testing first — garbage in, garbage out. All stages before AI input verified', 'Тестирование data pipeline первым — garbage in, garbage out. Все стадии до AI верифицированы')}</li>
+            <li>${t('Module 1a end-to-end: AI accuracy layer → real-time performance → clinical display — each independently, then integrated', 'Module 1a end-to-end: AI accuracy → real-time performance → clinical display — каждый независимо, потом вместе')}</li>
+            <li>${t('Independent validation dataset established from US sites — separate from training data', 'Независимый validation датасет из US сайтов — отдельный от обучающих данных')}</li>
+            <li>${t('Site acceptance testing protocol v1 — standardized checklist, tested and validated on Sheba', 'Site acceptance testing protocol v1 — стандартный чеклист, протестирован и валидирован на Sheba')}</li>
+            <li>${t('DHF documentation starts: requirements → test cases → results, full traceability', 'Начало DHF документации: требования → тест-кейсы → результаты, полная трассируемость')}</li>
+          </ul>
+          <p class="phase-note">${t('Module 2 test framework prepared in parallel — ready to execute as soon as dev stabilizes.','Framework для Module 2 готов параллельно — выполняется как только dev стабилизируется.')}</p>
+        </div>
+        ${renderNotePanel('plan_a_90')}
+      </div>
     </div>
   </div>
 
   <div class="phase">
     <div class="phase-header d180">${t('Days 91–180 · Submission Ready', 'Дни 91–180 · Готовность к Submission')}</div>
     <div class="phase-body">
-      <ul>
-        <li>${t('Module 2 full test cycle (conditional on stability by day 90)', 'Полный тест-цикл Module 2 (при условии стабильности к дню 90)')}</li>
-        <li>${t('Full regression — both modules integrated end-to-end', 'Полная регрессия — оба модуля интегрированы end-to-end')}</li>
-        <li>${t('Performance benchmarking on production-equivalent hardware', 'Performance benchmarking на production-эквивалентном оборудовании')}</li>
-        <li>${t('Predicate device comparison testing documented for 510(k)', 'Сравнительное тестирование с предикатными устройствами задокументировано для 510(k)')}</li>
-        <li>${t('510(k) submission package assembled together with regulatory consultant', '510(k) submission package собран вместе с регуляторным консультантом')}</li>
-      </ul>
-      <p class="phase-note">${t(
-        'Target: submission-ready at month 6–7. Main risk: Module 2 development timeline.',
-        'Цель: готовность к submission на месяце 6–7. Главный риск: timeline разработки Module 2.'
-      )}</p>
+      <div class="risk-card-inner">
+        <div class="risk-main">
+          <ul>
+            <li>${t('Module 2 full test cycle (conditional on stability by day 90)', 'Полный тест-цикл Module 2 (при условии стабильности к дню 90)')}</li>
+            <li>${t('Full regression — both modules integrated end-to-end', 'Полная регрессия — оба модуля интегрированы end-to-end')}</li>
+            <li>${t('Performance benchmarking on production-equivalent hardware', 'Performance benchmarking на production-эквивалентном оборудовании')}</li>
+            <li>${t('Predicate device comparison testing documented for 510(k)', 'Сравнительное тестирование с предикатными устройствами задокументировано для 510(k)')}</li>
+            <li>${t('510(k) submission package assembled together with regulatory consultant', '510(k) submission package собран вместе с регуляторным консультантом')}</li>
+          </ul>
+          <p class="phase-note">${t('Target: submission-ready at month 6–7. Main risk: Module 2 development timeline.','Цель: готовность к submission на месяце 6–7. Главный риск: timeline разработки Module 2.')}</p>
+        </div>
+        ${renderNotePanel('plan_a_180')}
+      </div>
     </div>
   </div>
 </div>
@@ -871,41 +937,50 @@ function renderPlan() {
   <div class="phase">
     <div class="phase-header d30">${t('Days 1–30 · Dual Track Launch', 'Дни 1–30 · Запуск обоих треков')}</div>
     <div class="phase-body">
-      <ul>
-        <li>${t('Me: Baseline audit + regulatory study + Test Strategy v1', 'Я: Baseline аудит + изучение regulatory + Test Strategy v1')}</li>
-        <li>${t('Junior: Tooling setup, first test cases on core flow, defect log started', 'Junior: Настройка инструментов, первые тест-кейсы на core flow, начало лога дефектов')}</li>
-        <li>${t('Together: Severity matrix, priority order, weekly sync cadence', 'Вместе: Severity матрица, порядок приоритетов, ритм еженедельных синхронизаций')}</li>
-      </ul>
+      <div class="risk-card-inner">
+        <div class="risk-main">
+          <ul>
+            <li>${t('Me: Baseline audit + regulatory study + Test Strategy v1', 'Я: Baseline аудит + изучение regulatory + Test Strategy v1')}</li>
+            <li>${t('Junior: Tooling setup, first test cases on core flow, defect log started', 'Junior: Настройка инструментов, первые тест-кейсы на core flow, начало лога дефектов')}</li>
+            <li>${t('Together: Severity matrix, priority order, weekly sync cadence', 'Вместе: Severity матрица, порядок приоритетов, ритм еженедельных синхронизаций')}</li>
+          </ul>
+        </div>
+        ${renderNotePanel('plan_c_30')}
+      </div>
     </div>
   </div>
 
   <div class="phase">
     <div class="phase-header d90">${t('Days 31–90 · Full Coverage', 'Дни 31–90 · Полное покрытие')}</div>
     <div class="phase-body">
-      <ul>
-        <li>${t('Me: DHF documentation, predicate device analysis, validation dataset validation, regulatory consultant coordination', 'Я: DHF документация, анализ предикатных устройств, валидация validation датасета, координация с регуляторным консультантом')}</li>
-        <li>${t('Junior: Module 1a full test execution, site acceptance testing, defect tracking and reporting', 'Junior: Полное тестирование Module 1a, site acceptance testing, трекинг и репортинг дефектов')}</li>
-        <li>${t('Together: Weekly QA review, metrics, risk reassessment', 'Вместе: Еженедельный QA review, метрики, переоценка рисков')}</li>
-      </ul>
-      <p class="phase-note">${t(
-        'Target by day 90: Module 1a fully tested and documented. Independent US validation set established.',
-        'Цель к дню 90: Module 1a полностью протестирован и задокументирован. Независимый US validation set установлен.'
-      )}</p>
+      <div class="risk-card-inner">
+        <div class="risk-main">
+          <ul>
+            <li>${t('Me: DHF documentation, predicate device analysis, validation dataset validation, regulatory consultant coordination', 'Я: DHF документация, анализ предикатных устройств, валидация validation датасета, координация с регуляторным консультантом')}</li>
+            <li>${t('Junior: Module 1a full test execution, site acceptance testing, defect tracking and reporting', 'Junior: Полное тестирование Module 1a, site acceptance testing, трекинг и репортинг дефектов')}</li>
+            <li>${t('Together: Weekly QA review, metrics, risk reassessment', 'Вместе: Еженедельный QA review, метрики, переоценка рисков')}</li>
+          </ul>
+          <p class="phase-note">${t('Target by day 90: Module 1a fully tested and documented. Independent US validation set established.','Цель к дню 90: Module 1a полностью протестирован и задокументирован. Независимый US validation set установлен.')}</p>
+        </div>
+        ${renderNotePanel('plan_c_90')}
+      </div>
     </div>
   </div>
 
   <div class="phase">
     <div class="phase-header d180">${t('Days 91–180 · Submission', 'Дни 91–180 · Submission')}</div>
     <div class="phase-body">
-      <ul>
-        <li>${t('Module 2 full cycle + integration testing with Module 1', 'Полный цикл Module 2 + интеграционное тестирование с Module 1')}</li>
-        <li>${t('Final regression, performance benchmarking, predicate device comparison', 'Финальная регрессия, performance benchmarking, сравнение с предикатными устройствами')}</li>
-        <li>${t('510(k) submission package — assembled with regulatory consultant', '510(k) submission package — собирается с регуляторным консультантом')}</li>
-      </ul>
-      <p class="phase-note">${t(
-        'Target: submission-ready at month 6. Main risk: Module 2 development timeline.',
-        'Цель: готовность к submission на месяце 6. Главный риск: timeline разработки Module 2.'
-      )}</p>
+      <div class="risk-card-inner">
+        <div class="risk-main">
+          <ul>
+            <li>${t('Module 2 full cycle + integration testing with Module 1', 'Полный цикл Module 2 + интеграционное тестирование с Module 1')}</li>
+            <li>${t('Final regression, performance benchmarking, predicate device comparison', 'Финальная регрессия, performance benchmarking, сравнение с предикатными устройствами')}</li>
+            <li>${t('510(k) submission package — assembled with regulatory consultant', '510(k) submission package — собирается с регуляторным консультантом')}</li>
+          </ul>
+          <p class="phase-note">${t('Target: submission-ready at month 6. Main risk: Module 2 development timeline.','Цель: готовность к submission на месяце 6. Главный риск: timeline разработки Module 2.')}</p>
+        </div>
+        ${renderNotePanel('plan_c_180')}
+      </div>
     </div>
   </div>
 </div>`;
@@ -930,118 +1005,82 @@ function renderNeeds() {
 )}</p>
 
 <h2>👥 ${t('People', 'Люди')}</h2>
-<div class="needs-grid">
-  <div class="card">
-    <div class="card-title">🩺 ${t('Clinical Expert', 'Клинический эксперт')}</div>
-    <p>${t(
-      'A physician or radiologist who is the single source of truth on clinical correctness. Who approves that a functional zone mapping is correct — not algorithmically, but clinically?',
-      'Врач или радиолог — единственный источник правды по клинической корректности. Кто апрувит что маппинг функциональной зоны корректен — не алгоритмически, а клинически?'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">⚖️ ${t('Regulatory Consultant', 'Регуляторный консультант')}</div>
-    <p>${t(
-      'Defines exactly what FDA requires for 510(k) submission. Already engaged or needs to be found? Without this, QA direction is a guess.',
-      'Определяет что именно требует FDA для 510(k) submission. Уже есть или нужно найти? Без этого направление QA — это догадки.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">👨‍💻 ${t('Developer Access', 'Доступ к разработчикам')}</div>
-    <p>${t(
-      'To understand pipeline architecture, data flow, technical debt, and upcoming changes. QA cannot be built in isolation.',
-      'Понимание архитектуры pipeline, data flow, технического долга и предстоящих изменений. QA нельзя строить изолированно.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">👶 ${t('Junior QA (Variant C)', 'Junior QA (Вариант C)')}</div>
-    <p>${t(
-      'For Variant C: handles test execution and documentation under my direction. Frees me for regulatory and strategic work. Fastest path to submission.',
-      'Для Варианта C: выполняет тесты и ведёт документацию под моим руководством. Освобождает меня для regulatory и стратегической работы. Самый быстрый путь к submission.'
-    )}</p>
-  </div>
-</div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">🩺 ${t('Clinical Expert', 'Клинический эксперт')}</div>
+  <p>${t('A physician or radiologist who is the single source of truth on clinical correctness. Who approves that a functional zone mapping is correct — not algorithmically, but clinically?','Врач или радиолог — единственный источник правды по клинической корректности. Кто апрувит что маппинг функциональной зоны корректен — не алгоритмически, а клинически?')}</p>
+</div>${renderNotePanel('need_clinical')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">⚖️ ${t('Regulatory Consultant', 'Регуляторный консультант')}</div>
+  <p>${t('Defines exactly what FDA requires for 510(k) submission. Already engaged or needs to be found? Without this, QA direction is a guess.','Определяет что именно требует FDA для 510(k) submission. Уже есть или нужно найти? Без этого направление QA — это догадки.')}</p>
+</div>${renderNotePanel('need_reg')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">👨‍💻 ${t('Developer Access', 'Доступ к разработчикам')}</div>
+  <p>${t('To understand pipeline architecture, data flow, technical debt, and upcoming changes. QA cannot be built in isolation.','Понимание архитектуры pipeline, data flow, технического долга и предстоящих изменений. QA нельзя строить изолированно.')}</p>
+</div>${renderNotePanel('need_dev')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">👶 ${t('Junior QA (Variant C)', 'Junior QA (Вариант C)')}</div>
+  <p>${t('For Variant C: handles test execution and documentation under my direction. Frees me for regulatory and strategic work. Fastest path to submission.','Для Варианта C: выполняет тесты и ведёт документацию под моим руководством. Освобождает меня для regulatory и стратегической работы. Самый быстрый путь к submission.')}</p>
+</div>${renderNotePanel('need_junior')}</div></div>
 
 <h2>📊 ${t('Data', 'Данные')}</h2>
-<div class="needs-grid">
-  <div class="card">
-    <div class="card-title">${t('Retrospective Data Access', 'Доступ к ретроспективным данным')}</div>
-    <p>${t(
-      'De-identified data from all three sites (Sheba, Mount Sinai, St. Vincent) for validation. IRB-approved and HIPAA-compliant.',
-      'Деидентифицированные данные из всех трёх сайтов (Sheba, Mount Sinai, St. Vincent) для валидации. С IRB approval и соответствием HIPAA.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">${t('Ground Truth Annotation Details', 'Детали Ground Truth разметки')}</div>
-    <p>${t(
-      'Who annotated, what protocol, inter-annotator agreement score, completion status. If incomplete — validation is blocked.',
-      'Кто размечал, по какому протоколу, inter-annotator agreement, статус завершённости. Если не завершена — валидация заблокирована.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">${t('Sheba Pilot Issue Log', 'Лог проблем Sheba пилота')}</div>
-    <p>${t(
-      'All physician feedback and technical issues from the live pilot. This is our ready-made QA backlog — real problems from real usage.',
-      'Весь feedback врачей и технические проблемы из живого пилота. Это готовый QA backlog — реальные проблемы реального использования.'
-    )}</p>
-  </div>
-</div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Retrospective Data Access', 'Доступ к ретроспективным данным')}</div>
+  <p>${t('De-identified data from all three sites (Sheba, Mount Sinai, St. Vincent) for validation. IRB-approved and HIPAA-compliant.','Деидентифицированные данные из всех трёх сайтов (Sheba, Mount Sinai, St. Vincent) для валидации. С IRB approval и соответствием HIPAA.')}</p>
+</div>${renderNotePanel('need_data')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Ground Truth Annotation Details', 'Детали Ground Truth разметки')}</div>
+  <p>${t('Who annotated, what protocol, inter-annotator agreement score, completion status. If incomplete — validation is blocked.','Кто размечал, по какому протоколу, inter-annotator agreement, статус завершённости. Если не завершена — валидация заблокирована.')}</p>
+</div>${renderNotePanel('need_gt')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Sheba Pilot Issue Log', 'Лог проблем Sheba пилота')}</div>
+  <p>${t('All physician feedback and technical issues from the live pilot. This is our ready-made QA backlog — real problems from real usage.','Весь feedback врачей и технические проблемы из живого пилота. Это готовый QA backlog — реальные проблемы реального использования.')}</p>
+</div>${renderNotePanel('need_log')}</div></div>
 
 <h2>💻 ${t('Systems & Tools', 'Системы и инструменты')}</h2>
-<div class="needs-grid">
-  <div class="card">
-    <div class="card-title">${t('Test Environment', 'Тестовая среда')}</div>
-    <p>${t(
-      'Access to the product in a test environment — not in production Sheba. Testing safely in a live OR is not possible.',
-      'Доступ к продукту в тестовой среде — не в продакшне Sheba. Безопасное тестирование в живой операционной невозможно.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">${t('Bug Tracking', 'Баг-трекинг')}</div>
-    <p>${t(
-      'Jira or equivalent — with proper workflows, fields, priorities, and severity definitions. Starting point for QA visibility across the team.',
-      'Jira или аналог — с правильными workflows, полями, приоритетами и определениями severity. Отправная точка для видимости QA в команде.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">${t('Documentation Space', 'Место для документации')}</div>
-    <p>${t(
-      'Confluence or equivalent for Test Strategy, test plans, DHF documentation, and traceability matrices.',
-      'Confluence или аналог для Test Strategy, тест-планов, DHF документации и матриц трассируемости.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">${t('Benchmark Product Access', 'Доступ к продуктам-бенчмаркам')}</div>
-    <p>${t(
-      'AiDOC, Viz.ai cited as UX benchmarks. Need at least demo or documentation to understand the target UX standard we are being compared against.',
-      'AiDOC, Viz.ai названы как UX бенчмарки. Нужен хотя бы демо или документация чтобы понять целевой UX стандарт с которым нас сравнивают.'
-    )}</p>
-  </div>
-</div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Test Environment', 'Тестовая среда')}</div>
+  <p>${t('Access to the product in a test environment — not in production Sheba. Testing safely in a live OR is not possible.','Доступ к продукту в тестовой среде — не в продакшне Sheba. Безопасное тестирование в живой операционной невозможно.')}</p>
+</div>${renderNotePanel('need_env')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Bug Tracking', 'Баг-трекинг')}</div>
+  <p>${t('Jira or equivalent — with proper workflows, fields, priorities, and severity definitions. Starting point for QA visibility across the team.','Jira или аналог — с правильными workflows, полями, приоритетами и определениями severity. Отправная точка для видимости QA в команде.')}</p>
+</div>${renderNotePanel('need_bugs')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Documentation Space', 'Место для документации')}</div>
+  <p>${t('Confluence or equivalent for Test Strategy, test plans, DHF documentation, and traceability matrices.','Confluence или аналог для Test Strategy, тест-планов, DHF документации и матриц трассируемости.')}</p>
+</div>${renderNotePanel('need_docs')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Benchmark Product Access', 'Доступ к продуктам-бенчмаркам')}</div>
+  <p>${t('AiDOC, Viz.ai cited as UX benchmarks. Need at least demo or documentation to understand the target UX standard we are being compared against.','AiDOC, Viz.ai названы как UX бенчмарки. Нужен хотя бы демо или документация чтобы понять целевой UX стандарт с которым нас сравнивают.')}</p>
+</div>${renderNotePanel('need_bench')}</div></div>
 
 <h2>📄 ${t('Documents', 'Документы')}</h2>
-<div class="needs-grid">
-  <div class="card">
-    <div class="card-title">${t('Product Requirements & Architecture', 'Product Requirements и архитектура')}</div>
-    <p>${t(
-      'Everything already written — PRD, architecture diagrams, any existing specs. Starting from scratch is preventable.',
-      'Всё что уже написано — PRD, архитектурные схемы, любые существующие specs. Начинать с нуля необязательно.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">${t('Clinical Trial Protocols', 'Протоколы клинических исследований')}</div>
-    <p>${t(
-      'Protocols from all three sites — Sheba, Mount Sinai, St. Vincent Indiana.',
-      'Протоколы из всех трёх сайтов — Sheba, Mount Sinai, St. Vincent Indiana.'
-    )}</p>
-  </div>
-  <div class="card">
-    <div class="card-title">IRB Approvals</div>
-    <p>${t(
-      'Confirms data was collected under proper ethics oversight. Required for any FDA submission.',
-      'Подтверждает что данные собирались под надлежащим этическим надзором. Обязательно для FDA submission.'
-    )}</p>
-  </div>
-</div>`;
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Product Requirements & Architecture', 'Product Requirements и архитектура')}</div>
+  <p>${t('Everything already written — PRD, architecture diagrams, any existing specs. Starting from scratch is preventable.','Всё что уже написано — PRD, архитектурные схемы, любые существующие specs. Начинать с нуля необязательно.')}</p>
+</div>${renderNotePanel('need_prd')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">${t('Clinical Trial Protocols', 'Протоколы клинических исследований')}</div>
+  <p>${t('Protocols from all three sites — Sheba, Mount Sinai, St. Vincent Indiana.','Протоколы из всех трёх сайтов — Sheba, Mount Sinai, St. Vincent Indiana.')}</p>
+</div>${renderNotePanel('need_protocols')}</div></div>
+
+<div class="card"><div class="risk-card-inner"><div class="risk-main">
+  <div class="card-title">IRB Approvals</div>
+  <p>${t('Confirms data was collected under proper ethics oversight. Required for any FDA submission.','Подтверждает что данные собирались под надлежащим этическим надзором. Обязательно для FDA submission.')}</p>
+</div>${renderNotePanel('need_irb')}</div></div>`;
 }
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
