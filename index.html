@@ -7,7 +7,20 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div class="layout">
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">QA Discovery</div>
+    <h2>CoPilotMD NV-Sight</h2>
+    <input type="text"     id="login-user" placeholder="Login"    autocomplete="username" />
+    <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')doLogin()" />
+    <div id="login-error"></div>
+    <button onclick="doLogin()">Enter →</button>
+  </div>
+</div>
+
+<div id="app-layout" class="layout" style="display:none">
   <nav id="sidebar">
     <div class="nav-header">
       <div class="lang-switch">
@@ -22,6 +35,7 @@
   </nav>
   <main id="main"></main>
 </div>
+
 <script src="app.js"></script>
 </body>
 </html>
