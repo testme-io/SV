@@ -639,8 +639,12 @@ function renderQuestions() {
   const must = [
     {
       q: t(
-        '"What format do you expect for the test assignment -slides, document, live discussion?"',
-        '"В каком формате вы ожидаете тестовое задание -слайды, документ, живой разговор?"'
+        '"What format do you expect for the test assignment - slides, document, live discussion?"',
+        '"В каком формате вы ожидаете тестовое задание - слайды, документ, живой разговор?"'
+      ),
+      g: t(
+        'Know how to prepare. Spending time on the wrong format wastes the only preparation window before the interview.',
+        'Понять как готовиться. Потраченное время на неправильный формат - это единственное окно подготовки до интервью.'
       ),
       a: t(
         'Expected: slides. Need this to spend preparation time correctly.',
@@ -649,8 +653,12 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Who is the presentation for -CTO only, or is the CEO also present?"',
-        '"На кого рассчитана презентация -только CTO или CEO тоже присутствует?"'
+        '"Who is the presentation for - CTO only, or is the CEO also present?"',
+        '"На кого рассчитана презентация - только CTO или CEO тоже присутствует?"'
+      ),
+      g: t(
+        'Calibrate language and depth. A technical-only audience gets deep QA specifics. A mixed panel needs both technical substance and business framing.',
+        'Откалибровать язык и глубину. Чисто технической аудитории - глубокая QA специфика. Смешанной панели нужны и технические детали и бизнес-формулировки.'
       ),
       a: t(
         'Expected: panel with CTO + CEO minimum. Need to balance technical and business language.',
@@ -662,15 +670,23 @@ function renderQuestions() {
         '"Was the model validated on an independent dataset, or does it overlap with training data?"',
         '"Модель валидировалась на независимом датасете или пересекается с обучающими данными?"'
       ),
+      g: t(
+        'Identify the first critical FDA gap before leaving the meeting. FDA requires a clean separation between training and validation data. If they overlap, US data collection becomes the first unblocking task.',
+        'Выявить первый критический FDA gap ещё на встрече. FDA требует чёткого разделения обучающих и валидационных данных. Если пересекаются - сбор US данных становится первой разблокирующей задачей.'
+      ),
       a: t(
-        'Expected: possible overlap. This is the first critical gap for FDA -US data must become the independent validation set.',
-        'Ожидаем: возможно пересекаются. Это первый критический gap для FDA -US данные должны стать независимым validation set.'
+        'Expected: possible overlap. This is the first critical gap for FDA - US data must become the independent validation set.',
+        'Ожидаем: возможно пересекаются. Это первый критический gap для FDA - US данные должны стать независимым validation set.'
       ),
     },
     {
       q: t(
         '"Was clinical data collected under IRB approval and de-identified per HIPAA/FDA standards?"',
         '"Клинические данные собирались под IRB approval и деидентифицированы по HIPAA/FDA стандартам?"'
+      ),
+      g: t(
+        'Determine if data can legally enter the QA pipeline at all. Missing IRB or HIPAA compliance blocks everything - no testing can start on that data until it is resolved.',
+        'Определить можно ли вообще юридически использовать данные в QA pipeline. Отсутствие IRB или HIPAA compliance блокирует всё - тестирование на этих данных невозможно пока не решено.'
       ),
       a: t(
         'Expected: yes. Without this, data cannot be used in a submission.',
@@ -682,6 +698,10 @@ function renderQuestions() {
         '"Is there already an FDA regulatory consultant engaged, or does that need to be organized?"',
         '"Есть ли уже контакт с FDA или регуляторным консультантом, или это нужно будет организовать?"'
       ),
+      g: t(
+        'Understand who owns the submission requirements. Without a regulatory consultant, QA direction is guesswork - we would be building evidence for a standard we have not confirmed applies.',
+        'Понять кто владеет требованиями к submission. Без регуляторного консультанта QA-направление строится на догадках - мы создаём доказательства для стандарта который не подтверждён.'
+      ),
       a: t(
         'Expected: not yet or just starting. Need to understand how independent we are in defining requirements.',
         'Ожидаем: нет или только начинают. Нужно понять насколько мы самостоятельны в определении требований.'
@@ -689,12 +709,44 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Is there a log of issues from the Sheba pilot -what physicians reported, what didn\'t work?"',
-        '"Есть ли лог проблем из Sheba пилота -что сообщали врачи, что не работало?"'
+        '"Is there a log of issues from the Sheba pilot - what physicians reported, what did not work?"',
+        '"Есть ли лог проблем из Sheba пилота - что сообщали врачи, что не работало?"'
+      ),
+      g: t(
+        'Find an existing QA backlog to avoid starting from zero. Real issues from real production usage are worth more than any test plan written in isolation.',
+        'Найти готовый QA backlog чтобы не начинать с нуля. Реальные проблемы реального использования стоят больше любого тест-плана написанного в изоляции.'
       ),
       a: t(
-        'Expected: informal notes. This is a ready-made QA backlog -real problems from real production usage.',
-        'Ожидаем: неформальные заметки. Это готовый QA backlog -реальные проблемы реального использования.'
+        'Expected: informal notes. This is a ready-made QA backlog - real problems from real production usage.',
+        'Ожидаем: неформальные заметки. Это готовый QA backlog - реальные проблемы реального использования.'
+      ),
+    },
+    {
+      q: t(
+        '"Why is the engagement structured as 3 months? Is this a trial period, a project milestone, or a budget decision?"',
+        '"Почему контракт на 3 месяца? Это испытательный срок, проектный milestone или бюджетное решение?"'
+      ),
+      g: t(
+        'Calibrate the engagement model and priority order. A trial period means proving value in the first 30 days. A fixed milestone means knowing exactly what "done" looks like at month 3. The answer changes what gets prioritized from day one.',
+        'Откалибровать модель работы и порядок приоритетов. Trial period - доказываю ценность в первые 30 дней. Фиксированный milestone - понимаю как выглядит "done" к месяцу 3. Ответ меняет приоритеты с первого дня.'
+      ),
+      a: t(
+        'Expected: trial period or milestone-based. Either way, the first 30 days must show visible, measurable output.',
+        'Ожидаем: испытательный срок или milestone-based. В любом случае первые 30 дней должны показать видимый измеримый результат.'
+      ),
+    },
+    {
+      q: t(
+        '"What is the plan for QA after the contract ends - extend, hire a permanent QA, build a team, transfer the project, or sell?"',
+        '"Что планируется с QA после окончания контракта - продление, найм постоянного QA, своя команда, передача проекта или продажа?"'
+      ),
+      g: t(
+        'Determines what to leave behind and how to structure all output. Handing over to a new hire means thorough documentation of every process built. Extension means focus on delivery. Selling or transferring - the DHF and process documentation become the primary asset being handed over.',
+        'Определяет что оставить после себя и как структурировать всю работу. Передача новому сотруднику - подробная документация каждого выстроенного процесса. Продление - фокус на результате. Продажа или передача - DHF и документация процессов становятся основным передаваемым активом.'
+      ),
+      a: t(
+        'Expected: extension or permanent hire. If selling or transferring - the documentation standard immediately goes up.',
+        'Ожидаем: продление или постоянный найм. Если продажа или передача - требования к документации сразу вырастают.'
       ),
     },
   ];
@@ -705,6 +757,10 @@ function renderQuestions() {
         '"What makes up the remaining 10% to MVP-ready in Module 1?"',
         '"Что составляет оставшиеся 10% до MVP ready в Module 1?"'
       ),
+      g: t(
+        'Locate where the active risk sits right now before any planning. Edge cases and integration issues are very different things to test for.',
+        'Найти где горячий риск прямо сейчас до любого планирования. Edge cases и интеграционные проблемы - принципиально разные объекты тестирования.'
+      ),
       a: t(
         'Expected: edge cases or integration. Need to know where the active risks are right now.',
         'Ожидаем: edge cases или интеграция. Нужно понять где горячие риски прямо сейчас.'
@@ -713,7 +769,11 @@ function renderQuestions() {
     {
       q: t(
         '"Is the laptop a temporary solution or the final production architecture?"',
-        '"Ноутбук -временное решение или финальная production архитектура?"'
+        '"Ноутбук - временное решение или финальная production архитектура?"'
+      ),
+      g: t(
+        'Distinguish what needs testing now from what to defer. If it is temporary, performance benchmarking on current hardware is wasted effort.',
+        'Разделить что тестировать сейчас от того что отложить. Если временное - performance benchmarking на текущем железе это потраченные впустую усилия.'
       ),
       a: t(
         'Expected: temporary. Affects what to test now versus what to defer.',
@@ -722,8 +782,12 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Module 2 is at feasibility -is there a timeline to a stable, testable version?"',
-        '"Module 2 на feasibility -есть ли timeline до stable, тестируемой версии?"'
+        '"Module 2 is at feasibility - is there a timeline to a stable, testable version?"',
+        '"Module 2 на feasibility - есть ли timeline до stable, тестируемой версии?"'
+      ),
+      g: t(
+        'Build a realistic 90-day plan. An unstable Module 2 with no timeline changes the entire engagement structure - resources shift fully to Module 1 and regulatory work.',
+        'Составить реалистичный 90-дневный план. Нестабильный Module 2 без timeline меняет всю структуру работы - ресурсы полностью смещаются на Module 1 и regulatory.'
       ),
       a: t(
         'Expected: 1-2 months. Directly affects the 90-day plan.',
@@ -735,15 +799,23 @@ function renderQuestions() {
         '"Is clinical data already annotated with ground truth labels, or is annotation still ongoing?"',
         '"Клинические данные уже размечены ground truth метками или разметка продолжается?"'
       ),
+      g: t(
+        'Identify whether validation is blocked before committing to any timeline. Incomplete annotation is the single most common reason AI medical device validation stalls.',
+        'Определить заблокирована ли валидация до принятия любых сроков. Незавершённая разметка - самая частая причина стагнации валидации AI медицинских устройств.'
+      ),
       a: t(
-        'Expected: partially done. If not complete -this is the bottleneck that blocks all validation.',
-        'Ожидаем: частично завершена. Если нет -это bottleneck который блокирует всю валидацию.'
+        'Expected: partially done. If not complete - this is the bottleneck that blocks all validation.',
+        'Ожидаем: частично завершена. Если нет - это bottleneck который блокирует всю валидацию.'
       ),
     },
     {
       q: t(
         '"Do modules 1 and 2 run sequentially in the pipeline, or can they operate independently?"',
         '"Модули 1 и 2 работают последовательно в pipeline или могут работать независимо?"'
+      ),
+      g: t(
+        'Determine whether integration testing is a separate and mandatory work item, or whether modules can be fully tested in isolation.',
+        'Определить является ли интеграционное тестирование отдельным обязательным пунктом или модули можно полностью тестировать изолированно.'
       ),
       a: t(
         'Expected: sequentially. Integration between them must be tested as a separate layer.',
@@ -754,6 +826,10 @@ function renderQuestions() {
       q: t(
         '"What is the target timeline for US commercialization?"',
         '"Какой целевой timeline для US commercialization?"'
+      ),
+      g: t(
+        'Assess whether a 6-month submission plan is realistic or needs to be renegotiated at the start. A 12-month target gives room; an 18-month target changes the urgency of every decision.',
+        'Оценить реалистичен ли 6-месячный план к submission или его нужно пересмотреть с самого начала. 12-месячная цель даёт пространство; 18-месячная меняет срочность каждого решения.'
       ),
       a: t(
         'Expected: 12-18 months. Need to assess realism of a 180-day submission plan.',
@@ -766,7 +842,11 @@ function renderQuestions() {
     {
       q: t(
         '"Is the 12mm from GT an internal accuracy requirement, or does it come from the regulator?"',
-        '"12mm from GT -внутреннее требование к точности или от регулятора?"'
+        '"12mm from GT - внутреннее требование к точности или от регулятора?"'
+      ),
+      g: t(
+        'Understand whether the current accuracy standard is enough for FDA, or whether it will need to be renegotiated with the regulatory consultant.',
+        'Понять достаточен ли текущий стандарт точности для FDA или его нужно будет пересматривать с регуляторным консультантом.'
       ),
       a: t(
         'Expected: internal. Need to understand if this is sufficient for FDA.',
@@ -778,6 +858,10 @@ function renderQuestions() {
         '"Which PACS systems and angiograph vendors have you already integrated with?"',
         '"С какими PACS системами и ангиографами вы уже интегрировались?"'
       ),
+      g: t(
+        'Define the compatibility test matrix for US site deployments. Each new PACS or angiograph vendor adds a separate integration test scope.',
+        'Определить матрицу совместимости для развёртывания на US сайтах. Каждый новый вендор PACS или ангиографа добавляет отдельный объём интеграционного тестирования.'
+      ),
       a: t(
         'Expected: Sheba configuration only. Need to understand the compatibility matrix for US sites.',
         'Ожидаем: только конфигурация Sheba. Нужно понять матрицу совместимости для US сайтов.'
@@ -788,6 +872,10 @@ function renderQuestions() {
         '"What happens if the system crashes or disconnects during an active procedure?"',
         '"Что происходит если система падает или теряет связь во время активной процедуры?"'
       ),
+      g: t(
+        'Understand the fail-safe behavior and its direct impact on regulatory risk classification. A system that the physician cannot safely ignore has a higher risk class and stricter evidence requirements.',
+        'Понять поведение fail-safe и его прямое влияние на регуляторный класс риска. Система которую врач не может безопасно проигнорировать имеет более высокий класс риска и более строгие требования к доказательствам.'
+      ),
       a: t(
         'Expected: physician continues without the system. Affects regulatory risk classification.',
         'Ожидаем: врач продолжает без системы. Влияет на regulatory класс риска.'
@@ -795,8 +883,12 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Are there examples of presentation formats you like or don\'t like?"',
+        '"Are there examples of presentation formats you like or do not like?"',
         '"Есть примеры форматов презентаций которые вам нравятся или нет?"'
+      ),
+      g: t(
+        'Match the presentation style to their culture and expectations. Some teams want raw data; others want narrative. Knowing this in advance avoids a mismatch on the day.',
+        'Подстроить стиль презентации под их культуру и ожидания. Одни команды хотят сырые данные; другие - narrative. Знание этого заранее исключает несовпадение в день презентации.'
       ),
       a: t(
         'Expected: concrete, no fluff.',
@@ -811,6 +903,10 @@ function renderQuestions() {
     <div class="risk-main">
       <div class="q-label ${cls}">${clsLabel}</div>
       <div class="question">${item.q}</div>
+      <div class="goal-box">
+        <strong>${t('Goal', 'Цель')}</strong>
+        ${item.g}
+      </div>
       <div class="expect-box">
         <strong>${t('Expected', 'Ожидаем')}</strong>
         ${item.a}
