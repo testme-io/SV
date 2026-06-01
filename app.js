@@ -94,6 +94,39 @@ function showSection(id) {
   main.innerHTML = (renders[id] || (() => ''))();
 }
 
+// ─── OVERVIEW CHIPS ────────────────────────────────────────────────────────
+const OV_STATUSES = ['', 'yes', 'no'];
+const OV_STATUS_LABELS = {
+  '':    ['❓ Not confirmed', '❓ Не утверждено'],
+  'yes': ['✅ Yes',           '✅ Да'],
+  'no':  ['❌ No',            '❌ Нет'],
+};
+const OV_STATUS_COLORS = {
+  '':    'background:#f1f5f9;color:#64748b;border-color:#cbd5e1',
+  'yes': 'background:#f0fdf4;color:#166534;border-color:#86efac',
+  'no':  'background:#fef2f2;color:#991b1b;border-color:#fca5a5',
+};
+function getOvStatus(key) { return localStorage.getItem('ovstatus_' + key) || ''; }
+function cycleOvStatus(key) {
+  const cur  = getOvStatus(key);
+  const idx  = OV_STATUSES.indexOf(cur);
+  const next = OV_STATUSES[(idx + 1) % OV_STATUSES.length];
+  next ? localStorage.setItem('ovstatus_' + key, next) : localStorage.removeItem('ovstatus_' + key);
+  const btn = document.getElementById('ovchip-' + key);
+  if (btn) {
+    const lbl = OV_STATUS_LABELS[next] || OV_STATUS_LABELS[''];
+    btn.textContent = lbl[L === 'en' ? 0 : 1];
+    btn.setAttribute('style', 'cursor:pointer;border:1px solid;border-radius:20px;padding:3px 12px;font-size:0.8rem;font-weight:600;display:inline-block;margin-bottom:8px;' + (OV_STATUS_COLORS[next] || OV_STATUS_COLORS['']));
+  }
+}
+function renderOvChip(key) {
+  const st  = getOvStatus(key);
+  const lbl = OV_STATUS_LABELS[st] || OV_STATUS_LABELS[''];
+  const col = OV_STATUS_COLORS[st] || OV_STATUS_COLORS[''];
+  return `<button id="ovchip-${key}" onclick="cycleOvStatus('${key}')"
+    style="cursor:pointer;border:1px solid;border-radius:20px;padding:3px 12px;font-size:0.8rem;font-weight:600;display:inline-block;margin-bottom:8px;${col}">${lbl[L === 'en' ? 0 : 1]}</button>`;
+}
+
 // ─── OVERVIEW ──────────────────────────────────────────────────────────────
 function renderOverview() {
   return `
@@ -107,6 +140,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_product')}
       <p>${t(
         'CoPilotMD NV-Sight is a real-time AI assistant for interventional neuro-radiology. It analyzes angiographic X-ray images during minimally invasive stroke procedures and provides the physician with real-time guidance: vessel anomaly detection, functional brain mapping, and automated clinical reporting.',
         'CoPilotMD NV-Sight -AI-ассистент реального времени для интервенционной нейрорадиологии. Анализирует ангиографические рентгеновские изображения во время малоинвазивных процедур лечения инсульта и предоставляет врачу помощь в реальном времени: детекция сосудистых аномалий, функциональное картирование мозга, автоматизированные клинические отчёты.'
@@ -120,14 +154,35 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
-      <p style="font-family:monospace;font-size:13px;color:#374151;line-height:2.2">
-        X-Ray Angio + PACS<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
-        CoPilotMD Workstation<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;(Receiver → Organizer → AI Classifier)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
-        ${t('INR Display -laptop in hospital network', 'INR Display -ноутбук в сети госпиталя')}
-      </p>
+      ${renderOvChip('ov_arch')}
+      <table style="font-size:13px;color:#374151;border-collapse:collapse;width:100%">
+        <tr>
+          <td style="font-family:monospace;padding:6px 16px 6px 0;white-space:nowrap;vertical-align:top;color:#1a1a2e;font-weight:600">X-Ray Angio + PACS</td>
+          <td style="padding:6px 0;color:#6b7a99;vertical-align:top">${t('the angiography machine in the OR + the hospital system where images are stored','ангиограф в операционной + госпитальная система хранения снимков')}</td>
+        </tr>
+        <tr><td style="font-family:monospace;padding:2px 16px 2px 0;color:#9ca3af">↓</td><td></td></tr>
+        <tr>
+          <td style="font-family:monospace;padding:6px 16px 6px 0;white-space:nowrap;vertical-align:top;color:#1a1a2e;font-weight:600">CoPilotMD Workstation</td>
+          <td style="padding:6px 0;color:#6b7a99;vertical-align:top">${t('the main processing box - receives images, runs the AI, sends results out','главный обрабатывающий блок - принимает снимки, запускает AI, отдаёт результат')}</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;padding:4px 16px 4px 12px;white-space:nowrap;vertical-align:top;color:#6b7a99">Receiver</td>
+          <td style="padding:4px 0;color:#6b7a99;vertical-align:top">${t('catches the image stream coming from the angio machine','принимает поток снимков с ангиографа')}</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;padding:4px 16px 4px 12px;white-space:nowrap;vertical-align:top;color:#6b7a99">Organizer</td>
+          <td style="padding:4px 0;color:#6b7a99;vertical-align:top">${t('sorts and prepares frames so the AI gets clean input','сортирует и готовит кадры чтобы AI получал чистый ввод')}</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;padding:4px 16px 4px 12px;white-space:nowrap;vertical-align:top;color:#6b7a99">AI Classifier</td>
+          <td style="padding:4px 0;color:#6b7a99;vertical-align:top">${t('the model itself - analyses frames and outputs detections in real time','сама модель - анализирует кадры и выдаёт детекции в реальном времени')}</td>
+        </tr>
+        <tr><td style="font-family:monospace;padding:2px 16px 2px 0;color:#9ca3af">↓</td><td></td></tr>
+        <tr>
+          <td style="font-family:monospace;padding:6px 16px 6px 0;white-space:nowrap;vertical-align:top;color:#1a1a2e;font-weight:600">INR Display</td>
+          <td style="padding:6px 0;color:#6b7a99;vertical-align:top">${t('a laptop on the hospital network showing AI output to the physician in real time','ноутбук в сети госпиталя, показывает AI-вывод врачу в реальном времени')}</td>
+        </tr>
+      </table>
       <p style="margin-top:12px;font-size:13px;color:#6b7a99">${t(
         '⚠ Currently runs on a laptop in the hospital domain. Likely a temporary architecture -QA must be designed to survive infrastructure changes.',
         '⚠ Сейчас работает на ноутбуке в домене госпиталя. Вероятно временная архитектура -QA нужно строить с расчётом на изменения инфраструктуры.'
@@ -142,6 +197,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_mod1a')}
       <div class="card-title"><span class="status-pill done" style="margin-right:8px">${t('Live pilot','Живой пилот')}</span> Module 1a -DETECT</div>
       <p>${t('Real-time detection of vessel anomalies -occlusions, vasospasms, emboli. Live pilot at Sheba Medical Center, Israel.','Детекция сосудистых аномалий в реальном времени -окклюзии, вазоспазмы, эмболии. Живой пилот в Sheba Medical Center, Израиль.')}</p>
     </div>
@@ -152,6 +208,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_mod1b')}
       <div class="card-title"><span class="status-pill feasibility" style="margin-right:8px">Feasibility</span> Module 1b -UNDERSTAND</div>
       <p>${t('Functional brain mapping -identifies eloquent brain zones at risk during the procedure. Currently at feasibility stage.','Функциональное картирование мозга -выявляет зоны элоквентного мозга под угрозой во время процедуры. Сейчас на стадии feasibility.')}</p>
     </div>
@@ -162,6 +219,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_mod2')}
       <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 2 -INSIGHT</div>
       <p>${t('Real-time risk analysis and procedural recommendations. Planned after MVP.','Анализ рисков и рекомендации в реальном времени. После MVP.')}</p>
     </div>
@@ -172,6 +230,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_mod3')}
       <div class="card-title"><span class="status-pill after" style="margin-right:8px">${t('Post-MVP','После MVP')}</span> Module 3 -REPORT</div>
       <p>${t('Automated post-procedure clinical reporting. Planned after MVP.','Автоматические клинические отчёты после процедуры. После MVP.')}</p>
     </div>
@@ -184,6 +243,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_sheba')}
       <div class="card-title">🇮🇱 Sheba Medical Center</div>
       <p>${t('3,000+ patients · 600 stroke cases · Live pilot running. Primary training data source.','3 000+ пациентов · 600 инсультных случаев · Пилот работает. Основной источник обучающих данных.')}</p>
     </div>
@@ -194,6 +254,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_sinai')}
       <div class="card-title">🇺🇸 Mount Sinai, New York</div>
       <p>${t('~500 US patients. Must become the independent validation set for FDA submission.','~500 пациентов США. Должен стать независимым validation set для FDA submission.')}</p>
     </div>
@@ -204,6 +265,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_vincent')}
       <div class="card-title">🇺🇸 St. Vincent, Indiana</div>
       <p>${t('~400 US patients. Part of the FDA submission evidence package.','~400 пациентов США. Часть доказательного пакета для FDA.')}</p>
     </div>
@@ -214,6 +276,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_perf')}
       <div class="card-title">📊 ${t('Performance Claims', 'Заявленные показатели')}</div>
       <p>${t('>80% accuracy (95% CI) · 12mm spatial accuracy from Ground Truth · ❓ Validated on which dataset?','>80% точность (95% CI) · 12мм пространственная точность от Ground Truth · ❓ Проверено на каких данных?')}</p>
     </div>
@@ -225,6 +288,7 @@ function renderOverview() {
 <div class="card">
   <div class="risk-card-inner">
     <div class="risk-main">
+      ${renderOvChip('ov_reg')}
       <p>${t(
         'Target market: United States → FDA clearance required. Path: 510(k) submission using predicate devices AiDOC, Viz.ai, RapidAI. Key standards: 21 CFR Part 820, IEC 62304 (software lifecycle), ISO 14971 (risk management), IEC 62366 (usability), FDA SaMD guidance. Requires a Quality Management System (QMS) and a Design History File (DHF) with full traceability.',
         'Целевой рынок: США → требуется FDA clearance. Путь: подача 510(k) используя предикатные устройства AiDOC, Viz.ai, RapidAI. Ключевые стандарты: 21 CFR Part 820, IEC 62304 (жизненный цикл ПО), ISO 14971 (управление рисками), IEC 62366 (юзабилити), руководство FDA по SaMD. Требуется QMS и Design History File (DHF) с полной трассируемостью.'
@@ -570,18 +634,6 @@ function renderRisks() {
       ),
     },
     {
-      level: 'medium',
-      title: t('Ground Truth Annotation Status Unknown', 'Статус Ground Truth разметки неизвестен'),
-      body: t(
-        'Clinical expert-annotated data is the foundation of any model validation. If annotation is incomplete -validation is blocked. Key questions: who annotated, what protocol was used, what is the inter-annotator agreement score, is it finished?',
-        'Данные с разметкой клинических экспертов -основа любой валидации модели. Если разметка не завершена -валидация заблокирована. Ключевые вопросы: кто размечал, по какому протоколу, inter-annotator agreement, завершена ли разметка?'
-      ),
-      expect: t(
-        'Expected: partially done. If not complete -this becomes the #1 bottleneck blocking everything else.',
-        'Ожидаем: частично завершена. Если нет -становится узким местом #1, блокирующим всё остальное.'
-      ),
-    },
-    {
       level: 'high',
       title: t('No Formal Requirements Documentation', 'Нет формальных требований'),
       body: t(
@@ -591,6 +643,18 @@ function renderRisks() {
       expect: t(
         'Expected: no formal requirements exist. Action: retrospective requirements documentation in first 30 days -QA extracts requirements from existing system behaviour, Jira, and dev conversations, then gets sign-off from CTO and clinical expert. No BA is needed; this is standard practice in early-stage medical device companies.',
         'Ожидаем: формальных требований нет. Действие: ретроспективная документация требований в первые 30 дней -QA извлекает требования из существующего поведения системы, Jira и разговоров с разработчиками, затем получает sign-off от CTO и клинического эксперта. BA для этого не нужен -это стандартная практика в ранних медицинских стартапах.'
+      ),
+    },
+    {
+      level: 'medium',
+      title: t('Ground Truth Annotation Status Unknown', 'Статус Ground Truth разметки неизвестен'),
+      body: t(
+        'Clinical expert-annotated data is the foundation of any model validation. If annotation is incomplete -validation is blocked. Key questions: who annotated, what protocol was used, what is the inter-annotator agreement score, is it finished?',
+        'Данные с разметкой клинических экспертов -основа любой валидации модели. Если разметка не завершена -валидация заблокирована. Ключевые вопросы: кто размечал, по какому протоколу, inter-annotator agreement, завершена ли разметка?'
+      ),
+      expect: t(
+        'Expected: partially done. If not complete -this becomes the #1 bottleneck blocking everything else.',
+        'Ожидаем: частично завершена. Если нет -становится узким местом #1, блокирующим всё остальное.'
       ),
     },
     {
@@ -1052,6 +1116,10 @@ function renderPlan() {
 
 <!-- VARIANT A -->
 <div id="variant-A" class="variant-content active">
+  <p style="font-size:15px;font-weight:600;color:#1a1a2e;margin:0 0 14px">${t(
+    'One person does everything. I run QA setup and regulatory preparation at the same time, solo. Slower on execution, leaner on headcount. Target: submission-ready at month 6–7.',
+    'Один человек делает всё. Я веду выстраивание QA и регуляторную подготовку одновременно, соло. Медленнее по исполнению, дешевле по составу команды. Цель: готовность к submission к месяцу 6–7.'
+  )}</p>
   <div class="highlight-box">
     <strong>${t('When to propose this', 'Когда предлагать')}</strong>
     ${t(
@@ -1119,6 +1187,10 @@ function renderPlan() {
 
 <!-- VARIANT B -->
 <div id="variant-B" class="variant-content">
+  <p style="font-size:15px;font-weight:600;color:#1a1a2e;margin:0 0 14px">${t(
+    'QA first, regulatory second. Build proper processes, culture, and full test coverage — then turn to FDA. Logical sequence, but the timeline doesn\'t fit.',
+    'Сначала QA, потом regulatory. Выстроить процессы, культуру и полное тестовое покрытие — затем переходить к FDA. Логичная последовательность, но сроки не вписываются.'
+  )}</p>
   <div class="highlight-box" style="background:#fee2e2;border-color:#fca5a5;color:#7f1d1d">
     <strong style="color:#7f1d1d">⛔ ${t('Eliminated -Too Slow to FDA', 'Исключён -Слишком медленный путь к FDA')}</strong>
     <p style="margin:12px 0 8px">${t(
@@ -1134,6 +1206,10 @@ function renderPlan() {
 
 <!-- VARIANT C -->
 <div id="variant-C" class="variant-content">
+  <p style="font-size:15px;font-weight:600;color:#1a1a2e;margin:0 0 14px">${t(
+    'Two people, two tracks running in parallel. I own strategy and regulatory. Junior owns test execution and documentation. Both tracks move at full speed simultaneously — that\'s why this gets to submission a month faster than Variant A.',
+    'Два человека, два трека параллельно. Я отвечаю за стратегию и regulatory. Junior ведёт выполнение тестов и документацию. Оба трека движутся на полной скорости одновременно — поэтому этот вариант приходит к submission на месяц быстрее Варианта A.'
+  )}</p>
   <div class="highlight-box" style="background:#f0fdf4;border-color:#86efac;color:#14532d">
     <strong style="color:#14532d">✅ ${t('Optimal -With a Junior QA (ideal scenario)', 'Оптимальный -с Junior QA (идеальный сценарий)')}</strong>
     ${t(
