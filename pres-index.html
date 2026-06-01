@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CoPilotMD NV-Sight — QA Framework</title>
+  <link rel="stylesheet" href="pres-styles.css" />
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">QA Framework</div>
+    <h2>CoPilotMD NV-Sight</h2>
+    <input type="text"     id="login-user" placeholder="Login"    autocomplete="username" />
+    <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')doLogin()" />
+    <div id="login-error"></div>
+    <button onclick="doLogin()">Enter →</button>
+  </div>
+</div>
+
+<div id="app-layout" class="layout" style="display:none">
+  <nav id="sidebar">
+    <div class="nav-header">
+      <div class="logo">QA Framework</div>
+      <h2>CoPilotMD<br>NV-Sight</h2>
+      <div class="subtitle">Mykhailo Novozhenov · QA Expert</div>
+    </div>
+    <ul id="nav-list"></ul>
+  </nav>
+  <main id="main"></main>
+</div>
+
+<script src="pres-app.js"></script>
+</body>
+</html>

@@ -10,7 +10,7 @@ function checkAuth() {
 function doLogin() {
   const user = document.getElementById('login-user').value.trim();
   const pass = document.getElementById('login-pass').value;
-  if (user === 'admin' && pass === 'sightendo') {
+  if (user === 'admin' && pass === 'sightendo!') {
     localStorage.setItem(AUTH_KEY, '1');
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-layout').style.display  = 'flex';
