@@ -75,6 +75,15 @@ function buildNav() {
       </a>
     </li>
   `).join('');
+
+  const footer = document.getElementById('nav-footer');
+  if (footer) {
+    footer.innerHTML = `
+      <div class="nav-footer">
+        <button class="nav-export-btn" onclick="exportNotes()">⬇ ${t('Export Notes', 'Экспорт заметок')}</button>
+        <button class="nav-import-btn" onclick="importNotes()">⬆ ${t('Import Notes', 'Импорт заметок')}</button>
+      </div>`;
+  }
 }
 
 function showSection(id) {
@@ -1529,6 +1538,54 @@ function renderNeeds() {
   <div class="card-title">IRB Approvals</div>
   <p>${t('Confirms data was collected under proper ethics oversight. Required for any FDA submission.','Подтверждает что данные собирались под надлежащим этическим надзором. Обязательно для FDA submission.')}</p>
 </div>${renderNotePanel('need_irb')}</div></div>`;
+}
+
+// ─── EXPORT / IMPORT ───────────────────────────────────────────────────────
+function exportNotes() {
+  const prefixes = ['note_', 'risk_answer_', 'docstatus_', 'ovstatus_'];
+  const singleKeys = ['custom_qs'];
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (singleKeys.includes(k) || prefixes.some(p => k.startsWith(p))) {
+      data[k] = localStorage.getItem(k);
+    }
+  }
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'nvsight-notes-' + new Date().toISOString().slice(0, 10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importNotes() {
+  const input  = document.createElement('input');
+  input.type   = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file   = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
+        Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v));
+        showSection(currentSection);
+      } catch(err) {
+        alert(t('Import failed: invalid or corrupted file.', 'Ошибка импорта: неверный или повреждённый файл.'));
+      }
+    };
+    reader.readAsText(file);
+  };
+  document.body.appendChild(input);
+  input.click();
+  document.body.removeChild(input);
 }
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
