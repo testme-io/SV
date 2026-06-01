@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 // ─── AUTH ──────────────────────────────────────────────────────────────────
-const AUTH_KEY = 'nvsight_auth';
+const AUTH_KEY = 'nvsight_auth_v2';
 
 function checkAuth() {
   return localStorage.getItem(AUTH_KEY) === '1';
