@@ -634,17 +634,104 @@ ${risks.map((r, i) => `
 `).join('')}`;
 }
 
+// ─── CUSTOM QUESTIONS ──────────────────────────────────────────────────────
+function getCustomQs() {
+  try { return JSON.parse(localStorage.getItem('custom_qs') || '[]'); }
+  catch(e) { return []; }
+}
+
+function renderCustomQCard(idx, editing) {
+  const qs   = getCustomQs();
+  const item = qs[idx] || { q: '', a: '' };
+  const isNew = !item.q && !item.a;
+  if (editing === undefined) editing = isNew;
+
+  const labelText = t('ADDED', 'ДОБАВЛЕН');
+  const saveBtn   = t('Save',   'Сохранить');
+  const editBtn   = t('Edit',   'Изменить');
+  const delBtn    = t('Delete', 'Удалить');
+
+  if (editing) {
+    return `
+<div id="cq-card-${idx}" class="q-card" style="border-color:#e9d5ff">
+  <div class="q-label" style="background:#fdf4ff;color:#6b21a8">${labelText}</div>
+  <textarea id="cq-q-${idx}" rows="2" placeholder="${t('Question…','Вопрос…')}"
+    style="width:100%;box-sizing:border-box;margin-top:8px;padding:8px;border:1px solid #e9d5ff;border-radius:6px;font-size:13px;resize:vertical;font-family:inherit">${item.q}</textarea>
+  <textarea id="cq-a-${idx}" rows="2" placeholder="${t('Answer…','Ответ…')}"
+    style="width:100%;box-sizing:border-box;margin-top:6px;padding:8px;border:1px solid #bae6fd;border-radius:6px;font-size:13px;resize:vertical;font-family:inherit">${item.a}</textarea>
+  <div style="margin-top:8px;display:flex;gap:8px">
+    <button class="answer-btn save" onclick="saveCustomQ(${idx})">${saveBtn}</button>
+    ${!isNew ? `<button class="answer-btn edit" style="background:#fef2f2;color:#991b1b;border-color:#fca5a5" onclick="deleteCustomQ(${idx})">${delBtn}</button>` : ''}
+  </div>
+</div>`;
+  }
+
+  return `
+<div id="cq-card-${idx}" class="q-card" style="border-color:#e9d5ff">
+  <div class="q-label" style="background:#fdf4ff;color:#6b21a8">${labelText}</div>
+  <div class="question" style="margin-top:6px">${item.q || '-'}</div>
+  ${item.a ? `<div class="expect-box"><strong>${t('Answer','Ответ')}</strong>${item.a}</div>` : ''}
+  <div style="margin-top:10px;display:flex;gap:8px">
+    <button class="answer-btn edit" onclick="editCustomQ(${idx})">${editBtn}</button>
+    <button class="answer-btn edit" style="background:#fef2f2;color:#991b1b;border-color:#fca5a5" onclick="deleteCustomQ(${idx})">${delBtn}</button>
+  </div>
+</div>`;
+}
+
+function refreshCustomQ(idx, editing) {
+  const card = document.getElementById('cq-card-' + idx);
+  if (!card) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = renderCustomQCard(idx, editing);
+  card.replaceWith(tmp.firstElementChild);
+}
+
+function saveCustomQ(idx) {
+  const qEl = document.getElementById('cq-q-' + idx);
+  const aEl = document.getElementById('cq-a-' + idx);
+  if (!qEl) return;
+  const qs = getCustomQs();
+  qs[idx] = { q: qEl.value.trim(), a: aEl ? aEl.value.trim() : '' };
+  localStorage.setItem('custom_qs', JSON.stringify(qs));
+  refreshCustomQ(idx, false);
+}
+
+function editCustomQ(idx) { refreshCustomQ(idx, true); }
+
+function deleteCustomQ(idx) {
+  const qs = getCustomQs();
+  qs.splice(idx, 1);
+  qs.length ? localStorage.setItem('custom_qs', JSON.stringify(qs))
+            : localStorage.removeItem('custom_qs');
+  const c = document.getElementById('custom-qs-container');
+  if (c) c.innerHTML = qs.map((_, i) => renderCustomQCard(i, false)).join('');
+}
+
+function addCustomQ() {
+  const qs  = getCustomQs();
+  const idx = qs.length;
+  qs.push({ q: '', a: '' });
+  localStorage.setItem('custom_qs', JSON.stringify(qs));
+  const c = document.getElementById('custom-qs-container');
+  if (c) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = renderCustomQCard(idx, true);
+    c.appendChild(tmp.firstElementChild);
+    document.getElementById('cq-card-' + idx)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
 // ─── QUESTIONS ─────────────────────────────────────────────────────────────
 function renderQuestions() {
   const must = [
     {
       q: t(
-        '"What format do you expect for the test assignment - slides, document, live discussion?"',
-        '"В каком формате вы ожидаете тестовое задание - слайды, документ, живой разговор?"'
+        '"What format do you expect for the test assignment - slides, document, live discussion? Are there examples of formats you like or do not like?"',
+        '"В каком формате вы ожидаете тестовое задание - слайды, документ, живой разговор? Есть примеры форматов которые вам нравятся или нет?"'
       ),
       g: t(
-        'Know how to prepare. Spending time on the wrong format wastes the only preparation window before the interview.',
-        'Понять как готовиться. Потраченное время на неправильный формат - это единственное окно подготовки до интервью.'
+        'Know how to prepare.',
+        'Понять как готовиться.'
       ),
       a: t(
         'Expected: slides. Need this to spend preparation time correctly.',
@@ -657,8 +744,8 @@ function renderQuestions() {
         '"На кого рассчитана презентация - только CTO или CEO тоже присутствует?"'
       ),
       g: t(
-        'Calibrate language and depth. A technical-only audience gets deep QA specifics. A mixed panel needs both technical substance and business framing.',
-        'Откалибровать язык и глубину. Чисто технической аудитории - глубокая QA специфика. Смешанной панели нужны и технические детали и бизнес-формулировки.'
+        'Determine the specific approach to the presentation.',
+        'Определить специфику подачи презентации.'
       ),
       a: t(
         'Expected: panel with CTO + CEO minimum. Need to balance technical and business language.',
@@ -667,12 +754,26 @@ function renderQuestions() {
     },
     {
       q: t(
+        '"Which markets are the priority - US only, Europe only, or both simultaneously? And in what order?"',
+        '"Какие рынки в приоритете - только США, только Европа, или оба одновременно? И в какой последовательности?"'
+      ),
+      g: t(
+        'Determines the entire regulatory scope and documentation standard. US only - FDA 510(k) path, HIPAA, no CE work. Europe only - EU MDR, GDPR, no FDA work. Both - the full list from the Regulatory Standards section applies, with significantly more documentation effort. The answer also tells us which dataset sources (US sites vs EU sites) to prioritize first.',
+        'Определяет весь регуляторный scope и стандарт документации. Только США - путь FDA 510(k), HIPAA, CE не нужен. Только Европа - EU MDR, GDPR, FDA не нужен. Оба рынка - применяется полный список из раздела Регуляторные стандарты, с существенно большим объёмом документации. Ответ также определяет какие источники данных (US сайты или EU сайты) приоритизировать первыми.'
+      ),
+      a: t(
+        'Expected: US first, then Europe. Changes nothing about the QA approach but immediately narrows the regulatory checklist to focus on.',
+        'Ожидаем: сначала США, потом Европа. Не меняет QA подход но сразу сужает регуляторный чеклист до нужного фокуса.'
+      ),
+    },
+    {
+      q: t(
         '"Was the model validated on an independent dataset, or does it overlap with training data?"',
         '"Модель валидировалась на независимом датасете или пересекается с обучающими данными?"'
       ),
       g: t(
-        'Identify the first critical FDA gap before leaving the meeting. FDA requires a clean separation between training and validation data. If they overlap, US data collection becomes the first unblocking task.',
-        'Выявить первый критический FDA gap ещё на встрече. FDA требует чёткого разделения обучающих и валидационных данных. Если пересекаются - сбор US данных становится первой разблокирующей задачей.'
+        'Identify the first critical FDA gap. FDA requires a clean separation between training and validation data. If they overlap, US data collection becomes the first unblocking task.',
+        'Выявить первый критический FDA gap. FDA требует чёткого разделения обучающих и валидационных данных. Если пересекаются - сбор US данных становится первой разблокирующей задачей.'
       ),
       a: t(
         'Expected: possible overlap. This is the first critical gap for FDA - US data must become the independent validation set.',
@@ -689,8 +790,8 @@ function renderQuestions() {
         'Определить можно ли вообще юридически использовать данные в QA pipeline. Отсутствие IRB или HIPAA compliance блокирует всё - тестирование на этих данных невозможно пока не решено.'
       ),
       a: t(
-        'Expected: yes. Without this, data cannot be used in a submission.',
-        'Ожидаем: да. Без этого данные нельзя использовать в submission.'
+        'Expected: yes. Without this, data cannot be used in a submission (submission - the regulatory approval filing sent to FDA).',
+        'Ожидаем: да. Без этого данные нельзя использовать в submission (submission - пакет документов на одобрение, который подаём в FDA).'
       ),
     },
     {
@@ -796,8 +897,8 @@ function renderQuestions() {
     },
     {
       q: t(
-        '"Is clinical data already annotated with ground truth labels, or is annotation still ongoing?"',
-        '"Клинические данные уже размечены ground truth метками или разметка продолжается?"'
+        '"Is clinical data already annotated with ground truth labels (ground truth - verified correct answers used to measure AI accuracy), or is annotation still ongoing?"',
+        '"Клинические данные уже размечены ground truth метками (ground truth - эталонная разметка, правильные ответы по которым проверяется точность AI), или разметка продолжается?"'
       ),
       g: t(
         'Identify whether validation is blocked before committing to any timeline. Incomplete annotation is the single most common reason AI medical device validation stalls.',
@@ -881,20 +982,6 @@ function renderQuestions() {
         'Ожидаем: врач продолжает без системы. Влияет на regulatory класс риска.'
       ),
     },
-    {
-      q: t(
-        '"Are there examples of presentation formats you like or do not like?"',
-        '"Есть примеры форматов презентаций которые вам нравятся или нет?"'
-      ),
-      g: t(
-        'Match the presentation style to their culture and expectations. Some teams want raw data; others want narrative. Knowing this in advance avoids a mismatch on the day.',
-        'Подстроить стиль презентации под их культуру и ожидания. Одни команды хотят сырые данные; другие - narrative. Знание этого заранее исключает несовпадение в день презентации.'
-      ),
-      a: t(
-        'Expected: concrete, no fluff.',
-        'Ожидаем: конкретика без воды.'
-      ),
-    },
   ];
 
   const qCard = (item, cls, clsLabel, key) => `
@@ -930,7 +1017,16 @@ ${must.map((q,i) => qCard(q, 'must', t('MUST ASK','ОБЯЗАТЕЛЬНО'), `q_
 ${important.map((q,i) => qCard(q, 'important', t('IMPORTANT','ВАЖНО'), `q_imp_${i}`)).join('')}
 
 <h2>🟢 ${t('Nice to Know', 'Хорошо бы узнать')}</h2>
-${nice.map((q,i) => qCard(q, 'nice', t('NICE TO KNOW','ХОРОШО БЫ'), `q_nice_${i}`)).join('')}`;
+${nice.map((q,i) => qCard(q, 'nice', t('NICE TO KNOW','ХОРОШО БЫ'), `q_nice_${i}`)).join('')}
+
+<h2>➕ ${t('Additional Questions', 'Дополнительные вопросы')}</h2>
+<div id="custom-qs-container">
+  ${getCustomQs().map((_, i) => renderCustomQCard(i, false)).join('')}
+</div>
+<button onclick="addCustomQ()"
+  style="margin-top:14px;padding:10px 24px;background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px">
+  ➕ ${t('Add question', 'Добавить вопрос')}
+</button>`;
 }
 
 // ─── PLAN ──────────────────────────────────────────────────────────────────
@@ -1030,8 +1126,8 @@ function renderPlan() {
       'Что представлял собой Вариант B: сначала выстроить внутреннюю зрелость QA -процессы, культуру, полное тестовое покрытие всех модулей -и только потом переходить к regulatory. Сначала правильная QA-система, потом регуляторная подготовка.'
     )}</p>
     <p style="margin:0">${t(
-      'Why eliminated: this sequence pushes the FDA 510(k) submission to month 9–10 at minimum. For a company whose primary goal is US market entry, that timeline is not viable. QA process maturity must be built in parallel with regulatory preparation -not before it.',
-      'Почему исключён: такая последовательность сдвигает FDA 510(k) submission минимум на месяц 9–10. Для компании, чья основная цель -выход на рынок США, этот срок неприемлем. Зрелость QA-процессов должна строиться параллельно с регуляторной подготовкой -не до неё.'
+      'Why eliminated: this sequence pushes the FDA 510(k) submission to month 9–10 at minimum. (too long)',
+      'Почему исключён: такая последовательность сдвигает FDA 510(k) submission минимум на месяц 9–10. (слишком большой срок)'
     )}</p>
   </div>
 </div>
@@ -1203,6 +1299,12 @@ ${renderDocCard('testcases', '✅',
   t('Test Cases', 'Тест-кейсы'),
   'Actual test scenarios -organized by module, risk level, and test type (functional, performance, usability, security, regression). Written with enough detail that any tester can execute them consistently. Linked to requirements for traceability.',
   'Сами тестовые сценарии -организованы по модулям, уровням риска и типам тестирования (функциональные, производительность, юзабилити, безопасность, регрессия). Написаны достаточно подробно чтобы любой тестировщик мог выполнить их последовательно. Привязаны к требованиям для трассируемости.'
+)}
+
+${renderDocCard('automation', '🤖',
+  t('Test Automation Framework', 'Фреймворк автоматизации тестирования'),
+  'Automation is optional at this stage but the approach must be defined early to avoid wasted effort. Key decisions: what level to automate (smoke only, regression suite, API layer, UI), what tools (Pytest, Playwright, Selenium, or none yet), and critically - what NOT to automate (AI accuracy testing, usability studies, one-off clinical validations). Important: clarify the expected automation scope with the team before committing any resources. The answer ranges from "no automation right now" to "full CI regression suite" and each requires a very different time investment.',
+  'Автоматизация на данном этапе не обязательна, но подход нужно определить заранее чтобы не потратить ресурсы впустую. Ключевые решения: что автоматизировать (только smoke, regression suite, API-слой, UI), какие инструменты (Pytest, Playwright, Selenium, или пока ничего), и главное - что НЕ автоматизировать (тестирование точности AI, юзабилити-исследования, одноразовые клинические валидации). Важно: согласовать ожидаемый объём автоматизации с командой до начала работ. Ответ варьируется от "автоматизация пока не нужна" до "полный CI regression suite" - и каждый вариант требует принципиально разного вложения времени.'
 )}
 
 ${renderDocCard('defectworkflow', '🔄',
