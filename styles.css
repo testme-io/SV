@@ -245,6 +245,24 @@ p  { margin-bottom: 10px; color: #374151; font-size: 14px; }
 .badge.high     { background: #fef3c7; color: #d97706; }
 .badge.medium   { background: #dbeafe; color: #2563eb; }
 
+.goal-box {
+  background: #fdf4ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #6b21a8;
+  margin-top: 10px;
+}
+.goal-box strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #581c87;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
 .expect-box {
   background: #f0f9ff;
   border: 1px solid #bae6fd;
@@ -500,6 +518,33 @@ p  { margin-bottom: 10px; color: #374151; font-size: 14px; }
 .answer-btn:hover { opacity: 0.8; }
 .answer-btn.save { background: #0f3460; color: #fff; }
 .answer-btn.edit { background: #f1f5f9; color: #475569; }
+
+/* ── STANDARD CROSS-REFERENCES ── */
+.std-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+.std-links-label {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.std-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-weight: 600;
+}
 
 /* ── NOTE INLINE (below card content) ── */
 .note-inline {
