@@ -828,12 +828,12 @@ function renderQuestions() {
         '"Какой целевой timeline для US commercialization?"'
       ),
       g: t(
-        'Assess whether a 6-month submission plan is realistic or needs to be renegotiated at the start. A 12-month target gives room; an 18-month target changes the urgency of every decision.',
-        'Оценить реалистичен ли 6-месячный план к submission или его нужно пересмотреть с самого начала. 12-месячная цель даёт пространство; 18-месячная меняет срочность каждого решения.'
+        'Our preliminary work plan targets FDA submission-ready at month 6-7. After submission, FDA review takes another 6-12 months before clearance and market entry. Total: minimum 12-18 months to first US sale. This question checks their business timeline against that math. Target 12 months - our plan fits just barely. Target 18 months - there is breathing room. Target under 12 months - something does not add up and needs to be discussed now.',
+        'Наш план нацелен на готовность к FDA submission к месяцу 6-7. После подачи FDA рассматривает документы ещё 6-12 месяцев до выдачи clearance и выхода на рынок. Итого: минимум 12-18 месяцев до первых продаж в США. Вопрос проверяет их бизнес-цель против этой математики. Цель 12 месяцев - наш план вписывается впритык. Цель 18 месяцев - есть запас. Цель меньше 12 месяцев - что-то не сходится и это нужно обсудить сразу.'
       ),
       a: t(
-        'Expected: 12-18 months. Need to assess realism of a 180-day submission plan.',
-        'Ожидаем: 12-18 месяцев. Нужно оценить реалистичность 180-дневного плана к submission.'
+        'Expected: 12-18 months. Confirms that a 6-7 month QA and submission preparation window is realistic.',
+        'Ожидаем: 12-18 месяцев. Подтверждает что окно 6-7 месяцев на QA и подготовку submission реалистично.'
       ),
     },
   ];
