@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CoPilotMD NV-Sight — QA Discovery</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>CoPilotMD NV-Sight — QA Framework</title>
+  <link rel="stylesheet" href="pres-styles.css" />
 </head>
 <body>
 
 <div id="login-screen">
   <div class="login-box">
-    <div class="login-logo">QA Discovery</div>
+    <div class="login-logo">QA Framework</div>
     <h2>CoPilotMD NV-Sight</h2>
     <input type="text"     id="login-user" placeholder="Login"    autocomplete="username" />
     <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password"
@@ -23,20 +23,15 @@
 <div id="app-layout" class="layout" style="display:none">
   <nav id="sidebar">
     <div class="nav-header">
-      <div class="lang-switch">
-        <button id="btn-en" class="lang-btn active" onclick="switchLang('en')">EN</button>
-        <button id="btn-ru" class="lang-btn" onclick="switchLang('ru')">RU</button>
-      </div>
-      <div class="logo">QA Discovery</div>
+      <div class="logo">QA Framework</div>
       <h2>CoPilotMD<br>NV-Sight</h2>
-      <div class="subtitle" id="nav-subtitle"></div>
+      <div class="subtitle">Mykhailo Novozhenov · QA Expert</div>
     </div>
     <ul id="nav-list"></ul>
-    <div id="nav-footer"></div>
   </nav>
   <main id="main"></main>
 </div>
 
-<script src="app.js"></script>
+<script src="pres-app.js"></script>
 </body>
 </html>
