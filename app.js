@@ -1113,8 +1113,8 @@ function renderPlan() {
 <!-- VARIANT A -->
 <div id="variant-A" class="variant-content active">
   <p style="font-size:15px;font-weight:600;color:#1a1a2e;margin:0 0 14px">${t(
-    'One person does everything. I run QA setup and regulatory preparation at the same time, solo. Slower on execution, leaner on headcount. Target: submission-ready at month 6–7.',
-    'Один человек делает всё. Я веду выстраивание QA и регуляторную подготовку одновременно, соло. Медленнее по исполнению, дешевле по составу команды. Цель: готовность к submission к месяцу 6–7.'
+    'One person does everything. I run QA setup and regulatory preparation at the same time, solo. Slower on execution, leaner on headcount.',
+    'Один человек делает всё. Я веду выстраивание QA и регуляторную подготовку одновременно, соло. Медленнее по исполнению, дешевле по составу команды.'
   )}</p>
   <div class="highlight-box">
     <strong>${t('When to propose this', 'Когда предлагать')}</strong>
@@ -1173,7 +1173,7 @@ function renderPlan() {
             <li>${t('Predicate device comparison testing documented for 510(k)', 'Сравнительное тестирование с предикатными устройствами задокументировано для 510(k)')}</li>
             <li>${t('510(k) submission package assembled together with regulatory consultant', '510(k) submission package собран вместе с регуляторным консультантом')}</li>
           </ul>
-          <p class="phase-note">${t('Target: submission-ready at month 6–7. Main risk: Module 2 development timeline.','Цель: готовность к submission на месяце 6–7. Главный риск: timeline разработки Module 2.')}</p>
+          <p class="phase-note">${t('Output: full evidence package assembled and handed to the regulatory consultant for submission filing. Main risk: Module 2 development timeline.','Результат: полный пакет доказательств собран и передан регуляторному консультанту для подачи. Главный риск: timeline разработки Module 2.')}</p>
         </div>
         ${renderNotePanel('plan_a_180')}
       </div>
@@ -1203,8 +1203,8 @@ function renderPlan() {
 <!-- VARIANT C -->
 <div id="variant-C" class="variant-content">
   <p style="font-size:15px;font-weight:600;color:#1a1a2e;margin:0 0 14px">${t(
-    'Two people, two tracks running in parallel. I own strategy and regulatory. Junior owns test execution and documentation. Both tracks move at full speed simultaneously — that\'s why this gets to submission a month faster than Variant A.',
-    'Два человека, два трека параллельно. Я отвечаю за стратегию и regulatory. Junior ведёт выполнение тестов и документацию. Оба трека движутся на полной скорости одновременно — поэтому этот вариант приходит к submission на месяц быстрее Варианта A.'
+    'Two people, two tracks running in parallel. I own strategy and regulatory. Junior owns test execution and documentation. Both tracks move at full speed simultaneously — more ground covered in the same time.',
+    'Два человека, два трека параллельно. Я отвечаю за стратегию и regulatory. Junior ведёт выполнение тестов и документацию. Оба трека движутся на полной скорости одновременно — больше сделано за то же время.'
   )}</p>
   <div class="highlight-box" style="background:#f0fdf4;border-color:#86efac;color:#14532d">
     <strong style="color:#14532d">✅ ${t('Optimal -With a Junior QA (ideal scenario)', 'Оптимальный -с Junior QA (идеальный сценарий)')}</strong>
@@ -1257,7 +1257,7 @@ function renderPlan() {
             <li>${t('Final regression, performance benchmarking, predicate device comparison', 'Финальная регрессия, performance benchmarking, сравнение с предикатными устройствами')}</li>
             <li>${t('510(k) submission package -assembled with regulatory consultant', '510(k) submission package -собирается с регуляторным консультантом')}</li>
           </ul>
-          <p class="phase-note">${t('Target: submission-ready at month 6. Main risk: Module 2 development timeline.','Цель: готовность к submission на месяце 6. Главный риск: timeline разработки Module 2.')}</p>
+          <p class="phase-note">${t('Output: full evidence package assembled and handed to the regulatory consultant for submission filing. Main risk: Module 2 development timeline.','Результат: полный пакет доказательств собран и передан регуляторному консультанту для подачи. Главный риск: timeline разработки Module 2.')}</p>
         </div>
         ${renderNotePanel('plan_c_180')}
       </div>
