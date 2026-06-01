@@ -132,8 +132,8 @@ function renderOverview() {
   return `
 <h1>CoPilotMD NV-Sight</h1>
 <p class="section-desc">${t(
-  'AI system for neuro-endovascular procedures -what I understood before the meeting.',
-  'AI-система для нейроэндоваскулярных процедур -что я понял до встречи.'
+  'AI system for neuro-endovascular procedures - what I understood before the meeting.',
+  'AI-система для нейроэндоваскулярных процедур - что я понял до встречи.'
 )}</p>
 
 <h2>${t('What the Product Does', 'Что делает продукт')}</h2>
@@ -143,7 +143,7 @@ function renderOverview() {
       ${renderOvChip('ov_product')}
       <p>${t(
         'CoPilotMD NV-Sight is a real-time AI assistant for interventional neuro-radiology. It analyzes angiographic X-ray images during minimally invasive stroke procedures and provides the physician with real-time guidance: vessel anomaly detection, functional brain mapping, and automated clinical reporting.',
-        'CoPilotMD NV-Sight -AI-ассистент реального времени для интервенционной нейрорадиологии. Анализирует ангиографические рентгеновские изображения во время малоинвазивных процедур лечения инсульта и предоставляет врачу помощь в реальном времени: детекция сосудистых аномалий, функциональное картирование мозга, автоматизированные клинические отчёты.'
+        'CoPilotMD NV-Sight - AI-ассистент реального времени для интервенционной нейрорадиологии. Анализирует ангиографические рентгеновские изображения во время малоинвазивных процедур лечения инсульта и предоставляет врачу помощь в реальном времени: детекция сосудистых аномалий, функциональное картирование мозга, автоматизированные клинические отчёты.'
       )}</p>
     </div>
     ${renderNotePanel('ov_product')}
@@ -184,7 +184,7 @@ function renderOverview() {
         </tr>
       </table>
       <p style="margin-top:12px;font-size:13px;color:#6b7a99">${t(
-        '⚠ Currently runs on a laptop in the hospital domain. Likely a temporary architecture -QA must be designed to survive infrastructure changes.',
+        '⚠ Currently runs on a laptop in the hospital domain. Likely a temporary architecture - QA must be designed to survive infrastructure changes.',
         '⚠ Сейчас работает на ноутбуке в домене госпиталя. Вероятно временная архитектура -QA нужно строить с расчётом на изменения инфраструктуры.'
       )}</p>
     </div>
@@ -199,7 +199,7 @@ function renderOverview() {
     <div class="risk-main">
       ${renderOvChip('ov_mod1a')}
       <div class="card-title"><span class="status-pill done" style="margin-right:8px">${t('Live pilot','Живой пилот')}</span> Module 1a -DETECT</div>
-      <p>${t('Real-time detection of vessel anomalies -occlusions, vasospasms, emboli. Live pilot at Sheba Medical Center, Israel.','Детекция сосудистых аномалий в реальном времени -окклюзии, вазоспазмы, эмболии. Живой пилот в Sheba Medical Center, Израиль.')}</p>
+      <p>${t('Real-time detection of vessel anomalies - occlusions, vasospasms, emboli. Live pilot at Sheba Medical Center, Israel.','Детекция сосудистых аномалий в реальном времени -окклюзии, вазоспазмы, эмболии. Живой пилот в Sheba Medical Center, Израиль.')}</p>
     </div>
     ${renderNotePanel('ov_mod1a')}
   </div>
@@ -210,7 +210,7 @@ function renderOverview() {
     <div class="risk-main">
       ${renderOvChip('ov_mod1b')}
       <div class="card-title"><span class="status-pill feasibility" style="margin-right:8px">Feasibility</span> Module 1b -UNDERSTAND</div>
-      <p>${t('Functional brain mapping -identifies eloquent brain zones at risk during the procedure. Currently at feasibility stage.','Функциональное картирование мозга -выявляет зоны элоквентного мозга под угрозой во время процедуры. Сейчас на стадии feasibility.')}</p>
+      <p>${t('Functional brain mapping - identifies eloquent brain zones at risk during the procedure. Currently at feasibility stage.','Функциональное картирование мозга -выявляет зоны элоквентного мозга под угрозой во время процедуры. Сейчас на стадии feasibility.')}</p>
     </div>
     ${renderNotePanel('ov_mod1b')}
   </div>
@@ -413,41 +413,41 @@ function renderRegulatory() {
   return `
 <h1>${t('Regulatory Standards', 'Регуляторные стандарты')}</h1>
 <p class="section-desc">${t(
-  'Standards applicable to CoPilotMD NV-Sight -by market and by function. To confirm: which markets are in scope and in what order?',
-  'Стандарты применимые к CoPilotMD NV-Sight -по рынкам и по функциям. Уточнить: какие рынки в приоритете и в какой последовательности?'
+  'Applicable to CoPilotMD NV-Sight - by market. Final scope depends on which markets they are actually targeting.',
+  'Стандарты применимые к CoPilotMD NV-Sight. Финальный scope зависит от того, какие рынки они реально планируют.'
 )}</p>
 
 <h2>${t('Common to Both Markets', 'Общие для обоих рынков')}</h2>
 
-${sc('iso13485', 'ISO 13485 -Quality Management System', t(
-  'The organisational foundation for all regulated medical device work. Defines how design, development, production, and post-market activities are managed -from writing requirements through to closing defects. Every other standard operates within this framework. QA provides the data; quality management owns the system.',
-  'Организационная основа для всей регулируемой работы с медицинскими устройствами. Определяет как управляются проектирование, разработка, производство и пост-маркетинговые активности -от написания требований до закрытия дефектов. Все остальные стандарты работают внутри этой системы. QA предоставляет данные; quality management владеет системой.'
+${sc('iso13485', 'ISO 13485 - Quality Management System', t(
+  'The organisational foundation for all regulated medical device work. Defines how design, development, production, and post-market activities are managed - from writing requirements through to closing defects. Every other standard operates within this framework. QA provides the data; quality management owns the system.',
+  'Организационная основа для всей регулируемой работы с медицинскими устройствами. Определяет как управляются проектирование, разработка, производство и пост-маркетинговые активности - от написания требований до закрытия дефектов. Все остальные стандарты работают внутри этой системы. QA предоставляет данные; quality management владеет системой.'
 ), ['21 CFR Part 820', 'EU MDR 2017/745'], ['IEC 62304', 'ISO 14971', 'IEC 62366'])}
 
-${sc('iec62304', 'IEC 62304 -Medical Device Software Lifecycle', t(
+${sc('iec62304', 'IEC 62304 - Medical Device Software Lifecycle', t(
   'The primary standard governing how medical software is developed and tested. Classifies software by safety risk, requires traceability from requirements through architecture to test results, and mandates structured defect management. This is where QA work lives most directly: test plans, test cases, and verification reports must all align with IEC 62304.',
   'Основной стандарт, регулирующий разработку и тестирование медицинского ПО. Классифицирует ПО по уровню риска безопасности, требует трассируемости от требований через архитектуру к результатам тестов, регламентирует структурированное управление дефектами. Именно здесь наиболее непосредственно работает QA: тест-планы, тест-кейсы и отчёты верификации должны соответствовать IEC 62304.'
 ), ['ISO 14971', '21 CFR Part 820', 'FDA 510(k)'])}
 
-${sc('iso14971', 'ISO 14971 -Risk Management', t(
+${sc('iso14971', 'ISO 14971 - Risk Management', t(
   'Requires identifying all hazards, analysing failure modes, defining mitigations, and documenting residual risk throughout the product lifecycle. For AI systems this includes incorrect predictions, dataset bias, edge case behaviour, and automation bias. The risk file directly drives QA priorities: higher risk means more rigorous test coverage.',
-  'Требует идентификации всех опасностей, анализа режимов отказов, определения мер по снижению рисков и документирования остаточного риска на протяжении всего жизненного цикла продукта. Для AI-систем это включает неверные предсказания, смещение датасета, граничные случаи и автоматизационное смещение. Risk file напрямую определяет приоритеты QA: выше риск -строже тестовое покрытие.'
+  'Требует идентификации всех опасностей, анализа режимов отказов, определения мер по снижению рисков и документирования остаточного риска на протяжении всего жизненного цикла продукта. Для AI-систем это включает неверные предсказания, смещение датасета, граничные случаи и автоматизационное смещение. Risk file напрямую определяет приоритеты QA: выше риск - строже тестовое покрытие.'
 ), ['IEC 62304', 'IEC 62366', 'EU AI Act', 'FDA Cybersecurity Guidance'])}
 
-${sc('iec62366', 'IEC 62366 -Usability Engineering', t(
-  'Addresses how users interact with the system under real clinical conditions. For NV-Sight: can a physician correctly interpret AI output under time pressure? Can they recognise when the system is uncertain? Does the display avoid creating false confidence? Requires documented formative and summative usability studies -QA designs and executes the test scenarios.',
-  'Охватывает то, как пользователи взаимодействуют с системой в реальных клинических условиях. Для NV-Sight: может ли врач правильно интерпретировать AI-вывод под давлением времени? Может ли он распознать когда система неуверена? Избегает ли дисплей создания ложной уверенности? Требует задокументированных формативных и суммативных юзабилити-исследований -QA проектирует и выполняет тестовые сценарии.'
+${sc('iec62366', 'IEC 62366 - Usability Engineering', t(
+  'Addresses how users interact with the system under real clinical conditions. For NV-Sight: can a physician correctly interpret AI output under time pressure? Can they recognise when the system is uncertain? Does the display avoid creating false confidence? Requires documented formative and summative usability studies - QA designs and executes the test scenarios.',
+  'Охватывает то, как пользователи взаимодействуют с системой в реальных клинических условиях. Для NV-Sight: может ли врач правильно интерпретировать AI-вывод под давлением времени? Может ли он распознать когда система неуверена? Избегает ли дисплей создания ложной уверенности? Требует задокументированных формативных и суммативных юзабилити-исследований - QA проектирует и выполняет тестовые сценарии.'
 ), ['ISO 14971', 'EU AI Act', 'FDA 510(k)'])}
 
-<h2>${t('United States -FDA', 'США -FDA')}</h2>
+<h2>${t('United States - FDA', 'США - FDA')}</h2>
 
-${sc('cfr820', '21 CFR Part 820 -Quality System Regulation', t(
+${sc('cfr820', '21 CFR Part 820 - Quality System Regulation', t(
   'The FDA\'s QMS requirements, increasingly harmonised with ISO 13485. Covers design controls, CAPA process, supplier qualification, document control, and production records. Assumed to be in place for any 510(k) submission.',
   'QMS-требования FDA, всё более гармонизированные с ISO 13485. Охватывают design controls, процесс CAPA, квалификацию поставщиков, контроль документации и производственные записи. Предполагается соответствие для любой 510(k) подачи.'
 ), ['ISO 13485', 'IEC 62304'])}
 
-${sc('fda510k', 'FDA 510(k) -Premarket Notification', t(
-  'The primary regulatory pathway for CoPilotMD as a Class II medical device. Requires demonstrating substantial equivalence to predicate devices -AiDOC, Viz.ai, and RapidAI are the relevant comparators. QA provides the performance test evidence package that forms the technical core of the submission.',
+${sc('fda510k', 'FDA 510(k) - Premarket Notification', t(
+  'The primary regulatory pathway for CoPilotMD as a Class II medical device. Requires demonstrating substantial equivalence to predicate devices - AiDOC, Viz.ai, and RapidAI are the relevant comparators. QA provides the performance test evidence package that forms the technical core of the submission.',
   'Основной регуляторный путь для CoPilotMD как медицинского устройства класса II. Требует демонстрации существенной эквивалентности предикатным устройствам -AiDOC, Viz.ai и RapidAI являются релевантными компараторами. QA предоставляет пакет доказательств производительности, который формирует техническое ядро submission.'
 ), ['IEC 62304', 'ISO 14971', 'IEC 62366', 'FDA AI/ML SaMD', 'FDA Cybersecurity Guidance', 'PCCP'])}
 
@@ -501,13 +501,13 @@ ${sc('approach1', t('Standards Define Structure, Not Additional Work', 'Стан
 ))}
 
 ${sc('approach2', t('QA Contributes, But Does Not Own Everything', 'QA участвует, но не владеет всем'), t(
-  'QA owns: test plans, test cases, verification reports, defect management, and usability test execution. QA contributes to: risk assessments, Design History File assembly, CAPA records. Regulatory consultant owns: submission strategy, final documentation, and direct FDA/MDR communication. These boundaries matter -attempting to cover all three without the appropriate expertise is a common reason medical device programmes stall.',
-  'QA владеет: тест-планами, тест-кейсами, отчётами верификации, управлением дефектами и выполнением юзабилити-тестов. QA участвует в: оценках рисков, сборке Design History File, записях CAPA. Regulatory consultant владеет: стратегией подачи, финальной документацией и прямой коммуникацией с FDA/MDR. Эти границы важны -попытка покрыть все три без нужной экспертизы является распространённой причиной стагнации программ медицинских устройств.'
+  'QA owns: test plans, test cases, verification reports, defect management, and usability test execution. QA contributes to: risk assessments, Design History File assembly, CAPA records. Regulatory consultant owns: submission strategy, final documentation, and direct FDA/MDR communication. Without a consultant, I am guessing what the regulator actually wants — that is too expensive a guess.',
+  'QA владеет: тест-планами, тест-кейсами, отчётами верификации, управлением дефектами и выполнением юзабилити-тестов. QA участвует в: оценках рисков, сборке Design History File, записях CAPA. Regulatory consultant владеет: стратегией подачи, финальной документацией и прямой коммуникацией с FDA/MDR. Без консультанта я буду гадать что регулятор на самом деле требует — это слишком дорогая догадка.'
 ))}
 
 ${sc('approach3', t('Everything Feeds the Design History File', 'Всё входит в Design History File'), t(
-  'The DHF is the primary evidence package for any regulatory submission. It accumulates everything produced during development: requirements, risk assessments, architectural decisions, test results, defect records, and corrective actions. The QA role is to ensure that nothing produced is lost -and that what is produced is specific enough to be meaningful to a reviewer who was not present when the work was done.',
-  'DHF -основной доказательный пакет для любой регуляторной подачи. Он накапливает всё произведённое в процессе разработки: требования, оценки рисков, архитектурные решения, результаты тестов, записи о дефектах и корректирующие действия. Роль QA -обеспечить чтобы ничто произведённое не было потеряно, и чтобы произведённое было достаточно конкретным, чтобы быть значимым для проверяющего, который не присутствовал при этой работе.'
+  'The DHF is the document package submitted to FDA. It accumulates everything produced during development: requirements, risk assessments, architectural decisions, test results, defect records, and corrective actions. My job is to make sure nothing gets lost and everything is written clearly enough that a regulator can follow it without me in the room.',
+  'DHF -пакет документов который подаётся в FDA. Накапливает всё произведённое в процессе разработки: требования, оценки рисков, архитектурные решения, результаты тестов, записи о дефектах и корректирующие действия. Моя задача -следить чтобы ничего не терялось и всё было написано достаточно понятно, чтобы регулятор мог разобраться без меня.'
 ))}
 `;
 }
@@ -1070,8 +1070,8 @@ function renderQuestions() {
   return `
 <h1>${t('Questions for CTO', 'Вопросы к CTO')}</h1>
 <p class="section-desc">${t(
-  'Prioritized -what to ask and why. Each question serves a purpose.',
-  'Приоритизированные -что спросить и зачем. Каждый вопрос имеет цель.'
+  'What to ask and why.',
+  'Что спросить и зачем.'
 )}</p>
 
 <h2>🔴 ${t('Must Ask', 'Задать обязательно')}</h2>
@@ -1097,10 +1097,6 @@ ${nice.map((q,i) => qCard(q, 'nice', t('NICE TO KNOW','ХОРОШО БЫ'), `q_n
 function renderPlan() {
   return `
 <h1>${t('Preliminary Work Plan', 'Предварительный план работы')}</h1>
-<p class="section-desc">${t(
-  'Three variants analysed -selected based on what they actually need and what resources are available. Variant B eliminated: pushes FDA submission to month 9–10.',
-  'Три варианта проанализированы -выбирается исходя из реальных потребностей и доступных ресурсов. Вариант B исключён: сдвигает FDA submission на месяц 9–10.'
-)}</p>
 
 <div class="variant-tabs">
   <button class="vtab active" onclick="showVariant('A')">
@@ -1333,8 +1329,8 @@ function renderDocs() {
   return `
 <h1>${t('QA Documents', 'Документы QA')}</h1>
 <p class="section-desc">${t(
-  'All QA documents to be created. Status can be set per document -click the badge to cycle through states. Notes field available on each card.',
-  'Все QA-документы которые будут созданы. Статус устанавливается на каждом документе -нажмите значок для переключения. На каждой карточке есть поле заметок.'
+  'Click the badge on each card to set status. Notes field on the right.',
+  'Нажмите значок на карточке чтобы поставить статус. Поле заметок справа.'
 )}</p>
 
 <h2>📐 ${t('Foundation -Build First', 'Фундамент -создаётся первым')}</h2>
@@ -1452,8 +1448,8 @@ function renderNeeds() {
   return `
 <h1>${t('What I Need', 'Что мне нужно')}</h1>
 <p class="section-desc">${t(
-  'Resources and access I will ask for -organized by category.',
-  'Ресурсы и доступы которые запрошу -сгруппированы по категориям.'
+  'Resources and access I will ask for on day one.',
+  'Ресурсы и доступы которые запрошу с первого дня.'
 )}</p>
 
 <h2>👥 ${t('People', 'Люди')}</h2>
