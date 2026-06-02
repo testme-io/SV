@@ -437,6 +437,7 @@ function showSlide(id) {
   else if (id === 'std-overview')   content = renderStandardOverview();
   else if (id.startsWith('std-'))   content = renderStandard(id);
   else if (id === 'teststrategy')   content = renderTestStrategy();
+  else if (id === 'testmatrix')     content = renderTestMatrix();
   else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -722,6 +723,127 @@ function renderStandard(id) {
       <ul class="std-pitfall-list">
         ${d.pitfalls.map(p => `<li>${p}</li>`).join('')}
       </ul>
+    </div>`;
+}
+
+// ─── TEST MATRIX ───────────────────────────────────────────────────────────
+function renderTestMatrix() {
+  const c = (cov, pri = null) => ({ cov, pri });
+
+  const sections = [
+    {
+      title: 'Hint Rendering Pipeline',
+      rows: [
+        ['All defined hint types rendered per specification',           c('—'),  c('◑'),       c('✅','P0'), c('✅'),      c('—')],
+        ['Hint delivery without loss or duplication',                   c('—'),  c('✅','P0'), c('✅','P0'), c('—'),       c('—')],
+        ['Overlay positioned on the correct frame',                     c('✅'), c('—'),       c('✅','P0'), c('◑'),       c('—')],
+        ['Silent failure detection (no output → explicit alert)',       c('—'),  c('◑'),       c('✅','P0'), c('—'),       c('—')],
+        ['Overlapping hints rendering',                                 c('✅'), c('—'),       c('◑','P2'), c('—'),       c('—')],
+        ['Rapid frame sequence handling',                               c('—'),  c('—'),       c('◑','P2'), c('—'),       c('—')],
+      ],
+    },
+    {
+      title: 'DICOM / PACS Integration',
+      rows: [
+        ['DICOM tag parsing',                                           c('✅'), c('—'),       c('—'),       c('—'),       c('—')],
+        ['PACS frame ingestion',                                        c('—'),  c('✅','P1'), c('✅','P1'), c('—'),       c('—')],
+        ['PACS connectivity stability',                                 c('—'),  c('✅','P1'), c('✅','P1'), c('—'),       c('—')],
+        ['Siemens-specific DICOM format variants',                      c('◑'),  c('—'),       c('✅','P2'), c('—'),       c('—')],
+      ],
+    },
+    {
+      title: 'Performance & Latency',
+      rows: [
+        ['End-to-end frame-to-hint latency (within clinical window)',   c('—'),  c('—'),       c('✅','P1'), c('—'),       c('✅')],
+        ['Pipeline throughput under load',                              c('—'),  c('—'),       c('—'),       c('—'),       c('✅')],
+        ['PACS transfer time baseline',                                 c('—'),  c('◑'),       c('—'),       c('—'),       c('✅')],
+      ],
+    },
+    {
+      title: 'Failure Handling & Resilience',
+      rows: [
+        ['Algorithm produces no output - system response',              c('—'),  c('—'),       c('✅','P0'), c('—'),       c('—')],
+        ['PACS disconnect mid-session',                                 c('—'),  c('—'),       c('✅','P1'), c('—'),       c('—')],
+        ['Malformed or corrupt DICOM frame',                            c('◑'),  c('—'),       c('✅','P2'), c('—'),       c('—')],
+      ],
+    },
+    {
+      title: 'Session Management',
+      rows: [
+        ['Session state integrity',                                     c('—'),  c('◑'),       c('✅','P2'), c('—'),       c('—')],
+        ['Session recovery after disconnect',                           c('—'),  c('—'),       c('✅','P2'), c('—'),       c('—')],
+      ],
+    },
+    {
+      title: 'Security & Data Privacy',
+      rows: [
+        ['Test data de-identification (HIPAA)',                         c('—'),  c('—'),       c('✅'),      c('✅'),      c('—')],
+        ['No PHI in test environment (process check)',                  c('—'),  c('—'),       c('✅'),      c('—'),       c('—')],
+      ],
+    },
+    {
+      title: 'UI & Display',
+      rows: [
+        ['UI overlays and measurement display',                         c('✅'), c('—'),       c('✅','P2'), c('◑'),       c('—')],
+        ['Logging and audit trail',                                     c('—'),  c('—'),       c('✅','P3'), c('—'),       c('—')],
+      ],
+    },
+    {
+      title: 'Out of QA Scope',
+      oos: true,
+      rows: [
+        ['Clinical accuracy of AI-generated hints',                     c('🏥'), c('🏥'),      c('🏥'),      c('🏥'),      c('—')],
+        ['Algorithm model performance (sensitivity / specificity)',      c('🏥'), c('🏥'),      c('🏥'),      c('🏥'),      c('—')],
+        ['Siemens hardware and firmware',                               c('—'),  c('—'),       c('—'),       c('—'),       c('—')],
+      ],
+    },
+  ];
+
+  const cols = ['Unit', 'Integration', 'System', 'UAT', 'Perf'];
+
+  const priHtml = (pri) => pri
+    ? `<span class="tm-pri tm-pri-${pri.toLowerCase()}">${pri}</span>`
+    : '';
+
+  const tableRows = sections.map(sec => {
+    const hCls = sec.oos ? 'tm-section-header tm-oos-header' : 'tm-section-header';
+    let html = `<tr><td class="${hCls}" colspan="6">${sec.title}</td></tr>`;
+    sec.rows.forEach(([label, ...cells]) => {
+      const cellsHtml = cells.map(cell => {
+        const cls = cell.cov === '🏥' ? 'tm-cell tm-cell-oos'
+                  : cell.cov === '✅' ? 'tm-cell tm-cell-full'
+                  : cell.cov === '◑'  ? 'tm-cell tm-cell-partial'
+                  :                     'tm-cell tm-cell-na';
+        return `<td class="${cls}">${cell.cov}${priHtml(cell.pri)}</td>`;
+      }).join('');
+      html += `<tr><td class="tm-row-label">${label}</td>${cellsHtml}</tr>`;
+    });
+    return html;
+  }).join('');
+
+  const legend = [
+    { sym: '✅', label: 'Full coverage' },
+    { sym: '◑',  label: 'Partial coverage' },
+    { sym: '—',  label: 'Not applicable' },
+    { sym: '🏥', label: 'Clinical team (Sheba) - not QA' },
+  ];
+  const legendHtml = legend.map(l =>
+    `<span class="tm-legend-item"><span class="tm-legend-sym">${l.sym}</span><span class="tm-legend-label">${l.label}</span></span>`
+  ).join('');
+
+  return `
+    <p class="ts-intro">Maps test coverage across features and test levels. Shows what is tested, at which level, and at what priority - and makes explicit what falls outside QA scope.</p>
+    <div class="tm-legend">${legendHtml}</div>
+    <div class="tm-table-wrap">
+      <table class="tm-table">
+        <thead>
+          <tr>
+            <th class="tm-th-label">Feature / Scenario</th>
+            ${cols.map(col => `<th class="tm-th-col">${col}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
     </div>`;
 }
 
