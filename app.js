@@ -513,12 +513,12 @@ function renderTestStrategy() {
   const mustHave = [
     {
       title: 'Product Overview and Risk Context',
-      what: 'A brief technical description of NV-Sight and the risk tier it operates in. This section anchors every downstream testing decision - without understanding what the product does and what goes wrong if it fails, you cannot prioritize correctly.',
+      what: 'A brief technical description of NV-Sight and the risk tier it operates in. Risk class, deployment context, and failure consequences all feed directly into how tests are structured and what gets prioritized.',
       nvsight: 'NV-Sight is a Class C SaMD (IEC 62304) operating intraoperatively on live Siemens angiography streams. A false negative during an active stroke intervention represents direct patient harm. All testing decisions are risk-stratified accordingly - this is not a typical SaaS product where a bug means a page refresh; an undetected occlusion during a procedure has irreversible consequences.',
     },
     {
       title: 'Test Scope',
-      what: 'Defines what is being tested and explicitly what is not. Clear boundaries prevent scope creep, document assumptions shared with the team, and ensure no one is surprised by what QA does or does not own.',
+      what: 'Defines what is being tested and explicitly what is not. Clear boundaries prevent scope creep, document shared assumptions, and make QA ownership unambiguous from day one.',
       nvsight: 'In scope: AI inference on DICOM frames, PACS integration, measurement accuracy, UI overlays and result display, session state management, de-identification of test data. Out of scope: Siemens hardware firmware, hospital network infrastructure, clinical decision-making by the physician, third-party PACS systems not in the integration plan.',
     },
     {
@@ -528,22 +528,22 @@ function renderTestStrategy() {
     },
     {
       title: 'Risk-Based Test Prioritization',
-      what: 'Not everything gets equal test coverage. This section maps risk severity to test effort, ensuring critical paths are never undertested when time or resources are constrained.',
+      what: 'Not everything gets equal test coverage. This section maps risk severity to test effort - the higher the potential impact, the deeper the coverage, regardless of timeline pressure.',
       nvsight: 'P0 - occlusion detection accuracy (patient safety, zero tolerance for untested regressions). P1 - real-time frame processing latency (a delay over 2 seconds intraoperatively is clinically unacceptable). P2 - PACS connectivity stability and session integrity. P3 - UI rendering, logging, and non-critical display elements.',
     },
     {
       title: 'Entry and Exit Criteria',
-      what: 'Conditions that must be met before testing starts (entry) and before a release is signed off (exit). This prevents testing theater - where you go through the motions but have no agreed standard for what "done" actually means.',
+      what: 'Conditions that must be met before testing starts (entry) and before a release is signed off (exit). Agreed upfront, these make release decisions data-driven rather than pressure-driven.',
       nvsight: 'Entry: build passes CI pipeline, no open P0 bugs from previous cycle, de-identified DICOM test dataset verified and available, test environment stable. Exit: 100% of P0 and P1 test cases passed, traceability matrix updated with current build results, regression suite green, QA sign-off documented.',
     },
     {
       title: 'Defect Management',
-      what: 'How bugs are classified, tracked, escalated, and resolved. Defines severity levels and expected response timelines per severity. Without this, every bug becomes a negotiation.',
+      what: 'How bugs are classified, tracked, escalated, and resolved. Severity levels and response timelines are defined once - so severity calls are consistent and escalation paths are clear when it matters.',
       nvsight: 'Severity 1 (patient safety impact) - immediate escalation, no release gate override under any circumstance. Severity 2 (workflow blocking) - must be resolved before release. Severity 3-4 - risk-accepted with product sign-off. All defects tracked in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference where applicable.',
     },
     {
       title: 'Test Environment',
-      what: 'Where tests are run, what infrastructure is needed, and how closely it mirrors production. A test environment that does not reflect reality produces test results that do not reflect reality.',
+      what: 'Where tests are run, what infrastructure is needed, and how closely it mirrors production. The closer the environment is to real deployment conditions, the more the test results can actually be trusted.',
       nvsight: 'Dedicated QA environment with Siemens angiography simulator or de-identified DICOM datasets from Sheba. Separate PACS test instance - no shared infrastructure with production. No real patient data in any test environment (HIPAA). Environment configuration documented and version-controlled so any test result can be reproduced.',
     },
   ];
