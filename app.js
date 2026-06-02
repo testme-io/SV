@@ -309,7 +309,7 @@ const STANDARDS_REFS = {
 };
 
 const STD_SLIDES_META = [
-  { id: 'std-overview', icon: '📜', title: 'Стандарты и требования' },
+  { id: 'std-overview', icon: '📜', title: 'Standards Overview' },
   { id: 'std-820',      icon: '🇺🇸', title: '21 CFR Part 820' },
   { id: 'std-62304',    icon: '💻', title: 'IEC 62304' },
   { id: 'std-14971',    icon: '⚠️', title: 'ISO 14971' },
@@ -526,7 +526,7 @@ function renderStandardOverview() {
   }).join('');
 
   return `
-    <p class="overview-intro" style="margin-bottom:20px">Стандарты и требования, которые нужно учитывать при создании QA-процессов и документации для FDA submission в США.</p>
+    <p class="overview-intro" style="margin-bottom:20px">Regulatory standards and requirements relevant to QA processes and documentation for FDA submission in the US market.</p>
     <div class="std-overview-grid">${rows}</div>`;
 }
 
