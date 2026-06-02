@@ -346,6 +346,29 @@ main {
   line-height: 1.65;
 }
 
+.ov-disclaimer {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #94a3b8;
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+
+.ov-disclaimer-text {
+  color: #475569;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.ov-link {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ov-link:hover { color: #1d4ed8; }
+
 .doc-group-section {
   margin-bottom: 22px;
 }
@@ -362,6 +385,28 @@ main {
 .doc-group-title.foundation  { color: #3b82f6; }
 .doc-group-title.operational { color: #22c55e; }
 .doc-group-title.regulatory  { color: #eab308; }
+
+.doc-group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding-right: 2px;
+}
+
+.doc-group-toggle:hover { opacity: 0.75; }
+
+.ov-arrow {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.ov-arrow-collapsed { transform: rotate(-90deg); }
 
 .doc-chips {
   display: flex;

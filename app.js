@@ -456,20 +456,42 @@ function showSlide(id) {
     </div>`;
 }
 
+const overviewCollapsed = new Set();
+
+function toggleOverviewGroup(group) {
+  if (overviewCollapsed.has(group)) {
+    overviewCollapsed.delete(group);
+  } else {
+    overviewCollapsed.add(group);
+  }
+  const body = document.querySelector('.slide-body');
+  if (body) body.innerHTML = renderOverview();
+}
+
 function renderOverview() {
   const groups = ['Standards', 'Foundation', 'Operational', 'Regulatory'];
-  let html = `<p class="overview-intro">QA-фреймворк для CoPilotMD NV-Sight - от стандартов FDA до готового пакета документов для submission. Нажмите на любой раздел чтобы перейти.</p>`;
+
+  let html = `
+    <div class="ov-disclaimer">
+      <p class="ov-disclaimer-text">One thing to flag upfront: the documents in this framework are built from QA engineering experience - how testing should be structured for a product like NV-Sight. They haven't been formally mapped to FDA premarket submission requirements yet, and haven't been audited against the applicable standards.</p>
+      <p class="ov-disclaimer-text" style="margin-top:10px">That alignment work - cross-referencing each document against <a href="https://www.fda.gov/media/153781/download" target="_blank" class="ov-link">FDA's guidance on premarket software submissions (2023)</a> and the relevant standards (21 CFR Part 820, IEC 62304, ISO 14971, and others) - is part of the actual project work ahead. The goal here is to show a clear QA structure and process thinking, not to hand over a submission-ready package on day one.</p>
+    </div>`;
 
   groups.forEach(group => {
     const groupSlides = SLIDES.filter(s => s.group === group);
+    const collapsed = overviewCollapsed.has(group);
     html += `
       <div class="doc-group-section">
-        <div class="doc-group-title ${group.toLowerCase()}">${group}</div>
+        <div class="doc-group-title ${group.toLowerCase()} doc-group-toggle" onclick="toggleOverviewGroup('${group}')">
+          <span>${group}</span>
+          <span class="ov-arrow${collapsed ? ' ov-arrow-collapsed' : ''}">▾</span>
+        </div>
+        ${collapsed ? '' : `
         <div class="doc-chips">
           ${groupSlides.map(s =>
             `<div class="doc-chip" onclick="showSlide('${s.id}')">${s.icon} ${s.title}</div>`
           ).join('')}
-        </div>
+        </div>`}
       </div>`;
   });
 
