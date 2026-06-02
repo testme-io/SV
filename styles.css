@@ -369,6 +369,30 @@ main {
 
 .ov-link:hover { color: #1d4ed8; }
 
+.ov-update-note {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-left: 3px solid #3b82f6;
+  border-radius: 0 10px 10px 0;
+  padding: 14px 20px;
+  margin-bottom: 28px;
+}
+
+.ov-update-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #1d4ed8;
+  margin-bottom: 8px;
+}
+
+.ov-update-text {
+  color: #1e3a5f;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
 .doc-group-section {
   margin-bottom: 22px;
 }
