@@ -556,10 +556,12 @@ function renderTestStrategy() {
     },
     {
       title: 'Entry and Exit Criteria',
-      what: 'Our goal here: define the conditions for starting a test cycle and signing off a release - agreed in advance so decisions are based on data, not pressure.',
+      what: 'Our goal here: define the conditions for starting a test cycle and signing off a release. In general, criteria are calibrated to release cadence and scope - a hotfix follows a faster path than a full release, and a team with weekly deploys structures this differently than a team shipping quarterly. For NV-Sight, scope adjustments are possible but the bar itself does not move: a missed occlusion is equally dangerous whether it was introduced in a major update or a one-line patch.',
       nvsight: [
-        'Entry: build passes CI, no open P0 bugs from previous cycle, de-identified DICOM dataset available, test environment stable',
-        'Exit: 100% of P0 and P1 test cases passed, traceability matrix updated, regression suite green, QA sign-off documented',
+        'Entry: build passes CI, no open P0 bugs from previous cycle, de-identified DICOM test dataset available, test environment stable and documented',
+        'Exit (full release): 100% of P0 and P1 test cases passed, traceability matrix updated, full regression suite green, QA sign-off documented',
+        'Exit (hotfix): targeted regression on the affected area + full P0 suite - scope is narrower, the bar is the same',
+        'No release gate override under any circumstance, regardless of business pressure or timeline',
       ],
     },
     {
