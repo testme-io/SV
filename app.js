@@ -348,6 +348,8 @@ const SLIDES = [
   { id: 'sat',              icon: '🏥', title: 'Site Acceptance Testing',           group: 'Regulatory' },
   { id: 'usability',        icon: '👁️', title: 'Usability Testing (IEC 62366)',    group: 'Regulatory' },
   { id: 'pccp',             icon: '🔁', title: 'PCCP',                              group: 'Regulatory' },
+  // Reference
+  { id: 'glossary',         icon: '📖', title: 'Abbreviations',                     group: 'Reference' },
 ];
 
 let currentSlide = 'overview';
@@ -378,7 +380,7 @@ function toggleGroup(group) {
 
 // ─── NAVIGATION ────────────────────────────────────────────────────────────
 function buildNav() {
-  const groups = ['', 'Standards', 'Foundation', 'Operational', 'Regulatory'];
+  const groups = ['', 'Standards', 'Foundation', 'Operational', 'Regulatory', 'Reference'];
   let html = '';
 
   groups.forEach(group => {
@@ -435,6 +437,7 @@ function showSlide(id) {
   else if (id === 'std-overview')   content = renderStandardOverview();
   else if (id.startsWith('std-'))   content = renderStandard(id);
   else if (id === 'teststrategy')   content = renderTestStrategy();
+  else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
   document.getElementById('main').innerHTML = `
@@ -514,11 +517,13 @@ function renderTestStrategy() {
     {
       title: 'Product Overview and Risk Context',
       what: 'Our goal here: establish the product context and risk tier so every testing decision that follows has a clear rationale behind it.',
+      label: 'entry',
       nvsight: [
-        'NV-Sight is a Class C SaMD (IEC 62304) - highest risk tier',
-        'Operates intraoperatively on live Siemens angiography streams',
-        'A false negative during an active stroke intervention = direct patient harm',
-        'All testing decisions are risk-stratified accordingly',
+        'Intended use: assists interventional neuroradiologists in real-time detection and measurement of cerebrovascular occlusions during angiographic procedures',
+        'Software class: Class C per IEC 62304 - software failure (missed occlusion detection) can result in serious injury or death during active intervention',
+        'Operating environment: Siemens Artis angiography systems, hospital PACS via DICOM, Windows client application',
+        'User population: interventional neuroradiologists and neurovascular surgeons, Sheba Medical Center (pilot site)',
+        'Key hazards driving test priorities: false negative detection (Critical), system unavailability mid-procedure (Serious), processing latency exceeding clinical threshold (Serious)',
       ],
     },
     {
@@ -587,19 +592,22 @@ function renderTestStrategy() {
     'Metrics and Reporting Cadence',
   ];
 
-  const sections = mustHave.map(s => `
+  const sections = mustHave.map(s => {
+    const isEntry = s.label === 'entry';
+    return `
     <div class="ts-section">
       <div class="ts-section-header">
         <div class="ts-section-title">${s.title}</div>
       </div>
       <div class="ts-section-what">${s.what}</div>
-      <div class="ts-nvsight-block">
-        <div class="ts-nvsight-label">Our preliminary example</div>
+      <div class="ts-nvsight-block${isEntry ? ' ts-entry-block' : ''}">
+        <div class="ts-nvsight-label">${isEntry ? 'Entry information' : 'Our preliminary example'}</div>
         <ul class="ts-nvsight-list">
           ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
         </ul>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
 
@@ -702,6 +710,53 @@ function renderStandard(id) {
         ${d.pitfalls.map(p => `<li>${p}</li>`).join('')}
       </ul>
     </div>`;
+}
+
+// ─── GLOSSARY ──────────────────────────────────────────────────────────────
+function renderGlossary() {
+  const terms = [
+    { abbr: 'BAA',    full: 'Business Associate Agreement',          note: 'Legal contract required when a vendor processes Protected Health Information (PHI) on behalf of a covered entity.' },
+    { abbr: 'CAPA',   full: 'Corrective and Preventive Action',      note: 'Process for identifying, investigating, and resolving non-conformances, plus preventing recurrence.' },
+    { abbr: 'CFR',    full: 'Code of Federal Regulations',           note: 'Official compilation of US federal rules. 21 CFR covers food and drugs, including medical devices.' },
+    { abbr: 'CI',     full: 'Continuous Integration',                note: 'Development practice where code changes are automatically built and tested on every commit.' },
+    { abbr: 'DHF',    full: 'Design History File',                   note: 'Required by 21 CFR Part 820 - the complete record of design and development of a device.' },
+    { abbr: 'DICOM',  full: 'Digital Imaging and Communications in Medicine', note: 'Standard format for storing and transmitting medical imaging data, including angiographic frames.' },
+    { abbr: 'DIMSE',  full: 'DICOM Message Service Element',         note: 'The network protocol used by DICOM to transfer images and data between devices and PACS.' },
+    { abbr: 'FDA',    full: 'Food and Drug Administration',          note: 'US federal agency that regulates medical devices, including SaMD. Oversees premarket submissions and post-market surveillance.' },
+    { abbr: 'FMEA',   full: 'Failure Mode and Effects Analysis',     note: 'Risk analysis technique that identifies potential failure modes, their causes, and their effects on system function.' },
+    { abbr: 'GMLP',   full: 'Good Machine Learning Practice',        note: 'FDA-defined principles for responsible development and evaluation of AI/ML-based medical devices.' },
+    { abbr: 'HIPAA',  full: 'Health Insurance Portability and Accountability Act', note: 'US law protecting patient health information. Applies directly to QA when working with clinical test data.' },
+    { abbr: 'IEC',    full: 'International Electrotechnical Commission', note: 'International standards body. Publishes IEC 62304 (software lifecycle) and IEC 62366 (usability engineering).' },
+    { abbr: 'ISO',    full: 'International Organization for Standardization', note: 'International standards body. Publishes ISO 13485 (QMS for medical devices) and ISO 14971 (risk management).' },
+    { abbr: 'PACS',   full: 'Picture Archiving and Communication System', note: 'Hospital infrastructure for storing, retrieving, and transmitting medical images. NV-Sight connects to PACS via DICOM.' },
+    { abbr: 'PCCP',   full: 'Predetermined Change Control Plan',     note: 'FDA submission document that pre-approves specific types of AI model changes, avoiding a new submission for each update.' },
+    { abbr: 'PHI',    full: 'Protected Health Information',          note: 'Any patient-identifiable health data regulated under HIPAA. DICOM files contain PHI in metadata tags.' },
+    { abbr: 'PMA',    full: 'Premarket Approval',                    note: 'FDA approval pathway for Class III (highest risk) devices. Requires clinical trial evidence.' },
+    { abbr: '510(k)', full: 'Premarket Notification',                note: 'FDA clearance pathway for Class II devices. Requires demonstrating substantial equivalence to a predicate device.' },
+    { abbr: 'QA',     full: 'Quality Assurance',                     note: 'Systematic process of ensuring product quality through planned activities - process-focused, not just test-focused.' },
+    { abbr: 'QMS',    full: 'Quality Management System',             note: 'The complete set of policies, processes, and documentation governing how quality is managed across the organization.' },
+    { abbr: 'QMSR',   full: 'Quality Management System Regulation',  note: 'FDA\'s 2024 update to 21 CFR Part 820, now incorporating ISO 13485:2016 by reference. Mandatory since February 2, 2026.' },
+    { abbr: 'SaMD',   full: 'Software as a Medical Device',          note: 'Software intended to be used for medical purposes without being part of a physical device. NV-Sight is a SaMD.' },
+    { abbr: 'SBOM',   full: 'Software Bill of Materials',            note: 'Complete inventory of all software components and dependencies in a product. Required in FDA cybersecurity submissions.' },
+    { abbr: 'SAT',    full: 'Site Acceptance Testing',               note: 'On-site validation that the system works correctly in the actual clinical environment before go-live.' },
+    { abbr: 'SOP',    full: 'Standard Operating Procedure',          note: 'Documented step-by-step instructions for a recurring process. Required by ISO 13485 for all key quality activities.' },
+    { abbr: 'STRIDE', full: 'Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege', note: 'Threat modeling framework used in cybersecurity analysis to identify attack vectors systematically.' },
+    { abbr: 'UAT',    full: 'User Acceptance Testing',               note: 'Validation with real end users (physicians) to confirm the system meets clinical needs before release.' },
+    { abbr: 'V&V',    full: 'Verification and Validation',           note: 'Verification: did we build the product right? Validation: did we build the right product? Both are required by IEC 62304 and 21 CFR Part 820.' },
+  ];
+
+  const rows = terms.map(t => `
+    <div class="gl-row">
+      <div class="gl-abbr">${t.abbr}</div>
+      <div class="gl-body">
+        <div class="gl-full">${t.full}</div>
+        <div class="gl-note">${t.note}</div>
+      </div>
+    </div>`).join('');
+
+  return `
+    <p class="ts-intro">Abbreviations used across this QA framework. Excludes common terms (API, AI, UI, OS, etc.).</p>
+    <div class="gl-list">${rows}</div>`;
 }
 
 // ─── KEYBOARD NAVIGATION ───────────────────────────────────────────────────
