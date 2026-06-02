@@ -288,6 +288,7 @@ main {
 .badge-foundation   { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
 .badge-operational  { background:#f0fdf4; color:#15803d; border:1px solid #86efac; }
 .badge-regulatory   { background:#fffbeb; color:#92400e; border:1px solid #fcd34d; }
+.badge-standards    { background:#f5f3ff; color:#6d28d9; border:1px solid #c4b5fd; }
 
 .slide-divider {
   height: 1px;
@@ -331,6 +332,7 @@ main {
   margin-bottom: 10px;
 }
 
+.doc-group-title.standards   { color: #8b5cf6; }
 .doc-group-title.foundation  { color: #3b82f6; }
 .doc-group-title.operational { color: #22c55e; }
 .doc-group-title.regulatory  { color: #eab308; }
@@ -363,6 +365,170 @@ main {
   border-color: #0f3460;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(15,52,96,0.15);
+}
+
+/* ── STANDARDS SLIDES ── */
+.std-type-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.tc-law         { background:#fef2f2; color:#991b1b; border:1px solid #fca5a5; }
+.tc-standard    { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+.tc-guidance    { background:#f0fdf4; color:#15803d; border:1px solid #86efac; }
+.tc-operational { background:#f5f3ff; color:#6d28d9; border:1px solid #c4b5fd; }
+
+.std-what {
+  color: #374151;
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin-bottom: 22px;
+  padding: 14px 18px;
+  background: #f8fafc;
+  border-left: 3px solid #e2e8f0;
+  border-radius: 0 8px 8px 0;
+}
+
+.std-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.std-reqs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.std-req-item {
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e9eef5;
+}
+
+.std-req-h {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 3px;
+}
+
+.std-req-d {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.std-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.std-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.std-doc-chip, .std-ref-chip {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.std-doc-chip {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+.std-doc-chip:hover { background: #1d4ed8; color: #fff; }
+
+.std-ref-chip {
+  background: #f5f3ff;
+  color: #6d28d9;
+  border: 1px solid #c4b5fd;
+}
+.std-ref-chip:hover { background: #6d28d9; color: #fff; }
+
+.std-pitfall-block {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.std-pitfall-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.std-pitfall-list li {
+  font-size: 13px;
+  color: #78350f;
+  line-height: 1.5;
+}
+
+/* ── STANDARDS OVERVIEW GRID ── */
+.std-overview-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.std-overview-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.std-overview-card:hover {
+  background: #0f3460;
+  border-color: #0f3460;
+}
+.std-overview-card:hover .std-overview-title,
+.std-overview-card:hover .std-overview-sub { color: #fff; }
+
+.std-overview-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+.std-overview-body { flex: 1; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+.std-overview-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  min-width: 180px;
+}
+
+.std-overview-sub {
+  font-size: 12px;
+  color: #94a3b8;
+  flex: 1;
 }
 
 /* ── RESPONSIVE ── */
