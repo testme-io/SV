@@ -351,6 +351,16 @@ const SLIDES = [
 ];
 
 let currentSlide = 'overview';
+const collapsedGroups = new Set();
+
+function toggleGroup(group) {
+  if (collapsedGroups.has(group)) {
+    collapsedGroups.delete(group);
+  } else {
+    collapsedGroups.add(group);
+  }
+  buildNav();
+}
 
 // ─── NAVIGATION ────────────────────────────────────────────────────────────
 function buildNav() {
@@ -362,7 +372,15 @@ function buildNav() {
     if (!groupSlides.length) return;
 
     if (group) {
-      html += `<li><div class="group-label">${group}</div></li>`;
+      const collapsed = collapsedGroups.has(group);
+      html += `
+        <li>
+          <div class="group-label group-label-btn" onclick="toggleGroup('${group}')">
+            <span>${group}</span>
+            <span class="group-arrow${collapsed ? ' group-arrow-collapsed' : ''}">▾</span>
+          </div>
+        </li>`;
+      if (collapsed) return;
     }
 
     groupSlides.forEach(s => {
