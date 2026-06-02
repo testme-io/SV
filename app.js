@@ -431,10 +431,11 @@ function showSlide(id) {
     : '';
 
   let content;
-  if (id === 'overview')          content = renderOverview();
-  else if (id === 'std-overview') content = renderStandardOverview();
-  else if (id.startsWith('std-')) content = renderStandard(id);
-  else                            content = renderBlankSlide();
+  if (id === 'overview')            content = renderOverview();
+  else if (id === 'std-overview')   content = renderStandardOverview();
+  else if (id.startsWith('std-'))   content = renderStandard(id);
+  else if (id === 'teststrategy')   content = renderTestStrategy();
+  else                              content = renderBlankSlide();
 
   document.getElementById('main').innerHTML = `
     <div class="slide-progress">
@@ -505,6 +506,85 @@ function renderOverview() {
 
 function renderBlankSlide() {
   return `<p class="slide-placeholder">- content coming soon -</p>`;
+}
+
+// ─── TEST STRATEGY ─────────────────────────────────────────────────────────
+function renderTestStrategy() {
+  const mustHave = [
+    {
+      title: 'Product Overview and Risk Context',
+      what: 'A brief technical description of NV-Sight and the risk tier it operates in. This section anchors every downstream testing decision - without understanding what the product does and what goes wrong if it fails, you cannot prioritize correctly.',
+      nvsight: 'NV-Sight is a Class C SaMD (IEC 62304) operating intraoperatively on live Siemens angiography streams. A false negative during an active stroke intervention represents direct patient harm. All testing decisions are risk-stratified accordingly - this is not a typical SaaS product where a bug means a page refresh; an undetected occlusion during a procedure has irreversible consequences.',
+    },
+    {
+      title: 'Test Scope',
+      what: 'Defines what is being tested and explicitly what is not. Clear boundaries prevent scope creep, document assumptions shared with the team, and ensure no one is surprised by what QA does or does not own.',
+      nvsight: 'In scope: AI inference on DICOM frames, PACS integration, measurement accuracy, UI overlays and result display, session state management, de-identification of test data. Out of scope: Siemens hardware firmware, hospital network infrastructure, clinical decision-making by the physician, third-party PACS systems not in the integration plan.',
+    },
+    {
+      title: 'Test Levels',
+      what: 'Defines which types of testing apply and at which stage - unit, integration, system, and acceptance. This is the testing pyramid for the product: what gets tested how, by whom, and when.',
+      nvsight: 'Unit: algorithm components, measurement logic, DICOM tag parsing. Integration: PACS connectivity, DICOM series ingestion, Siemens API handshake. System: end-to-end intraoperative workflow simulation using de-identified case data from Sheba. UAT: clinical validation sessions with physicians from the Sheba Medical team.',
+    },
+    {
+      title: 'Risk-Based Test Prioritization',
+      what: 'Not everything gets equal test coverage. This section maps risk severity to test effort, ensuring critical paths are never undertested when time or resources are constrained.',
+      nvsight: 'P0 - occlusion detection accuracy (patient safety, zero tolerance for untested regressions). P1 - real-time frame processing latency (a delay over 2 seconds intraoperatively is clinically unacceptable). P2 - PACS connectivity stability and session integrity. P3 - UI rendering, logging, and non-critical display elements.',
+    },
+    {
+      title: 'Entry and Exit Criteria',
+      what: 'Conditions that must be met before testing starts (entry) and before a release is signed off (exit). This prevents testing theater - where you go through the motions but have no agreed standard for what "done" actually means.',
+      nvsight: 'Entry: build passes CI pipeline, no open P0 bugs from previous cycle, de-identified DICOM test dataset verified and available, test environment stable. Exit: 100% of P0 and P1 test cases passed, traceability matrix updated with current build results, regression suite green, QA sign-off documented.',
+    },
+    {
+      title: 'Defect Management',
+      what: 'How bugs are classified, tracked, escalated, and resolved. Defines severity levels and expected response timelines per severity. Without this, every bug becomes a negotiation.',
+      nvsight: 'Severity 1 (patient safety impact) - immediate escalation, no release gate override under any circumstance. Severity 2 (workflow blocking) - must be resolved before release. Severity 3-4 - risk-accepted with product sign-off. All defects tracked in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference where applicable.',
+    },
+    {
+      title: 'Test Environment',
+      what: 'Where tests are run, what infrastructure is needed, and how closely it mirrors production. A test environment that does not reflect reality produces test results that do not reflect reality.',
+      nvsight: 'Dedicated QA environment with Siemens angiography simulator or de-identified DICOM datasets from Sheba. Separate PACS test instance - no shared infrastructure with production. No real patient data in any test environment (HIPAA). Environment configuration documented and version-controlled so any test result can be reproduced.',
+    },
+  ];
+
+  const niceToHave = [
+    'Performance and Load Testing Strategy',
+    'Regression Automation Approach',
+    'Test Data Management Policy',
+    'Third-Party and Vendor Testing Responsibilities',
+    'Metrics and Reporting Cadence',
+  ];
+
+  const sections = mustHave.map(s => `
+    <div class="ts-section">
+      <div class="ts-section-header">
+        <div class="ts-section-title">${s.title}</div>
+      </div>
+      <div class="ts-section-what">${s.what}</div>
+      <div class="ts-nvsight-block">
+        <div class="ts-nvsight-label">NV-Sight</div>
+        <div class="ts-nvsight-text">${s.nvsight}</div>
+      </div>
+    </div>`).join('');
+
+  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+
+  return `
+    <p class="ts-intro">The Test Strategy defines what we test, why, and how. It is the top-level QA thinking document that everything else flows from - test plans, test cases, and the traceability matrix are all downstream of decisions made here.</p>
+
+    <div class="ts-label-row">
+      <span class="ts-must-label">Must-Have</span>
+      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    </div>
+
+    <div class="ts-sections">${sections}</div>
+
+    <div class="ts-nicehave-block">
+      <div class="ts-nicehave-title">Nice-to-Have sections</div>
+      <p class="ts-nicehave-note">These sections are important for a mature QA process but are not blockers for the initial framework. They will be defined and filled in during the project.</p>
+      <ul class="ts-nice-list">${niceList}</ul>
+    </div>`;
 }
 
 // ─── STANDARDS RENDER ──────────────────────────────────────────────────────
