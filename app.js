@@ -351,7 +351,20 @@ const SLIDES = [
 ];
 
 let currentSlide = 'overview';
-const collapsedGroups = new Set();
+
+// ─── COLLAPSED GROUPS (persisted in sessionStorage) ────────────────────────
+const COLLAPSED_KEY = 'nvsight_collapsed';
+
+function loadCollapsed() {
+  try { return new Set(JSON.parse(sessionStorage.getItem(COLLAPSED_KEY)) || []); }
+  catch { return new Set(); }
+}
+
+function saveCollapsed(set) {
+  sessionStorage.setItem(COLLAPSED_KEY, JSON.stringify([...set]));
+}
+
+const collapsedGroups = loadCollapsed();
 
 function toggleGroup(group) {
   if (collapsedGroups.has(group)) {
@@ -359,6 +372,7 @@ function toggleGroup(group) {
   } else {
     collapsedGroups.add(group);
   }
+  saveCollapsed(collapsedGroups);
   buildNav();
 }
 
