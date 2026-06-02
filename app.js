@@ -519,29 +519,29 @@ function renderTestStrategy() {
       what: 'Our goal here: establish the product context and risk tier so every testing decision that follows has a clear rationale behind it.',
       label: 'entry',
       nvsight: [
-        'Intended use: assists interventional neuroradiologists in real-time detection and measurement of cerebrovascular occlusions during angiographic procedures',
-        'Software class: Class C per IEC 62304 - software failure (missed occlusion detection) can result in serious injury or death during active intervention',
+        'Intended use: assists interventional neuroradiologists by generating visual hints (overlays, markers) on angiographic frames - the physician interprets those hints, NV-Sight does not make clinical decisions',
+        'Software class: Class C per IEC 62304 - system failure during an active procedure (crash, silent failure, hints not rendered) directly impacts the physician\'s situational awareness',
         'Operating environment: Siemens Artis angiography systems, hospital PACS via DICOM, Windows client application',
         'User population: interventional neuroradiologists and neurovascular surgeons, Sheba Medical Center (pilot site)',
-        'Key hazards driving test priorities: false negative detection (Critical), system unavailability mid-procedure (Serious), processing latency exceeding clinical threshold (Serious)',
+        'Key hazards from QA perspective: pipeline fails silently during procedure (Critical), hints not rendered or misplaced on wrong frames (Serious), latency exceeding clinical threshold (Serious)',
       ],
     },
     {
       title: 'Test Scope',
       what: 'Our goal here: define the boundaries of what QA owns and what it does not - agreed with the team upfront, not figured out mid-sprint.',
       nvsight: [
-        'In scope: AI inference on DICOM frames, PACS integration, measurement accuracy, UI overlays, session state, test data de-identification',
-        'Out of scope: Siemens hardware firmware, hospital network infrastructure, clinical decision-making by the physician, third-party PACS systems not in the integration plan',
+        'In scope: hint rendering pipeline (completeness, correct placement, all defined hint types), PACS integration and DICOM frame ingestion, UI overlays and measurement display, session state, end-to-end latency, test data de-identification',
+        'Out of scope: clinical accuracy of AI-generated hints (validated by the clinical team at Sheba - not QA), Siemens hardware firmware, hospital network infrastructure, third-party PACS systems not in the integration plan',
       ],
     },
     {
       title: 'Test Levels',
       what: 'Our goal here: map out which types of testing apply at each stage of the cycle and who is responsible for each.',
       nvsight: [
-        'Unit: algorithm components, measurement logic, DICOM tag parsing',
-        'Integration: PACS connectivity, DICOM series ingestion, Siemens API handshake',
-        'System: end-to-end intraoperative workflow on de-identified Sheba case data',
-        'UAT: clinical validation sessions with physicians from Sheba Medical',
+        'Unit: hint rendering components, overlay positioning logic, DICOM tag parsing, display state management',
+        'Integration: PACS connectivity, DICOM series ingestion, Siemens API handshake, algorithm output - rendering pipeline handoff',
+        'System: end-to-end intraoperative workflow on de-identified Sheba case data, covering all defined hint types',
+        'UAT: clinical sessions with physicians from Sheba - validating the hint delivery experience, not the AI\'s clinical conclusions',
       ],
     },
     {
@@ -571,10 +571,11 @@ function renderTestStrategy() {
       title: 'Defect Management',
       what: 'Our goal here: define how bugs are classified, who escalates what, and what the resolution standard looks like for each severity level.',
       nvsight: [
-        'Severity 1 (patient safety impact) - immediate escalation, no release gate override',
-        'Severity 2 (workflow blocking) - resolved before release',
+        'Severity 1 (pipeline crash, silent failure, complete hint rendering loss during procedure) - immediate escalation, no release gate override',
+        'Severity 2 (hint rendering incorrect or incomplete: wrong overlay, missing hint type, hint on wrong frame) - resolved before release',
         'Severity 3-4 - risk-accepted with product sign-off',
         'All defects in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference',
+        'Clinical accuracy of AI output is not a QA severity category - that is clinical validation, tracked separately by the Sheba team',
       ],
     },
     {
@@ -582,6 +583,7 @@ function renderTestStrategy() {
       what: 'Our goal here: define the infrastructure needed to run tests in conditions that reflect real deployment as closely as possible.',
       nvsight: [
         'Dedicated QA environment with Siemens angiography simulator or de-identified DICOM datasets from Sheba',
+        'DICOM dataset must cover all defined hint types - without this, hint type coverage cannot be validated exhaustively',
         'Separate PACS test instance - no shared infrastructure with production',
         'No real patient data in any test environment (HIPAA)',
         'Environment configuration documented and version-controlled',
