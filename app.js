@@ -476,6 +476,12 @@ function renderOverview() {
   const groups = ['Standards', 'Foundation', 'Operational', 'Regulatory'];
 
   let html = `
+    <div class="ov-scope-note">
+      <div class="ov-scope-label">📌 QA Scope boundary</div>
+      <p class="ov-scope-text">As agreed with the CTO at the initial interview: QA scope on this project does not include clinical validation of AI output. Determining whether a generated hint correctly reflects the underlying pathology is the responsibility of the clinical team at Sheba Medical - that is a separate validation process with different ownership, methods, and sign-off authority.</p>
+      <p class="ov-scope-text" style="margin-top:10px">QA owns the layer between the algorithm and the physician: that every hint produced is delivered completely and rendered correctly; that the system never fails silently; that end-to-end latency stays within the clinical window; that the pipeline holds under real operating conditions.</p>
+      <p class="ov-scope-text ov-scope-key" style="margin-top:12px"><strong>The clinical team owns the question "is this hint medically accurate?" QA owns the question "did this hint reach the physician's screen - fully delivered, correctly rendered, and conforming to the system's design specifications?"</strong></p>
+    </div>
     <div class="ov-disclaimer">
       <p class="ov-disclaimer-text">One thing to flag upfront: the documents in this framework are built from QA engineering experience - how testing should be structured for a product like NV-Sight. They haven't been formally mapped to FDA premarket submission requirements yet, and haven't been audited against the applicable standards.</p>
       <p class="ov-disclaimer-text" style="margin-top:10px">That alignment work - cross-referencing each document against <a href="https://www.fda.gov/media/153781/download" target="_blank" class="ov-link">FDA's guidance on premarket software submissions (2023)</a> and the relevant standards (<a href="https://www.ecfr.gov/current/title-21/chapter-I/subchapter-H/part-820" target="_blank" class="ov-link">21 CFR Part 820</a>, IEC 62304, <a href="https://www.iso.org/standard/59752.html" target="_blank" class="ov-link">ISO 13485</a>, ISO 14971, and others) - is part of the actual project work ahead. The goal here is to show a clear QA structure and process thinking, not to hand over a submission-ready package on day one.</p>
