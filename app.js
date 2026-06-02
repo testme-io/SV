@@ -233,6 +233,81 @@ const STANDARDS_DATA = {
   },
 };
 
+// ─── STANDARDS CROSS-REFERENCES ───────────────────────────────────────────
+// rel types: 'Общее' | 'Дополнение' | 'Взаимозависимость'
+const STANDARDS_REFS = {
+  'std-820': [
+    { id: 'std-13485', rel: 'Общее',
+      note: 'После 2024 обновления 820 и 13485 структурно совпадают — выполняя одно, закрываешь большинство требований второго. Различие: 13485 международный, 820 только для США.' },
+    { id: 'std-62304', rel: 'Дополнение',
+      note: '820 задаёт общие Design Controls для любого медустройства, 62304 конкретизирует их применительно к ПО — что именно документировать на каждом этапе разработки.' },
+  ],
+  'std-62304': [
+    { id: 'std-14971', rel: 'Взаимозависимость',
+      note: 'Уровень риска из 14971 определяет Software Class в 62304 (A/B/C). Без risk assessment нельзя правильно классифицировать ПО — объём документации вытекает из этой связи.' },
+    { id: 'std-820', rel: 'Дополнение',
+      note: '820 требует Design Controls в общем виде, 62304 описывает конкретные шаги для ПО внутри этих controls.' },
+  ],
+  'std-14971': [
+    { id: 'std-62304', rel: 'Взаимозависимость',
+      note: 'Класс ПО (62304) вытекает из оценки риска (14971). Замкнутый цикл: риск → software class → объём документации и тестирования.' },
+    { id: 'std-62366', rel: 'Дополнение',
+      note: '62366 выявляет usability hazards, которые как input идут в risk file (14971). Два независимых источника рисков: технические и пользовательские — оба обязательны.' },
+    { id: 'std-820', rel: 'Общее',
+      note: 'Оба требуют документировать risk mitigation и доказательства что controls работают. 14971 детализирует risk framework, 820 требует итоговый результат.' },
+  ],
+  'std-62366': [
+    { id: 'std-14971', rel: 'Дополнение',
+      note: '62366 находит usability hazards, 14971 принимает их как input и оценивает риск. Однонаправленная связь: 62366 поставляет данные, 14971 управляет ими.' },
+    { id: 'std-820', rel: 'Дополнение',
+      note: '820.30(g) требует design validation — 62366 описывает как именно проводить usability validation для медустройств с UI.' },
+  ],
+  'std-13485': [
+    { id: 'std-820', rel: 'Общее',
+      note: 'Структурно практически идентичны после 2024. Единственное практическое отличие: 13485 международный, 820 только для США. При глобальном выходе нужны оба.' },
+    { id: 'std-62304', rel: 'Дополнение',
+      note: '13485 описывает QMS в целом, 62304 детализирует требования к software lifecycle внутри этой системы.' },
+  ],
+  'std-samd': [
+    { id: 'std-aiml', rel: 'Дополнение',
+      note: 'SaMD guidance — базовый framework clinical evaluation для любого SaMD. AI/ML Action Plan — надстройка с требованиями специфичными именно для AI модели. Читать оба вместе.' },
+    { id: 'std-14971', rel: 'Дополнение',
+      note: 'Clinical performance data из SaMD guidance используется как evidence в risk file. Недостаточная производительность модели = risk, должен быть задокументирован и mitigated.' },
+  ],
+  'std-aiml': [
+    { id: 'std-samd', rel: 'Дополнение',
+      note: 'SaMD guidance — основа, AI/ML Action Plan — расширение для AI-специфичных требований. Неотделимы при работе с AI medical device.' },
+    { id: 'std-pccp', rel: 'Взаимозависимость',
+      note: 'AI/ML Action Plan вводит концепцию PCCP и объясняет зачем он нужен. PCCP guidance описывает как его составить. Концепция + реализация.' },
+    { id: 'std-62366', rel: 'Дополнение',
+      note: 'AI/ML требует прозрачное взаимодействие врача с AI output. 62366 описывает как проверить это через usability testing — в т.ч. интерпретацию вывода под временным давлением.' },
+  ],
+  'std-pccp': [
+    { id: 'std-aiml', rel: 'Взаимозависимость',
+      note: 'AI/ML Action Plan вводит требование PCCP, PCCP guidance даёт детальный формат. Неотделимы: без контекста AI/ML непонятно зачем PCCP, без PCCP guidance непонятно как его писать.' },
+    { id: 'std-62304', rel: 'Дополнение',
+      note: 'Каждое изменение из PCCP должно следовать change management процессу 62304. PCCP определяет ЧТО и при каких условиях меняем, 62304 — КАК документируем это изменение.' },
+  ],
+  'std-cyber': [
+    { id: 'std-62304', rel: 'Дополнение',
+      note: '62304 требует документировать software components (основа для SBOM) и change management (для security patches). Cybersecurity — часть software lifecycle, а не отдельная дисциплина.' },
+    { id: 'std-hipaa', rel: 'Дополнение',
+      note: 'Оба про защиту данных пациента, но с разных сторон: HIPAA — privacy, Cybersecurity — security системы. Нарушение security (взлом, утечка) автоматически становится HIPAA violation.' },
+  ],
+  'std-hipaa': [
+    { id: 'std-dicom', rel: 'Взаимозависимость',
+      note: 'PHI теги встроены прямо в DICOM файлы. Деидентификация по HIPAA невозможна без точного знания какие именно DICOM теги содержат PHI и как их удалять.' },
+    { id: 'std-cyber', rel: 'Дополнение',
+      note: 'HIPAA защищает PHI со стороны privacy, Cybersecurity — со стороны security. Нарушение Cybersecurity (взлом системы) автоматически становится нарушением HIPAA.' },
+  ],
+  'std-dicom': [
+    { id: 'std-hipaa', rel: 'Взаимозависимость',
+      note: 'PHI теги встроены в DICOM структуру. Корректная деидентификация по HIPAA требует детального знания DICOM — без этого невозможно гарантировать что все идентификаторы удалены.' },
+    { id: 'std-cyber', rel: 'Дополнение',
+      note: 'DICOM over network (DIMSE protocol) — это attack surface. FDA Cybersecurity требует threat modeling для всех сетевых протоколов, включая DICOM-соединение между аппаратом и PACS.' },
+  ],
+};
+
 const STD_SLIDES_META = [
   { id: 'std-overview', icon: '📜', title: 'Стандарты и требования' },
   { id: 'std-820',      icon: '🇺🇸', title: '21 CFR Part 820' },
@@ -410,10 +485,25 @@ function renderStandard(id) {
     return s ? `<span class="std-doc-chip" onclick="showSlide('${s.id}')">${s.icon} ${s.title}</span>` : '';
   };
 
-  const refChip = (refId) => {
-    const s = SLIDES.find(sl => sl.id === refId);
-    return s ? `<span class="std-ref-chip" onclick="showSlide('${s.id}')">${s.icon} ${s.title}</span>` : '';
+  const REL_CLASS = {
+    'Общее':            'rel-obshhee',
+    'Дополнение':       'rel-dopolnenie',
+    'Взаимозависимость':'rel-vzaimozavis',
   };
+
+  const refs = STANDARDS_REFS[id] || [];
+  const refRows = refs.map(ref => {
+    const s = SLIDES.find(sl => sl.id === ref.id);
+    if (!s) return '';
+    return `
+      <div class="std-ref-row">
+        <div class="std-ref-top">
+          <span class="std-ref-chip" onclick="showSlide('${s.id}')">${s.icon} ${s.title}</span>
+          <span class="std-rel-badge ${REL_CLASS[ref.rel] || ''}">${ref.rel}</span>
+        </div>
+        <div class="std-ref-note">${ref.note}</div>
+      </div>`;
+  }).join('');
 
   return `
     <span class="std-type-badge tc-${d.typeClass}">${d.type}</span>
@@ -428,16 +518,11 @@ function renderStandard(id) {
         </div>`).join('')}
     </div>
 
-    <div class="std-two-col">
-      <div>
-        <div class="std-section-title">Влияет на документы</div>
-        <div class="std-chip-row">${d.docs.map(docChip).join('')}</div>
-      </div>
-      <div>
-        <div class="std-section-title">Пересечения со стандартами</div>
-        <div class="std-chip-row">${d.refs.map(refChip).join('')}</div>
-      </div>
-    </div>
+    <div class="std-section-title">Влияет на документы</div>
+    <div class="std-chip-row" style="margin-bottom:20px">${d.docs.map(docChip).join('')}</div>
+
+    <div class="std-section-title">Пересечения со стандартами</div>
+    <div class="std-refs-list" style="margin-bottom:20px">${refRows}</div>
 
     <div class="std-pitfall-block">
       <div class="std-section-title">⚠️ Подводные камни</div>

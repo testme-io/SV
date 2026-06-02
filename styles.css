@@ -464,8 +464,45 @@ main {
   background: #f5f3ff;
   color: #6d28d9;
   border: 1px solid #c4b5fd;
+  flex-shrink: 0;
 }
 .std-ref-chip:hover { background: #6d28d9; color: #fff; }
+
+.std-refs-list { display: flex; flex-direction: column; gap: 10px; }
+
+.std-ref-row {
+  background: #fafafa;
+  border: 1px solid #e9eef5;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.std-ref-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.std-ref-note {
+  font-size: 12.5px;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+.std-rel-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.rel-obshhee     { background: #e0f2fe; color: #0369a1; }
+.rel-dopolnenie  { background: #dcfce7; color: #15803d; }
+.rel-vzaimozavis { background: #f5f3ff; color: #6d28d9; }
 
 .std-pitfall-block {
   background: #fffbeb;
