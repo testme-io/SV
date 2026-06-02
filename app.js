@@ -513,38 +513,69 @@ function renderTestStrategy() {
   const mustHave = [
     {
       title: 'Product Overview and Risk Context',
-      what: 'A brief technical description of NV-Sight and the risk tier it operates in. Risk class, deployment context, and failure consequences all feed directly into how tests are structured and what gets prioritized.',
-      nvsight: 'NV-Sight is a Class C SaMD (IEC 62304) operating intraoperatively on live Siemens angiography streams. A false negative during an active stroke intervention represents direct patient harm. All testing decisions are risk-stratified accordingly - this is not a typical SaaS product where a bug means a page refresh; an undetected occlusion during a procedure has irreversible consequences.',
+      what: 'Our goal here: establish the product context and risk tier so every testing decision that follows has a clear rationale behind it.',
+      nvsight: [
+        'NV-Sight is a Class C SaMD (IEC 62304) - highest risk tier',
+        'Operates intraoperatively on live Siemens angiography streams',
+        'A false negative during an active stroke intervention = direct patient harm',
+        'All testing decisions are risk-stratified accordingly',
+      ],
     },
     {
       title: 'Test Scope',
-      what: 'Defines what is being tested and explicitly what is not. Clear boundaries prevent scope creep, document shared assumptions, and make QA ownership unambiguous from day one.',
-      nvsight: 'In scope: AI inference on DICOM frames, PACS integration, measurement accuracy, UI overlays and result display, session state management, de-identification of test data. Out of scope: Siemens hardware firmware, hospital network infrastructure, clinical decision-making by the physician, third-party PACS systems not in the integration plan.',
+      what: 'Our goal here: define the boundaries of what QA owns and what it does not - agreed with the team upfront, not figured out mid-sprint.',
+      nvsight: [
+        'In scope: AI inference on DICOM frames, PACS integration, measurement accuracy, UI overlays, session state, test data de-identification',
+        'Out of scope: Siemens hardware firmware, hospital network infrastructure, clinical decision-making by the physician, third-party PACS systems not in the integration plan',
+      ],
     },
     {
       title: 'Test Levels',
-      what: 'Defines which types of testing apply and at which stage - unit, integration, system, and acceptance. This is the testing pyramid for the product: what gets tested how, by whom, and when.',
-      nvsight: 'Unit: algorithm components, measurement logic, DICOM tag parsing. Integration: PACS connectivity, DICOM series ingestion, Siemens API handshake. System: end-to-end intraoperative workflow simulation using de-identified case data from Sheba. UAT: clinical validation sessions with physicians from the Sheba Medical team.',
+      what: 'Our goal here: map out which types of testing apply at each stage of the cycle and who is responsible for each.',
+      nvsight: [
+        'Unit: algorithm components, measurement logic, DICOM tag parsing',
+        'Integration: PACS connectivity, DICOM series ingestion, Siemens API handshake',
+        'System: end-to-end intraoperative workflow on de-identified Sheba case data',
+        'UAT: clinical validation sessions with physicians from Sheba Medical',
+      ],
     },
     {
       title: 'Risk-Based Test Prioritization',
-      what: 'Not everything gets equal test coverage. This section maps risk severity to test effort - the higher the potential impact, the deeper the coverage, regardless of timeline pressure.',
-      nvsight: 'P0 - occlusion detection accuracy (patient safety, zero tolerance for untested regressions). P1 - real-time frame processing latency (a delay over 2 seconds intraoperatively is clinically unacceptable). P2 - PACS connectivity stability and session integrity. P3 - UI rendering, logging, and non-critical display elements.',
+      what: 'Our goal here: allocate test effort proportionally to risk - highest coverage where the impact of failure is highest.',
+      nvsight: [
+        'P0 - occlusion detection accuracy (patient safety, no regression goes untested)',
+        'P1 - real-time frame processing latency (over 2s intraoperatively is clinically unacceptable)',
+        'P2 - PACS connectivity stability and session integrity',
+        'P3 - UI rendering, logging, non-critical display elements',
+      ],
     },
     {
       title: 'Entry and Exit Criteria',
-      what: 'Conditions that must be met before testing starts (entry) and before a release is signed off (exit). Agreed upfront, these make release decisions data-driven rather than pressure-driven.',
-      nvsight: 'Entry: build passes CI pipeline, no open P0 bugs from previous cycle, de-identified DICOM test dataset verified and available, test environment stable. Exit: 100% of P0 and P1 test cases passed, traceability matrix updated with current build results, regression suite green, QA sign-off documented.',
+      what: 'Our goal here: define the conditions for starting a test cycle and signing off a release - agreed in advance so decisions are based on data, not pressure.',
+      nvsight: [
+        'Entry: build passes CI, no open P0 bugs from previous cycle, de-identified DICOM dataset available, test environment stable',
+        'Exit: 100% of P0 and P1 test cases passed, traceability matrix updated, regression suite green, QA sign-off documented',
+      ],
     },
     {
       title: 'Defect Management',
-      what: 'How bugs are classified, tracked, escalated, and resolved. Severity levels and response timelines are defined once - so severity calls are consistent and escalation paths are clear when it matters.',
-      nvsight: 'Severity 1 (patient safety impact) - immediate escalation, no release gate override under any circumstance. Severity 2 (workflow blocking) - must be resolved before release. Severity 3-4 - risk-accepted with product sign-off. All defects tracked in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference where applicable.',
+      what: 'Our goal here: define how bugs are classified, who escalates what, and what the resolution standard looks like for each severity level.',
+      nvsight: [
+        'Severity 1 (patient safety impact) - immediate escalation, no release gate override',
+        'Severity 2 (workflow blocking) - resolved before release',
+        'Severity 3-4 - risk-accepted with product sign-off',
+        'All defects in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference',
+      ],
     },
     {
       title: 'Test Environment',
-      what: 'Where tests are run, what infrastructure is needed, and how closely it mirrors production. The closer the environment is to real deployment conditions, the more the test results can actually be trusted.',
-      nvsight: 'Dedicated QA environment with Siemens angiography simulator or de-identified DICOM datasets from Sheba. Separate PACS test instance - no shared infrastructure with production. No real patient data in any test environment (HIPAA). Environment configuration documented and version-controlled so any test result can be reproduced.',
+      what: 'Our goal here: define the infrastructure needed to run tests in conditions that reflect real deployment as closely as possible.',
+      nvsight: [
+        'Dedicated QA environment with Siemens angiography simulator or de-identified DICOM datasets from Sheba',
+        'Separate PACS test instance - no shared infrastructure with production',
+        'No real patient data in any test environment (HIPAA)',
+        'Environment configuration documented and version-controlled',
+      ],
     },
   ];
 
@@ -563,8 +594,10 @@ function renderTestStrategy() {
       </div>
       <div class="ts-section-what">${s.what}</div>
       <div class="ts-nvsight-block">
-        <div class="ts-nvsight-label">NV-Sight</div>
-        <div class="ts-nvsight-text">${s.nvsight}</div>
+        <div class="ts-nvsight-label">Our preliminary example</div>
+        <ul class="ts-nvsight-list">
+          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
+        </ul>
       </div>
     </div>`).join('');
 
