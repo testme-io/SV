@@ -546,12 +546,15 @@ function renderTestStrategy() {
     },
     {
       title: 'Risk-Based Test Prioritization',
-      what: 'Our goal here: allocate test effort proportionally to risk - highest coverage where the impact of failure is highest.',
+      what: 'Our goal here: allocate test effort proportionally to risk - highest coverage where the impact of failure is highest. Important distinction for NV-Sight: QA validates that the system correctly delivers what the algorithm produces. Clinical validation of the algorithm\'s medical accuracy is a separate process owned by the clinical team at Sheba - not QA\'s responsibility.',
       nvsight: [
-        'P0 - occlusion detection accuracy (patient safety, no regression goes untested)',
-        'P1 - real-time frame processing latency (over 2s intraoperatively is clinically unacceptable)',
-        'P2 - PACS connectivity stability and session integrity',
-        'P3 - UI rendering, logging, non-critical display elements',
+        'P0 - pipeline completeness: every hint the algorithm generates reaches the display without loss, duplication, or frame misplacement',
+        'P0 - hint type coverage: all defined hint types (overlays, highlights, markers) render correctly per specification',
+        'P0 - silent failure detection: if the algorithm produces no output, the system surfaces this explicitly - a blank screen with no indication is not acceptable',
+        'P1 - end-to-end latency: time from PACS frame arrival to hint display on screen, within the clinically acceptable window',
+        'P1 - PACS connectivity stability and session integrity',
+        'P2 - edge cases in hint rendering: overlapping hints, rapid frame sequences, unusual DICOM formats from Siemens',
+        'P3 - UI polish, logging, non-critical display elements',
       ],
     },
     {
