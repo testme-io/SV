@@ -543,12 +543,12 @@ function renderTestStrategy() {
     },
     {
       title: 'Test Levels',
-      what: 'Our goal here: map out which types of testing apply at each stage of the cycle and who is responsible for each.',
+      what: 'Our goal here: define which testing levels apply to NV-Sight, what each covers, and who runs it - so ownership is clear before the project starts, not negotiated mid-sprint.',
       nvsight: [
-        'Unit: hint rendering components, overlay positioning logic, DICOM tag parsing, display state management',
-        'Integration: PACS connectivity, DICOM series ingestion, Siemens API handshake, algorithm output - rendering pipeline handoff',
-        'System: end-to-end intraoperative workflow on de-identified Sheba case data, covering all defined hint types',
-        'UAT: clinical sessions with physicians from Sheba - validating the hint delivery experience, not the AI\'s clinical conclusions',
+        'Unit — owned by engineering, not QA. Covers hint rendering components, overlay positioning logic, DICOM tag parsing. QA reviews coverage reports and flags gaps.',
+        'Integration — QA and engineering jointly. Validates the seams between components: PACS connectivity, DICOM series ingestion, Siemens API handshake, algorithm output handoff to the rendering pipeline.',
+        'System — QA owns end-to-end. Intraoperative workflow simulation on de-identified Sheba case data, covering all defined hint types across real-world DICOM scenarios.',
+        'UAT — QA organises and facilitates, physicians from Sheba execute. Validates the hint delivery experience from clinical hands: is everything displayed correctly, on time, and as specified. QA cannot run UAT alone.',
       ],
     },
     {
