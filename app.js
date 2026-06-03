@@ -532,27 +532,58 @@ function renderBugReporting() {
     },
     {
       label: 'Description',
-      hint: 'Full detail of the defect: actual result, expected result, screenshots or video if needed, possible root cause',
-      ex: 'Actual: hint overlay clears on PACS reconnect - frame 14 shows no hint. Expected: hints persist through reconnect per SRS-RND-042. Attachments: screen-rec-20240918.mp4. Possible cause: session state not preserved across PACS disconnect/reconnect cycle.',
-      note: 'Actual and expected results are mandatory in every description. Screenshots are optional for P2/P3; for P0 and P1 a screen recording of the full reproduction sequence is expected. Root cause is a hypothesis - mark it as such. It gives the developer a starting point without locking in the diagnosis.',
+      hint: 'The full body of the bug report. Contains: Steps to Reproduce, Expected Result, Actual Result, Evidence, and Possible Root Cause - in that order',
+      ex: '',
+      note: 'All sub-sections below (Steps to Reproduce through Root Cause) are mandatory parts of the Description field in Jira. They are listed separately here for clarity on what each must contain.',
+      sub: true,
     },
     {
-      label: 'Priority',
-      hint: 'P0 / P1 / P2 / P3 - required at filing time, not "to be determined"',
-      ex: 'P1',
-      note: 'Same scale as test case priority and release gates. If unsure between P0 and P1, pick P0 and discuss - not the other way around.',
+      label: '↳ Steps to Reproduce',
+      hint: 'Numbered, minimal path to trigger the defect - no assumptions, no prior context required',
+      ex: '1. Load DICOM series [UID]. 2. Wait for hint overlay to render. 3. Simulate PACS disconnect. 4. Reconnect PACS. 5. Observe hint state on frame 14.',
+      note: 'If steps cannot be condensed to under 10 lines, the reproduction case is not isolated enough.',
+    },
+    {
+      label: '↳ Expected Result',
+      hint: 'What the system should do - reference the spec or requirement ID where possible',
+      ex: 'All previously rendered hints persist through PACS reconnect. No re-render required. Ref: SRS-RND-042.',
+      note: 'Linking to a requirement turns the bug into a traceability artifact - useful for the DHF.',
+    },
+    {
+      label: '↳ Actual Result',
+      hint: 'What the system actually does - precise and observable, no interpretation',
+      ex: 'Hint overlay clears completely on reconnect. Frame 14 shows no hint even though hint was visible before disconnect.',
+      note: 'Avoid "it does not work" or "hint is wrong" - describe exactly what is visible on screen.',
+    },
+    {
+      label: '↳ Evidence',
+      hint: 'Screenshot, screen recording, or DICOM viewer export - attached inline or linked',
+      ex: 'screen-rec-20240918-frame14-reconnect.mp4 (attached)',
+      note: 'For P0 and P1 a screen recording of the full reproduction sequence is expected, not just a final-state screenshot.',
+    },
+    {
+      label: '↳ Root Cause',
+      hint: 'A hypothesis about the likely cause - clearly marked as a hypothesis, not a diagnosis',
+      ex: 'Possible cause: session state not preserved across PACS disconnect/reconnect cycle.',
+      note: 'Gives the developer a starting point without locking in the diagnosis. If you have no hypothesis, write "Unknown" - do not leave the section blank.',
+    },
+    {
+      label: 'Priority & Severity',
+      hint: 'Set both together. Jira standard severity (Blocker / Critical / Major / Minor / Trivial) mapped to the P0-P3 scale from Risk-Based Test Prioritization in the Test Strategy',
+      ex: 'Blocker (P0) / Critical (P1) / Major (P2) / Minor (P3) / Trivial (P3 - cosmetic)',
+      note: 'The mapping is fixed: Blocker = P0, Critical = P1, Major = P2, Minor = P3, Trivial = P3 cosmetic. Both fields are set at filing time. If unsure between P0 and P1, choose P0 and discuss at triage - never the other way around.',
     },
     {
       label: 'Labels',
-      hint: 'Two label groups: (1) severity - Blocker / Critical / Major / Minor / Trivial mapped to P0-P3; (2) context - Smoke / Regression / UAT / build number or other tags per project conventions',
-      ex: 'Critical, Regression, build-2.4.1',
-      note: 'Severity labels (Blocker = P0, Critical = P1, Major = P2, Minor = P3, Trivial = P3 cosmetic) align the ticket with standard Jira workflows. Context labels (Smoke, Regression, UAT, build tag) make the backlog filterable by test type and release. The exact context label set is defined at project onboarding based on how the team organises the board.',
+      hint: 'Context tags: Smoke / Regression / UAT / build number or other tags per project conventions',
+      ex: 'Regression, build-2.4.1',
+      note: 'Make the backlog filterable by test type and release. The exact label set is defined at project onboarding based on how the team organises the board.',
     },
     {
       label: 'Assignee',
-      hint: 'The engineer responsible for investigating and fixing the defect - set at triage, not left unassigned',
-      ex: 'Assigned to: [component owner] at triage. QA lead notified as watcher.',
-      note: 'An unassigned bug is a bug no one owns. Assignee is set during triage for P1-P3, and immediately for P0. QA lead is added as a watcher on all P0 and P1 tickets to receive status updates without being the fix owner.',
+      hint: 'The engineer responsible for investigating and fixing - set at triage, not left unassigned',
+      ex: '[Component owner] assigned at triage. QA lead added as watcher.',
+      note: 'An unassigned bug is a bug no one owns. Set immediately for P0, at triage for P1-P3. QA lead is a watcher on all P0 and P1 tickets.',
     },
     {
       label: 'Build Version',
@@ -562,65 +593,53 @@ function renderBugReporting() {
     },
     {
       label: 'Environment',
-      hint: 'Dev / Staging / Prod - depending on project setup. Never assume the environment; state it explicitly.',
-      ex: 'Staging - Siemens angiography simulator, PACS test instance v3.1',
-      note: 'The environment tier structure (dev / staging / prod or QA / UAT / prod) is defined at project onboarding. Include component versions - PACS, simulator config, OS - if the bug is at the integration layer. Never use production environment for bug reproduction (HIPAA).',
-    },
-    {
-      label: 'Steps to Reproduce',
-      hint: 'Numbered, minimal path to trigger the defect - no assumptions',
-      ex: '1. Load DICOM series [UID]. 2. Wait for hint overlay to render. 3. Simulate PACS disconnect (kill process). 4. Reconnect PACS. 5. Observe hint state.',
-      note: 'If steps cannot be condensed to under 10 lines, the reproduction case is not isolated enough.',
-    },
-    {
-      label: 'Expected Result',
-      hint: 'What the system should do, ideally referencing the spec or requirement ID',
-      ex: 'All previously rendered hints persist through PACS reconnect. No re-render required. Ref: SRS-RND-042.',
-      note: 'Linking to a requirement turns the bug into a traceability artifact - useful for the DHF.',
-    },
-    {
-      label: 'Actual Result',
-      hint: 'What the system actually does - precise, observable, no interpretation',
-      ex: 'Hint overlay clears completely on reconnect. Frame 14 shows no hint after PACS reconnect even though hint was visible before disconnect.',
-      note: 'Avoid "it does not work" or "hint is wrong" - describe what is visible on screen.',
+      hint: 'Dev / Staging / Prod - depending on project setup. State it explicitly, never assume.',
+      ex: 'Staging - Siemens angiography simulator v4.1, PACS test instance v3.1',
+      note: 'The tier structure (dev / staging / prod) is defined at project onboarding. Include component versions if the bug is at the integration layer. Never use production for bug reproduction (HIPAA).',
     },
     {
       label: 'DICOM Reference',
       hint: 'Series UID, frame number, hint type - mandatory for any rendering or pipeline bug',
       ex: 'Study UID: 1.2.840.xxx | Series UID: 1.2.840.yyy | Frame: 14 | Hint type: Aneurysm marker',
-      note: 'Without a DICOM reference, rendering bugs cannot be reproduced by engineering. This field is non-negotiable for hint delivery defects.',
+      note: 'Without a DICOM reference, rendering bugs cannot be reproduced by engineering. Non-negotiable for hint delivery defects.',
     },
     {
-      label: 'Evidence',
-      hint: 'Screenshot, screen recording, or DICOM viewer export attached to the ticket',
-      ex: 'screen-rec-20240918-frame14-reconnect.mp4 (attached)',
-      note: 'For P0 and P1 bugs, a screen recording of the full reproduction sequence is expected, not just a screenshot of the final state.',
+      label: 'Related Bugs / Tasks',
+      hint: 'Links to parent tasks, blocking issues, duplicate tickets, or related bugs - typed by relationship',
+      ex: 'Blocks: NV-412 (release ticket) | Relates to: NV-388 (PACS reconnect session issue) | Parent: NV-300 (Rendering epic)',
+      note: 'Use Jira\'s built-in link types: Blocks / Is blocked by / Relates to / Duplicates / Is child of. Correct linking keeps the dependency graph visible and prevents duplicate investigation of the same root cause.',
     },
     {
       label: 'Related Test Case',
       hint: 'Test case ID from the test plan that covers this scenario',
       ex: 'TC-RND-014',
-      note: 'Required for traceability matrix and V&V report. A bug with no linked test case is a gap in coverage that needs to be explained.',
+      note: 'Required for traceability matrix and V&V report. A bug with no linked test case is a coverage gap that must be explained.',
     },
     {
       label: 'Comments',
-      hint: 'Verification status updates posted as Jira comments throughout the ticket lifecycle - not in the description field',
-      ex: `<strong>Verified</strong> [date] - build 2.4.2, Staging, Siemens simulator v4.1. Hint persists after PACS reconnect on frame 14. Screen recording attached. TC-RND-014 passed. → Closing.<br>
-           <strong>Reopened</strong> [date] - build 2.4.3, Staging. Failure reproduced again on frame 22 in a different series. New recording attached. Returning to Triage.<br>
-           <strong>Not Relevant</strong> [date] - Staging env config mismatch (PACS v2 vs. test requirement PACS v3). Not reproducible on correct environment. Closing as env issue.`,
-      note: 'Every verification attempt is a comment, not a silent status change. Include: outcome (Verified / Reopened / Not Relevant), build version, environment tier, devices or simulator version, and attached evidence. This comment history is the audit trail for the fix cycle and goes into the DHF for P0 and P1 tickets.',
+      hint: 'Verification status updates posted as Jira comments throughout the lifecycle - not in the description',
+      ex: `<strong>Verified</strong> [date] - build 2.4.2, Staging, Siemens simulator v4.1. Hint persists after reconnect on frame 14. Recording attached. TC-RND-014 passed. → Closing.<br>
+           <strong>Reopened</strong> [date] - build 2.4.3, Staging. Failure reproduced on frame 22 in a different series. New recording attached. Returning to Triage.<br>
+           <strong>Not Relevant</strong> [date] - Staging env config mismatch (PACS v2 vs. required PACS v3). Not reproducible on correct environment. Closing as env issue.`,
+      note: 'Every verification attempt is a comment, not a silent status change. Include: outcome (Verified / Reopened / Not Relevant), build, environment tier, devices or simulator version, and evidence. Comment history for P0 and P1 goes into the DHF.',
     },
   ];
 
-  const fieldRows = fields.map(f => `
-    <div class="br-field-row">
+  const fieldRows = fields.map(f => {
+    const isSub  = f.label.startsWith('↳');
+    const isDesc = f.sub === true;
+    const rowCls = isSub ? 'br-field-row br-field-sub' : isDesc ? 'br-field-row br-field-desc-parent' : 'br-field-row';
+    const exHtml = f.ex ? `<div class="br-field-ex"><span class="br-ex-tag">e.g.</span> ${f.ex}</div>` : '';
+    return `
+    <div class="${rowCls}">
       <div class="br-field-label">${f.label}</div>
       <div class="br-field-body">
         <div class="br-field-hint">${f.hint}</div>
-        <div class="br-field-ex"><span class="br-ex-tag">e.g.</span> ${f.ex}</div>
+        ${exHtml}
         <div class="br-field-note">${f.note}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   const escalation = [
     {
