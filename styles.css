@@ -1310,6 +1310,68 @@ main {
 .mq-gate-rc      .mq-gate-list li { color: #78350f; }
 .mq-gate-signoff .mq-gate-list li { color: #7f1d1d; }
 
+/* ── DEFECT WORKFLOW ── */
+.dw-states-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.dw-state-card {
+  border-radius: 8px;
+  padding: 11px 13px;
+  border-left: 4px solid transparent;
+}
+
+.dw-state-label {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.2px;
+}
+
+.dw-state-desc {
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.dw-st-new      { background: #f0f9ff; border-color: #38bdf8; }
+.dw-st-new      .dw-state-label { color: #0369a1; }
+.dw-st-new      .dw-state-desc  { color: #075985; }
+
+.dw-st-triage   { background: #faf5ff; border-color: #a78bfa; }
+.dw-st-triage   .dw-state-label { color: #6d28d9; }
+.dw-st-triage   .dw-state-desc  { color: #5b21b6; }
+
+.dw-st-inprog   { background: #fffbeb; border-color: #fbbf24; }
+.dw-st-inprog   .dw-state-label { color: #b45309; }
+.dw-st-inprog   .dw-state-desc  { color: #92400e; }
+
+.dw-st-fixed    { background: #f0fdf4; border-color: #4ade80; }
+.dw-st-fixed    .dw-state-label { color: #15803d; }
+.dw-st-fixed    .dw-state-desc  { color: #166534; }
+
+.dw-st-verify   { background: #fff7ed; border-color: #fb923c; }
+.dw-st-verify   .dw-state-label { color: #c2410c; }
+.dw-st-verify   .dw-state-desc  { color: #9a3412; }
+
+.dw-st-closed   { background: #f8fafc; border-color: #94a3b8; }
+.dw-st-closed   .dw-state-label { color: #334155; }
+.dw-st-closed   .dw-state-desc  { color: #475569; }
+
+.dw-st-rejected { background: #fef2f2; border-color: #f87171; }
+.dw-st-rejected .dw-state-label { color: #b91c1c; }
+.dw-st-rejected .dw-state-desc  { color: #991b1b; }
+
+.dw-st-wontfix  { background: #fdf4ff; border-color: #e879f9; }
+.dw-st-wontfix  .dw-state-label { color: #86198f; }
+.dw-st-wontfix  .dw-state-desc  { color: #701a75; }
+
+.dw-st-reopen   { background: #fff1f2; border-color: #fb7185; }
+.dw-st-reopen   .dw-state-label { color: #be123c; }
+.dw-st-reopen   .dw-state-desc  { color: #9f1239; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 800px) {
   main { padding: 20px 16px 40px; }

@@ -443,6 +443,7 @@ function showSlide(id) {
   else if (id === 'testplans')      content = renderTestPlans();
   else if (id === 'testcases')      content = renderTestCases();
   else if (id === 'automation')     content = renderAutomation();
+  else if (id === 'defectworkflow') content = renderDefectWorkflow();
   else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -1174,6 +1175,143 @@ function renderAutomation() {
     <div class="ts-nicehave-block">
       <div class="ts-nicehave-title">Nice-to-Have sections</div>
       <p class="ts-nicehave-note">Valuable for a mature automation suite. Added after the core regression coverage is stable and the CI pipeline is running reliably.</p>
+      <ul class="ts-nice-list">${niceList}</ul>
+    </div>`;
+}
+
+function renderDefectWorkflow() {
+
+  // ── Lifecycle states diagram ──────────────────────────────────────────────
+  const states = [
+    { id: 'new',        label: 'New',         desc: 'Filed by QA. Mandatory fields complete. Priority set.',                                         cls: 'dw-st-new' },
+    { id: 'triage',     label: 'Triage',       desc: 'Priority confirmed by QA lead. Assigned to engineering. Sprint scheduled.',                     cls: 'dw-st-triage' },
+    { id: 'inprog',     label: 'In Progress',  desc: 'Engineering owns. Active fix underway. P0 = same-day start.',                                  cls: 'dw-st-inprog' },
+    { id: 'fixed',      label: 'Fixed',        desc: 'Engineering marks fixed, links commit and build number. QA is notified.',                       cls: 'dw-st-fixed' },
+    { id: 'verify',     label: 'In Verify',    desc: 'QA re-executes the original test case on the fix build. Must reproduce the failure first.',     cls: 'dw-st-verify' },
+    { id: 'closed',     label: 'Closed',       desc: 'Fix confirmed. TC result updated. Traceability matrix updated.',                                cls: 'dw-st-closed' },
+    { id: 'rejected',   label: 'Rejected',     desc: 'Not reproducible or filed in error. Reason documented. Original reporter notified.',            cls: 'dw-st-rejected' },
+    { id: 'wontfix',    label: "Won't Fix",    desc: "Risk-accepted. Documented rationale, approver named. P0/P1 cannot be Won't Fixed.",            cls: 'dw-st-wontfix' },
+    { id: 'reopen',     label: 'Reopened',     desc: 'Fix did not resolve the issue. Returned to Triage with a note on why verification failed.',    cls: 'dw-st-reopen' },
+  ];
+
+  const stateCards = states.map(s => `
+    <div class="dw-state-card ${s.cls}">
+      <div class="dw-state-label">${s.label}</div>
+      <div class="dw-state-desc">${s.desc}</div>
+    </div>`).join('');
+
+  const mustHave = [
+    {
+      title: 'Defect Lifecycle - Workflow States',
+      what: 'Our goal here: define the states a bug moves through from filing to closure, and what must happen at each transition. State transitions are the audit trail. An auditor reviewing the DHF should be able to reconstruct the full history of any P0 or P1 defect - who filed it, who triaged it, who fixed it, who verified it, and when each step happened.',
+      label: 'states',
+    },
+    {
+      title: 'Triage',
+      what: 'Our goal here: confirm priority, assign ownership, and schedule resolution within one business day of filing. Triage is a decision point, not a rubber stamp. The filed priority can be adjusted at triage - but the adjustment must be documented with a reason.',
+      nvsight: [
+        'Triage is conducted by the QA lead, with engineering present for P0 and P1 bugs. P2 and P3 are triaged asynchronously by QA lead and assigned in the next sprint planning slot.',
+        'At triage: confirm or adjust priority (with reason documented in Jira), assign to the responsible engineering component owner, agree on resolution target (same sprint / next sprint / backlog), identify if a workaround exists for P1 and P2.',
+        'Priority can only be downgraded at triage with written justification and the agreement of both QA lead and Product. Priority cannot be downgraded based on timeline pressure alone.',
+        'P0 bugs skip the triage queue - they are escalated immediately per the escalation path defined in Bug Reporting Standards. Triage for P0 means retrospective confirmation of the priority after the fix is underway, not a gate before the fix starts.',
+        'Every triage decision is logged as a Jira comment, not in a separate doc. The comment format: "Triage [date]: Priority confirmed P1. Assigned to [name]. Target: sprint [X]. Workaround: [none / description]."',
+      ],
+    },
+    {
+      title: 'Fix and Handoff to QA',
+      what: 'Our goal here: define what a complete fix handoff looks like. A bug marked "Fixed" by engineering without the information QA needs to verify it is not fixed - it is deferred work. The handoff standard is agreed before the first sprint starts.',
+      nvsight: [
+        'Engineering transitions the ticket to Fixed and adds a Jira comment with: commit hash or PR link, build number where the fix is included, a brief description of what was changed and why.',
+        'If the fix required a change to the DICOM handling, rendering pipeline, or PACS integration layer - a note on what regression risk the change introduces and which test cases QA should prioritise in verification.',
+        'QA is notified via Jira ticket update. For P0 and P1 fixes, QA lead is also notified in Slack with a direct link to the ticket and the fix build number.',
+        'A fix that changes the expected behaviour of the system (as opposed to restoring it) requires a specification update before QA can verify. QA does not verify against undocumented behaviour.',
+        'For NV-Sight specifically: any fix touching the hint rendering pipeline or PACS session management triggers a targeted regression on the P0 suite, even if the bug was P2.',
+      ],
+    },
+    {
+      title: 'Verification',
+      what: 'Our goal here: define what QA does to confirm a fix is valid. Verification is not a casual rerun of the happy path. For a medical device, a fix that is incorrectly closed as verified is a V&V gap that can surface at audit.',
+      nvsight: [
+        'Verification starts by reproducing the original failure on a pre-fix build (or the build where the failure was first observed). If the failure cannot be reproduced, the test is marked Blocked and the defect is routed back to Triage for a root cause discussion.',
+        'After confirming reproduction, QA applies the fix build and re-runs the original test case. If the original test case passes, the fix is provisionally confirmed.',
+        'For P0 and P1: verification also includes a targeted regression covering adjacent test cases that could have been affected by the fix. The regression scope is determined by the engineering handoff note.',
+        'Verification result is logged as a Jira comment: "Verified [date] on build [X.Y.Z]. Original failure reproduced on [prior build]. Fix confirmed - TC-[ID] passed. Regression: [TC list] - all passed." The ticket is then moved to Closed.',
+        'If verification fails, the ticket is moved to Reopened with a comment explaining what was observed and on which build. The Reopened ticket goes back to Triage, not directly to In Progress - priority is reconfirmed before the next fix attempt.',
+      ],
+    },
+    {
+      title: "Won't Fix and Risk Acceptance",
+      what: "Our goal here: define how defects that will not be fixed are handled. A Won't Fix is not a way to make a bug disappear - it is a documented risk acceptance decision. For a Class C SaMD, an undocumented Won't Fix is an open regulatory risk.",
+      nvsight: [
+        "P0 and P1 defects cannot be Won't Fixed. If a P0 or P1 defect cannot be resolved before release, the release does not go out. There is no documented exception to this.",
+        "P2 Won't Fix: requires written rationale in Jira, named approver (QA lead and Product), and a risk impact statement - what is the clinical consequence of leaving this defect open. Filed in the DHF.",
+        "P3 Won't Fix: requires a Jira comment with rationale. No separate risk document required, but the decision must be visible in the ticket.",
+        "Won't Fix is not the same as Deferred. A deferred bug has a target sprint. A Won't Fix is a final decision. If the decision changes, the ticket is reopened - not a new ticket filed.",
+        "All Won't Fix decisions for P2 defects are reviewed at the start of the next release cycle. A P2 that was Won't Fixed in three consecutive releases needs a product-level decision on whether the underlying issue should be addressed in the spec.",
+      ],
+    },
+    {
+      title: 'Regulatory and Audit Considerations',
+      what: 'Our goal here: make the defect tracking system audit-ready from day one. Under 21 CFR Part 820 (CAPA) and IEC 62304, defect records for a medical device are not internal operational data - they are regulated artifacts that an FDA inspector or notified body auditor can request at any time.',
+      nvsight: [
+        'Every P0 and P1 defect has a CAPA implication: after closure, a brief root cause analysis is documented in the Jira ticket. Not a full CAPA report for every bug - but the root cause category (specification gap, implementation error, test environment issue, regression from prior change) must be tagged.',
+        'Defect records are never deleted from Jira. Incorrectly filed tickets are marked Rejected with a reason. Duplicate tickets are linked and one is closed as Duplicate - both remain in the system.',
+        'The full comment history of every P0 and P1 ticket is part of the DHF. QA exports P0 and P1 ticket histories as part of the V&V report package.',
+        'Jira field changes (priority adjustment, reassignment, state transitions) are logged automatically by Jira. The audit log is not modified. Any bulk state change (e.g. closing old backlog items before a release) is done via a documented triage session, not a silent batch update.',
+        'For NV-Sight: a defect that involves hint rendering failure during a procedure scenario is flagged with the label "patient-safety-relevant" regardless of priority. This label triggers automatic inclusion in the ISO 14971 risk review at the next release cycle.',
+      ],
+    },
+  ];
+
+  const niceToHave = [
+    'Defect Aging Report - a weekly automated report of open bugs by priority and age, flagging any P1 that has been open longer than one sprint without a fix build',
+    'Root Cause Category Taxonomy - a defined tag set in Jira (spec gap, implementation error, env issue, regression, data issue) to enable trend analysis across sprints',
+    'SLA Dashboard - live view of mean time to fix and mean time to verify by priority level, used in the QA quality report',
+    'Automated Jira Transitions from CI - CI failure on a linked test case automatically transitions the defect to Reopened if it was in Fixed or Closed state',
+    'Defect Density Trend - sprint-over-sprint defect count by component, used to identify areas of the codebase with structural quality issues',
+  ];
+
+  const sections = mustHave.map(s => {
+    if (s.label === 'states') {
+      return `
+      <div class="ts-section">
+        <div class="ts-section-header">
+          <div class="ts-section-title">${s.title}</div>
+        </div>
+        <div class="ts-section-what">${s.what}</div>
+        <div class="dw-states-grid">${stateCards}</div>
+      </div>`;
+    }
+    return `
+    <div class="ts-section">
+      <div class="ts-section-header">
+        <div class="ts-section-title">${s.title}</div>
+      </div>
+      <div class="ts-section-what">${s.what}</div>
+      <div class="ts-nvsight-block">
+        <div class="ts-nvsight-label">Our preliminary example</div>
+        <ul class="ts-nvsight-list">
+          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`;
+  }).join('');
+
+  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+
+  return `
+    <p class="ts-intro">A defect workflow is the process that governs a bug from the moment it is filed to the moment it is closed or formally risk-accepted. For NV-Sight, defect records are regulatory artifacts: every P0 and P1 defect is part of the CAPA chain and the DHF. The workflow below ensures that nothing falls through the cracks, and that every decision - fix, defer, reject, or risk-accept - is documented and traceable.</p>
+
+    <div class="ts-label-row">
+      <span class="ts-must-label">Must-Have</span>
+      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    </div>
+
+    <div class="ts-sections">${sections}</div>
+
+    <div class="ts-nicehave-block">
+      <div class="ts-nicehave-title">Nice-to-Have sections</div>
+      <p class="ts-nicehave-note">Operational improvements that add visibility and automation to the workflow. Added after the base process is stable.</p>
       <ul class="ts-nice-list">${niceList}</ul>
     </div>`;
 }
