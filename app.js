@@ -439,6 +439,7 @@ function showSlide(id) {
   else if (id === 'teststrategy')   content = renderTestStrategy();
   else if (id === 'testmatrix')     content = renderTestMatrix();
   else if (id === 'bugreporting')   content = renderBugReporting();
+  else if (id === 'metrics')        content = renderMetrics();
   else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -658,6 +659,135 @@ function renderBugReporting() {
         ${oosItems.map(i => `<li>${i}</li>`).join('')}
       </ul>
     </div>`;
+}
+
+function renderMetrics() {
+  const metrics = [
+    {
+      id: 'TC',
+      title: 'Test Case Execution',
+      icon: '✅',
+      desc: 'Tracks how much of the planned test scope has been run. Tells you where you are in the test cycle.',
+      rows: [
+        { label: 'Execution rate', formula: 'Executed TC / Total planned TC × 100', gate: '100% P0+P1 before release', nv: 'All hint type rendering cases + PACS integration cases must be fully executed. Partial execution is not acceptable for P0 coverage.' },
+        { label: 'Pass rate', formula: 'Passed TC / Executed TC × 100', gate: '100% P0, ≥95% P1', nv: 'Any P0 failure blocks the release outright. P1 failures require a fix and re-run before sign-off.' },
+        { label: 'Blocked rate', formula: 'Blocked TC / Total TC × 100', gate: '0% at release gate', nv: 'Blocked cases typically mean environment or data issues - must be resolved or formally risk-accepted with documented rationale.' },
+      ],
+    },
+    {
+      id: 'DEF',
+      title: 'Defect Metrics',
+      icon: '🐛',
+      desc: 'Tracks the health and velocity of the bug funnel. High open P0/P1 count late in a sprint is an early warning signal.',
+      rows: [
+        { label: 'Open P0 count', formula: 'Count of open P0 Jira tickets', gate: '0 at release', nv: 'If this number is not zero, the release is blocked. No exceptions.' },
+        { label: 'Open P1 count', formula: 'Count of open P1 Jira tickets', gate: '0 at release', nv: 'Same gate as P0. A P1 with no fix before release requires formal escalation and documented decision.' },
+        { label: 'Defect density', formula: 'Total defects / test cases executed', gate: 'Tracked, no hard threshold yet', nv: 'Used to compare cycles over time. A spike in density after a DICOM ingestion or PACS integration change is a signal to extend coverage in that area.' },
+        { label: 'Reopen rate', formula: 'Reopened bugs / Total closed bugs × 100', gate: '<5% target', nv: 'A high reopen rate points to either poor fix quality or insufficient re-test coverage. Both need a root cause conversation.' },
+        { label: 'Mean time to close (P0/P1)', formula: 'Sum of (close date - open date) / count', gate: 'P0: same day | P1: within sprint', nv: 'Tracked per sprint to monitor engineering response time on critical defects.' },
+      ],
+    },
+    {
+      id: 'COV',
+      title: 'Coverage Metrics',
+      icon: '🗺️',
+      desc: 'Tracks how much of the product is actually covered by tests - by requirement, by feature, and by risk level. The traceability matrix is the source of truth.',
+      rows: [
+        { label: 'Requirements coverage', formula: 'Requirements with linked TC / Total requirements × 100', gate: '100% P0 requirements', nv: 'Every P0 requirement in the SRS must have at least one passing test case. Gaps here are a direct DHF finding.' },
+        { label: 'Hint type coverage', formula: 'Hint types with passing TC / Total defined hint types × 100', gate: '100% before release', nv: 'NV-Sight-specific: if any defined hint type has no test case covering it, the release cannot be signed off.' },
+        { label: 'Risk coverage (ISO 14971)', formula: 'Identified risks with mitigating TC / Total identified risks × 100', gate: '100% P0 risks covered', nv: 'Risk items from the ISO 14971 risk file must be traceable to test cases. Unmitigated P0 risks block sign-off.' },
+      ],
+    },
+    {
+      id: 'ENV',
+      title: 'Environment & Pipeline Health',
+      icon: '⚙️',
+      desc: 'An unstable test environment produces unreliable results. These metrics flag when environmental noise is distorting test outcomes.',
+      rows: [
+        { label: 'Environment availability', formula: 'Hours env available / Hours planned × 100', gate: '≥95% during test cycle', nv: 'If the Siemens simulator or PACS test instance is down, test execution stalls. Tracked to quantify impact on schedule.' },
+        { label: 'CI pass rate', formula: 'Green CI runs / Total CI runs × 100', gate: '≥90% on main branch', nv: 'A CI pass rate below 90% on main means builds handed to QA are unreliable. Flaky CI needs to be fixed at the source.' },
+        { label: 'False positive rate', formula: 'False failure reports / Total failures × 100', gate: '<5%', nv: 'Environment noise or flaky tests producing false P0 failures erode trust in the test suite. Investigated and fixed the same way as real defects.' },
+      ],
+    },
+  ];
+
+  const gates = [
+    {
+      label: 'Sprint exit',
+      cls: 'mg-sprint',
+      conditions: [
+        'No open P0 or P1 defects',
+        'Execution rate ≥ 80% for planned sprint scope',
+        'All new test cases reviewed and linked to requirements',
+        'Test results logged - no "verbal pass" without a record',
+      ],
+    },
+    {
+      label: 'Release candidate',
+      cls: 'mg-rc',
+      conditions: [
+        '100% P0 and P1 test cases executed and passed',
+        '100% defined hint types covered by passing test cases',
+        'Zero open P0 or P1 defects',
+        'All P2 defects either fixed or risk-accepted with written rationale',
+        'Traceability matrix updated and reviewed',
+        'Environment stable - no outstanding false positives',
+      ],
+    },
+    {
+      label: 'Release sign-off (QA)',
+      cls: 'mg-signoff',
+      conditions: [
+        'Full regression suite green',
+        'V&V report drafted and reviewed',
+        'DHF updated with test results and open risk items',
+        'QA lead sign-off documented in Jira and the release record',
+        'No open P0 or P1 - no exceptions regardless of business pressure or timeline',
+      ],
+    },
+  ];
+
+  const metricBlocks = metrics.map(m => {
+    const rows = m.rows.map(r => `
+      <div class="mq-metric-row">
+        <div class="mq-metric-label">${r.label}</div>
+        <div class="mq-metric-formula">${r.formula}</div>
+        <div class="mq-metric-gate">${r.gate}</div>
+        <div class="mq-metric-nv">${r.nv}</div>
+      </div>`).join('');
+    return `
+      <div class="mq-group">
+        <div class="mq-group-header">
+          <span class="mq-group-icon">${m.icon}</span>
+          <span class="mq-group-title">${m.title}</span>
+        </div>
+        <p class="mq-group-desc">${m.desc}</p>
+        <div class="mq-metric-table">
+          <div class="mq-metric-thead">
+            <div>Metric</div><div>Formula</div><div>Gate</div><div>For NV-Sight</div>
+          </div>
+          ${rows}
+        </div>
+      </div>`;
+  }).join('');
+
+  const gateBlocks = gates.map(g => `
+    <div class="mq-gate-block mq-gate-${g.cls.split('-')[1]}">
+      <div class="mq-gate-label">${g.label}</div>
+      <ul class="mq-gate-list">
+        ${g.conditions.map(c => `<li>${c}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+
+  return `
+    <p class="ts-intro">Metrics make the QA process visible and auditable. For a Class C SaMD, gut feeling is not a release criterion - every gate decision must be backed by a number that can be shown to an auditor. The metrics below track three things: are we executing enough, are we finding and closing defects fast enough, and is the environment stable enough to trust the results.</p>
+
+    <div class="br-section-title">Metrics by Category</div>
+    <div class="mq-groups">${metricBlocks}</div>
+
+    <div class="br-section-title" style="margin-top:28px">Quality Gates</div>
+    <p class="ts-intro" style="margin-top:0;margin-bottom:14px">Gates are binary - pass or fail. A gate condition that is "almost met" is a failed gate. Exceptions require documented sign-off from QA lead and Product, not a verbal agreement.</p>
+    <div class="mq-gates-row">${gateBlocks}</div>`;
 }
 
 function renderBlankSlide() {
