@@ -389,10 +389,13 @@ function buildNav() {
 
     if (group) {
       const collapsed = collapsedGroups.has(group);
+      const groupBadge = group === 'Standards'
+        ? ' <span class="nav-ref-badge">internal ref</span>'
+        : '';
       html += `
         <li>
           <div class="group-label group-label-btn" onclick="toggleGroup('${group}')">
-            <span>${group}</span>
+            <span>${group}${groupBadge}</span>
             <span class="group-arrow${collapsed ? ' group-arrow-collapsed' : ''}">▾</span>
           </div>
         </li>`;
@@ -1929,6 +1932,10 @@ function renderStandardOverview() {
   }).join('');
 
   return `
+    <div class="std-internal-note">
+      <span class="std-internal-icon">🗂</span>
+      <span>This section is a working reference for the QA lead - not part of the main presentation. It maps regulatory requirements to QA processes and will be reviewed with a compliance consultant during onboarding.</span>
+    </div>
     <p class="overview-intro" style="margin-bottom:20px">Regulatory standards and requirements relevant to QA processes and documentation for FDA submission in the US market.</p>
     <div class="std-overview-grid">${rows}</div>`;
 }

@@ -203,6 +203,40 @@ nav {
   color: #93c5fd;
 }
 
+.nav-ref-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+  background: rgba(100,116,139,0.15);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.std-internal-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #94a3b8;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.55;
+}
+.std-internal-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 /* ── MAIN ── */
 main {
   flex: 1;
