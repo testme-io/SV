@@ -1926,7 +1926,13 @@ function renderTestMatrix() {
     },
   ];
 
-  const cols = ['Unit', 'Integration', 'System', 'UAT', 'Perf'];
+  const cols = [
+    { label: 'Unit',        owner: 'Engineering' },
+    { label: 'Integration', owner: 'QA + Eng' },
+    { label: 'System',      owner: 'QA' },
+    { label: 'UAT',         owner: 'Physicians' },
+    { label: 'Perf',        owner: 'QA' },
+  ];
 
   const priHtml = (pri) => pri
     ? `<span class="tm-pri tm-pri-${pri.toLowerCase()}">${pri}</span>`
@@ -1949,10 +1955,10 @@ function renderTestMatrix() {
   }).join('');
 
   const legend = [
-    { sym: '✅', label: 'Full coverage' },
-    { sym: '◑',  label: 'Partial coverage' },
-    { sym: '—',  label: 'Not applicable' },
-    { sym: '🏥', label: 'Clinical team (Sheba) - not QA' },
+    { sym: '✅', label: 'Covered at this level (by the owner shown in the column header)' },
+    { sym: '◑',  label: 'Partially covered - not all scenarios or variants' },
+    { sym: '—',  label: 'Not tested at this level - wrong layer for this type of check' },
+    { sym: '🏥', label: 'Clinical team at Sheba - outside QA scope' },
   ];
   const legendHtml = legend.map(l =>
     `<span class="tm-legend-item"><span class="tm-legend-sym">${l.sym}</span><span class="tm-legend-label">${l.label}</span></span>`
@@ -1967,7 +1973,7 @@ function renderTestMatrix() {
         <thead>
           <tr>
             <th class="tm-th-label">Feature / Scenario</th>
-            ${cols.map(col => `<th class="tm-th-col">${col}</th>`).join('')}
+            ${cols.map(col => `<th class="tm-th-col">${col.label}<div class="tm-th-owner">${col.owner}</div></th>`).join('')}
           </tr>
         </thead>
         <tbody>${tableRows}</tbody>
