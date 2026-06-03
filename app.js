@@ -442,6 +442,7 @@ function showSlide(id) {
   else if (id === 'metrics')        content = renderMetrics();
   else if (id === 'testplans')      content = renderTestPlans();
   else if (id === 'testcases')      content = renderTestCases();
+  else if (id === 'automation')     content = renderAutomation();
   else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -1049,6 +1050,130 @@ function renderTestCases() {
     <div class="ts-nicehave-block">
       <div class="ts-nicehave-title">Nice-to-Have sections</div>
       <p class="ts-nicehave-note">These practices strengthen the test case suite over time but are not required to start executing and reporting.</p>
+      <ul class="ts-nice-list">${niceList}</ul>
+    </div>`;
+}
+
+function renderAutomation() {
+  const mustHave = [
+    {
+      title: 'Automation Scope and Boundaries',
+      what: 'Our goal here: define what will and will not be automated - before writing a single line of automation code. Automation without a scope decision is a maintenance liability waiting to happen. For a Class C SaMD, the decision is also regulatory: automated test results must be as traceable and auditable as manual ones, which means the framework and its output have to be treated as controlled artifacts.',
+      nvsight: [
+        '<strong>In automation scope:</strong> P0 smoke suite (pipeline liveness, PACS connect, hint output on known DICOM input), regression suite for stable hint rendering scenarios, latency measurement runs (time from DICOM delivery to hint visible on screen), DICOM ingestion validation for the standard Sheba dataset variants',
+        '<strong>Out of automation scope:</strong> UAT - physicians execute UAT manually, automation cannot substitute clinical judgment in that context. Exploratory testing - by definition not scriptable. Visual hint accuracy judgment - a screenshot diff can confirm pixel-level consistency, but whether the hint is correctly placed relative to the anatomy requires a trained eye.',
+        'Automation starts with the P0 smoke suite and the core rendering regression. Anything beyond that is a nice-to-have until the manual suite is stable and the DICOM test dataset is finalised.',
+        'An automated test that is flaky is worse than no automated test - it erodes trust in the entire suite. Stability is a hard requirement before a test case is added to CI.',
+      ],
+    },
+    {
+      title: 'Framework Architecture',
+      what: 'Our goal here: define the technical structure of the automation framework - layers, responsibilities, and integration points. The architecture is determined after onboarding and reviewing the existing tech stack. The principles below apply regardless of the specific tools chosen.',
+      label: 'entry',
+      nvsight: [
+        '<strong>Layer 1 - Test runner:</strong> executes test cases, collects results, generates a machine-readable report (JUnit XML or equivalent). Hooks into CI via a standard interface.',
+        '<strong>Layer 2 - Domain abstractions:</strong> wrappers for DICOM dataset loading, PACS connection lifecycle, hint capture from the rendering layer. Test cases are written against these abstractions, not against raw APIs - so infrastructure changes do not require rewriting every test.',
+        '<strong>Layer 3 - Test data management:</strong> resolves DICOM dataset by version and series UID, injects it into the test environment, tears it down after execution. No hardcoded paths or ad-hoc dataset copies.',
+        '<strong>Reporting integration:</strong> results are published to the same system used for manual test tracking. Automated pass/fail must be linkable to the test case ID and the build version - for the traceability matrix and V&V report.',
+        'Tool selection (test runner, assertion library, DICOM handling library) is finalised after onboarding. No tool decisions are made here without reviewing the existing engineering stack.',
+      ],
+    },
+    {
+      title: 'Test Case Selection for Automation',
+      what: 'Our goal here: define clear criteria for which manual test cases become automated. Automating everything is as wrong as automating nothing. The criteria are driven by risk, stability, and return on investment - the same logic as any other QA decision on this project.',
+      nvsight: [
+        '<strong>Automate if:</strong> the test case is P0 or P1, the steps are fully deterministic (no human judgment in pass/fail), the scenario is executed more than once per sprint, the expected result can be expressed as a machine-verifiable assertion',
+        '<strong>Do not automate if:</strong> the expected result requires visual clinical judgment, the test case covers a scenario that changes every sprint (unstable spec), the setup cost of the scenario in an automated context exceeds the manual execution cost over a 6-sprint horizon',
+        'Each TC-ID in the test case library gets an "Automation status" field: Automated / Candidate / Manual-only / Deferred. This is maintained alongside the test case itself.',
+        'The first automation milestone covers the P0 smoke suite: PACS connect success, at least one hint type rendered on a known frame within latency threshold, silent failure detection (no output triggers an alert, not silence). These three run on every CI build.',
+      ],
+    },
+    {
+      title: 'DICOM Test Data in Automation',
+      what: 'Our goal here: define how automated tests select, load, and clean up DICOM data. This is the hardest automation challenge for NV-Sight - the test data is not synthetic, it is de-identified clinical data, which means it has versioning, compliance, and reproducibility requirements that generic web automation does not.',
+      nvsight: [
+        'Automated tests reference DICOM series by ID and dataset version, not by file path. The test data layer resolves the reference to the actual file in the versioned dataset store.',
+        'No real patient data in any automated run. The de-identified dataset used by automation is version-controlled alongside the test suite.',
+        'Each automated test case declares its DICOM dependencies in a configuration block at the top of the test: dataset version, series UID, expected hint types. This makes the test self-documenting and the dependency auditable.',
+        'Test teardown removes any DICOM data loaded during the run from the test PACS instance. No residual state between automated runs - a test that leaves state can corrupt the next run\'s results.',
+        'If the required DICOM series is not present in the test environment, the test reports "blocked" with a reason - not "failed." A missing dataset is an environment issue, not a product bug.',
+      ],
+    },
+    {
+      title: 'CI/CD Integration',
+      what: 'Our goal here: define where automated tests sit in the build pipeline and what happens when they fail. The P0 smoke suite blocking a build is a policy decision that needs to be agreed with engineering before the pipeline is configured - not discovered when the first P0 test fails and blocks a release.',
+      nvsight: [
+        'P0 smoke suite runs on every build promoted to QA. A failing P0 automated test blocks the build from entering the manual test cycle - the same gate as a manually found P0 defect.',
+        'Full regression suite runs on a nightly build trigger, not on every commit. Running the full DICOM replay suite on every commit is too slow to be useful and adds noise to commit-level feedback.',
+        'Automated test results are published to the test management system (Jira Xray or equivalent) automatically after each run. The report is linked to the build version. A run with no published report is treated as a failed run.',
+        'Flaky test handling: a test that fails intermittently is quarantined (moved to a non-blocking suite) within one sprint of the flakiness being observed. Quarantined tests get a Jira ticket and a fix deadline. A quarantined P0 test is treated as a P1 defect in the framework itself.',
+        'The pipeline configuration is version-controlled alongside the test suite. Changes to CI configuration follow the same review process as changes to test cases.',
+      ],
+    },
+    {
+      title: 'Results, Reporting, and Traceability',
+      what: 'Our goal here: make automated test results as traceable as manual ones. Under 21 CFR Part 820, it does not matter whether the test was run by a human or a script - the result must be linked to a requirement, a build, and a signed record. Automated results that live only in a CI log and are never imported into the test management system are not V&V evidence.',
+      nvsight: [
+        'Every automated run produces a report in a machine-readable format (JUnit XML). The report is imported into the test management system and linked to the build version and the sprint.',
+        'Each automated test case result is linked to the same TC-ID as the corresponding manual test case. There is no separate "automation-only" test case namespace.',
+        'When an automated test fails, a Jira defect is opened automatically (or via a defined manual step within one hour). The defect is linked to the TC-ID and the failing build. It goes through the same P0-P3 triage as a manually found defect.',
+        'The traceability matrix entry for an automated test case shows "Automated" in the execution method column. This is a positive traceability signal - it means the test case runs more frequently and consistently than its manual equivalent.',
+        'Automated test results are included in the QA sign-off memo and the V&V report, with the run timestamp and build reference.',
+      ],
+    },
+    {
+      title: 'Maintenance and Stability Standards',
+      what: 'Our goal here: prevent the automation suite from becoming a maintenance burden that slows down QA instead of supporting it. Automation debt accumulates faster on medical device projects than on standard software - the regulatory requirement to keep test results trustworthy means a broken or flaky test suite cannot simply be ignored.',
+      nvsight: [
+        'Every automated test case has an owner: the QA engineer who wrote it. Ownership transfers explicitly when the team changes, not by default.',
+        'A test case that breaks due to a product change is updated within the same sprint the change is deployed. A broken test that stays broken for more than one sprint is a process failure, not a backlog item.',
+        'Automated tests are reviewed for relevance at the start of each major release cycle. Tests covering deprecated features are retired. Tests covering new P0 requirements are added before the release cycle starts.',
+        'A "green CI" that is achieved by disabling or quarantining too many tests is not a green CI. The number of quarantined tests is tracked as a metric and reviewed at sprint planning. More than 10% of P0 automated tests quarantined at any time triggers a framework review.',
+        'Automation code is treated as product code: version-controlled, code-reviewed, and not modified directly on the main branch without a PR.',
+      ],
+    },
+  ];
+
+  const niceToHave = [
+    'Visual Regression Testing - pixel-level screenshot comparison for hint overlay rendering, flagging rendering changes between builds without human review of every frame',
+    'Performance Automation Suite - automated latency measurement across a full DICOM session, with historical trending and threshold alerting in CI',
+    'Contract Testing for PACS Integration - schema-level validation of the DICOM/DIMSE interface, independent of full end-to-end runs, running on every commit',
+    'Automated Traceability Matrix Generation - a script that queries Jira and generates the current traceability matrix on demand, replacing the manually maintained spreadsheet',
+    'Test Execution Dashboard - a live view of automation run status, quarantine count, flakiness rate, and coverage delta across sprints',
+  ];
+
+  const sections = mustHave.map(s => {
+    const isEntry = s.label === 'entry';
+    return `
+    <div class="ts-section">
+      <div class="ts-section-header">
+        <div class="ts-section-title">${s.title}</div>
+      </div>
+      <div class="ts-section-what">${s.what}</div>
+      <div class="ts-nvsight-block${isEntry ? ' ts-entry-block' : ''}">
+        <div class="ts-nvsight-label">${isEntry ? 'Architecture principles' : 'Our preliminary example'}</div>
+        <ul class="ts-nvsight-list">
+          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`;
+  }).join('');
+
+  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+
+  return `
+    <p class="ts-intro">Automation is not a goal - it is a tool for making the regression cycle faster and more reliable. For NV-Sight, automation has a specific constraint: the test data is de-identified clinical DICOM, the system under test is a Class C SaMD, and automated results must be as traceable as manual ones. The framework below reflects that context. Tool selection is finalised after onboarding - the architecture and scope principles apply regardless of which tools are chosen.</p>
+
+    <div class="ts-label-row">
+      <span class="ts-must-label">Must-Have</span>
+      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    </div>
+
+    <div class="ts-sections">${sections}</div>
+
+    <div class="ts-nicehave-block">
+      <div class="ts-nicehave-title">Nice-to-Have sections</div>
+      <p class="ts-nicehave-note">Valuable for a mature automation suite. Added after the core regression coverage is stable and the CI pipeline is running reliably.</p>
       <ul class="ts-nice-list">${niceList}</ul>
     </div>`;
 }
