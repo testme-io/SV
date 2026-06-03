@@ -574,13 +574,14 @@ function renderTestStrategy() {
     },
     {
       title: 'Defect Management',
-      what: 'Our goal here: define how bugs are classified, who escalates what, and what the resolution standard looks like for each severity level.',
+      what: 'Our goal here: define how bugs are classified, who escalates what, and what the resolution standard looks like at each level. We use the same P0-P3 scale as test prioritization - one language across test cases, bug reports, and release decisions. No separate severity vs priority split at this stage.',
       nvsight: [
-        'Severity 1 (pipeline crash, silent failure, complete hint rendering loss during procedure) - immediate escalation, no release gate override',
-        'Severity 2 (hint rendering incorrect or incomplete: wrong overlay, missing hint type, hint on wrong frame) - resolved before release',
-        'Severity 3-4 - risk-accepted with product sign-off',
-        'All defects in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference',
-        'Clinical accuracy of AI output is not a QA severity category - that is clinical validation, tracked separately by the Sheba team',
+        'P0 (pipeline crash, silent failure, complete hint rendering loss during procedure) - immediate escalation, release is blocked, no exceptions',
+        'P1 (hint rendering incorrect or incomplete: wrong overlay, missing hint type, hint on wrong frame; latency above clinical threshold) - must be resolved before release',
+        'P2 (edge case rendering issues, rare DICOM format problems, non-blocking functional gaps) - risk-accepted with documented rationale, fixed in planned order',
+        'P3 (UI polish, logging gaps, non-critical display issues) - logged in Jira, fixed when there is capacity',
+        'All defects in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference where applicable',
+        'Clinical accuracy of AI output is not a QA defect category - tracked separately by the clinical team at Sheba',
       ],
     },
     {
