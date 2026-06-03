@@ -445,6 +445,7 @@ function showSlide(id) {
   else if (id === 'automation')     content = renderAutomation();
   else if (id === 'defectworkflow')   content = renderDefectWorkflow();
   else if (id === 'releasereadiness') content = renderReleaseReadiness();
+  else if (id === 'qualityreport')    content = renderQualityReport();
   else if (id === 'glossary')         content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -1498,6 +1499,145 @@ function renderReleaseReadiness() {
     <div class="ts-nicehave-block">
       <div class="ts-nicehave-title">Nice-to-Have sections</div>
       <p class="ts-nicehave-note">Operational maturity improvements for when the core release process is running reliably and the team wants deeper visibility and automation.</p>
+      <ul class="ts-nice-list">${niceList}</ul>
+    </div>`;
+}
+
+function renderQualityReport() {
+
+  // ── Report structure preview ───────────────────────────────────────────────
+  const reportSections = [
+    { icon: '📋', label: 'Header',             desc: 'Report type (sprint / release), cycle dates, build version, author, status (Draft / Final)' },
+    { icon: '✅', label: 'Execution Summary',  desc: 'Planned vs. executed TCs, pass / fail / blocked counts by priority tier' },
+    { icon: '🐛', label: 'Defect Summary',     desc: 'New / closed / carried-over defects by priority, reopen count, mean time to close P0/P1' },
+    { icon: '🗺️', label: 'Coverage Summary',  desc: 'Requirements coverage %, hint type coverage %, risk coverage % (ISO 14971)' },
+    { icon: '🚦', label: 'Gate Status',        desc: 'Binary green / red for each gate condition: QA, Documentation, Engineering, Regulatory, Sign-offs' },
+    { icon: '⚠️', label: 'Open Risks',         desc: "Won't Fix decisions, blocked test cases, outstanding risk-acceptance items, carried-over P2 defects" },
+    { icon: '🔍', label: 'Notable Findings',   desc: 'Anything that does not fit the numbers: unexpected failure patterns, environment instability, spec gaps discovered during testing' },
+    { icon: '📝', label: 'Recommendation',     desc: 'Explicit Go / No-Go with a one-paragraph rationale. Signed by QA lead.' },
+  ];
+
+  const reportCards = reportSections.map(r => `
+    <div class="qr-section-card">
+      <div class="qr-section-icon">${r.icon}</div>
+      <div class="qr-section-body">
+        <div class="qr-section-label">${r.label}</div>
+        <div class="qr-section-desc">${r.desc}</div>
+      </div>
+    </div>`).join('');
+
+  const mustHave = [
+    {
+      title: 'Purpose and Audience',
+      what: 'Our goal here: define what the Quality Report is for and who reads it, so it is written at the right level of detail. A report written for an auditor looks different from a report written for a sprint retrospective. For NV-Sight, the Quality Report serves both - it is the QA summary document that goes into the DHF and the main input for the release readiness review meeting.',
+      nvsight: [
+        'Primary audience: QA lead (author and owner), Engineering lead, Product. Secondary audience: CTO at release review, regulatory affairs if a submission is in scope.',
+        'The report is not a raw data dump from Jira. It is a QA lead\'s assessment of the cycle: numbers plus interpretation. A report that lists 97% pass rate without explaining the 3% is not useful.',
+        'Two report types: Sprint Quality Report (end of every sprint, internal, 1-2 pages) and Release Quality Report (end of a release cycle, formal DHF artifact, full detail). Both follow the same structure but differ in scope and sign-off requirements.',
+        'The report is the QA lead\'s professional judgment on record. It is signed. If the recommendation is Go and a defect is discovered post-deployment, the report is part of the root cause record. If the recommendation is No-Go and the team ships anyway, the report documents the override.',
+      ],
+    },
+    {
+      title: 'Report Cadence and Triggers',
+      what: 'Our goal here: define when a Quality Report is produced so it is ready when decisions need to be made, not assembled retrospectively after the meeting where the decision happened.',
+      nvsight: [
+        'Sprint Quality Report: produced within 24 hours of sprint end. Input to sprint retrospective and next sprint planning. Shared with Engineering lead and Product.',
+        'Release Quality Report: produced after the QA gate is confirmed green, before the release readiness meeting. Not produced during testing - only when testing is complete.',
+        'Hotfix Quality Report: a condensed version covering the targeted regression scope only. Produced same-day for a P0 hotfix. Includes the same Recommendation section.',
+        'On-demand: if a significant defect is found mid-cycle that affects the release timeline or a gate condition, a brief interim report is circulated - not as a DHF artifact, but as a decision-support document for the team.',
+        'The release readiness meeting is not scheduled until the Release Quality Report is distributed. A meeting without the report is not a release readiness review.',
+      ],
+    },
+    {
+      title: 'Report Structure',
+      what: 'Our goal here: standardise what goes into every report so readers can find the information they need without reading the whole document. Consistency matters especially for the DHF - an auditor reviewing reports from three different release cycles should be able to compare them at a glance.',
+      label: 'structure',
+    },
+    {
+      title: 'Execution and Defect Numbers',
+      what: 'Our goal here: define exactly which numbers the report must contain, and how they are calculated. Inconsistent definitions across reports make trend analysis meaningless.',
+      nvsight: [
+        '<strong>Execution rate:</strong> executed TC / planned TC × 100. Planned = all TCs in scope for this cycle per the test plan. Blocked TCs are executed but counted separately.',
+        '<strong>Pass rate (by priority):</strong> passed TC / executed TC × 100, reported separately for P0, P1, P2, P3. A combined pass rate that hides a P0 failure is not acceptable.',
+        '<strong>Defect counts:</strong> new defects filed this cycle, defects closed this cycle, defects carried over from prior cycles - all broken down by P0/P1/P2/P3. Not a single total.',
+        '<strong>Reopen rate:</strong> reopened bugs / total closed bugs × 100 for the cycle. A reopen rate above 5% is flagged in Notable Findings with a root cause comment.',
+        '<strong>Mean time to close (P0 / P1):</strong> calculated per cycle, compared to the prior cycle. An increasing trend is a signal worth explaining.',
+        'All numbers are pulled from Jira at a defined timestamp (end of last test execution day). The timestamp is stated in the report header. Numbers that change between report generation and the release meeting are noted as an addendum, not silently updated.',
+      ],
+    },
+    {
+      title: 'Coverage and Gate Status',
+      what: 'Our goal here: give the reader a clear, unambiguous view of how much of the product was tested and whether the release gates are met. Coverage percentages without context are noise; gate status without supporting numbers is just a colour.',
+      nvsight: [
+        'Requirements coverage: number and percentage of P0 requirements with at least one passing TC. Any P0 requirement below 100% coverage is a release blocker - flagged in red in the report.',
+        'Hint type coverage: explicitly listed by hint type name, not as an aggregate percentage. "Aneurysm marker: ✅ Occlusion highlight: ✅ Measurement overlay: ✅" - not "100% hint coverage." If any type is missing, that is visible immediately.',
+        'Risk coverage: percentage of ISO 14971 risk items with a mitigating test case result. New risk items identified during the cycle are listed by name.',
+        'Gate status table: one row per gate (QA / Documentation / Engineering / Regulatory / Sign-offs), one column per condition, green or red cell. No "partial" - a condition is either met or it is not.',
+        'If a gate has a red cell, the report explains what is needed to turn it green and who owns the action. The report does not recommend Go with a red gate cell.',
+      ],
+    },
+    {
+      title: 'Go / No-Go Recommendation',
+      what: 'Our goal here: make the QA lead\'s position explicit, in writing, before the release decision is made. The recommendation is not a consensus output of the release meeting - it is QA\'s input to that meeting. The meeting can override QA\'s recommendation, but that override must also be documented.',
+      nvsight: [
+        'Format: "Recommendation: GO / NO-GO. [One paragraph rationale citing the specific gate conditions that are met or not met.]"',
+        'A Go recommendation means all five gates are confirmed green by the QA lead at the time of writing. If anything changes between report issue and release, the recommendation is revisited.',
+        'A No-Go recommendation lists the specific blocking conditions by name: "P1 defect TC-PAC-017 open, hint type coverage incomplete for Measurement overlay - release blocked until both are resolved."',
+        'If the business decides to ship against a No-Go recommendation, the override decision is documented in the release Jira ticket by the person authorising the override, with their name and reason. The QA report is not amended.',
+        'For NV-Sight specifically: a No-Go recommendation from QA on a P0 or P1 defect cannot be overridden by business or timeline pressure. The only path forward is fixing the defect.',
+      ],
+    },
+  ];
+
+  const niceToHave = [
+    'Sprint-over-Sprint Trend Table - pass rate, defect density, and coverage delta across the last 4-6 sprints in a single view, used to spot degradation before it becomes a release problem',
+    'Component-Level Quality Breakdown - execution and defect numbers split by component (rendering pipeline, PACS integration, session management) to identify which area is generating the most risk',
+    'Automated Report Generation - a Jira query + script that pulls the numbers and populates the report template, leaving only the Notable Findings and Recommendation sections for the QA lead to write',
+    'Defect Aging Heatmap - a visual showing how long open defects have been open by priority, useful for identifying stale P2 items that are accumulating risk',
+    'Post-Release Quality Report - a brief follow-up 2 weeks after deployment: any defects reported by the Sheba team, latency observations, any physician-reported display issues',
+  ];
+
+  const sections = mustHave.map(s => {
+    if (s.label === 'structure') {
+      return `
+      <div class="ts-section">
+        <div class="ts-section-header">
+          <div class="ts-section-title">${s.title}</div>
+        </div>
+        <div class="ts-section-what">${s.what}</div>
+        <div class="qr-sections-grid">${reportCards}</div>
+      </div>`;
+    }
+    return `
+    <div class="ts-section">
+      <div class="ts-section-header">
+        <div class="ts-section-title">${s.title}</div>
+      </div>
+      <div class="ts-section-what">${s.what}</div>
+      <div class="ts-nvsight-block">
+        <div class="ts-nvsight-label">Our preliminary example</div>
+        <ul class="ts-nvsight-list">
+          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`;
+  }).join('');
+
+  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+
+  return `
+    <p class="ts-intro">The Quality Report is the QA lead's signed assessment of a test cycle - numbers, interpretation, and a Go / No-Go recommendation. It is the primary input to the release readiness meeting and a required DHF artifact for every release cycle. It is not a Jira export or a dashboard screenshot: it is a professional judgment document that puts the QA lead's name on a position.</p>
+
+    <div class="ts-label-row">
+      <span class="ts-must-label">Must-Have</span>
+      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    </div>
+
+    <div class="ts-sections">${sections}</div>
+
+    <div class="ts-nicehave-block">
+      <div class="ts-nicehave-title">Nice-to-Have sections</div>
+      <p class="ts-nicehave-note">Reporting enhancements that add trend visibility and reduce manual effort. Added once the base report structure is stable and producing consistent outputs.</p>
       <ul class="ts-nice-list">${niceList}</ul>
     </div>`;
 }
