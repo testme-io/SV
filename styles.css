@@ -797,6 +797,12 @@ main {
   line-height: 1.5;
 }
 
+.ts-nv-label {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .ts-entry-block {
   background: #f5f3ff;
 }
