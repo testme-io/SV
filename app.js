@@ -925,6 +925,30 @@ function renderTestPlans() {
       ],
     },
     {
+      title: 'Suspension and Resumption Criteria',
+      what: 'Our goal here: define when testing must be formally stopped mid-cycle and what conditions allow it to resume. This is separate from entry/exit - those govern the start and end of a cycle. Suspension criteria govern unexpected events during execution.',
+      nvsight: [
+        '<strong>Suspend if:</strong> a P0 defect is found that blocks the hint delivery pipeline or causes system crash mid-session - further test execution on the affected build produces no meaningful results',
+        '<strong>Suspend if:</strong> the PACS test instance or Siemens simulator becomes unstable (more than 2 unplanned failures per day) - results logged under those conditions cannot be trusted',
+        '<strong>Suspend if:</strong> real patient data is discovered in the test environment - testing stops immediately, HIPAA incident process is initiated',
+        '<strong>Suspend if:</strong> the build under test is replaced mid-cycle without QA sign-off - results from the prior build are invalidated',
+        '<strong>Resume when:</strong> a hotfix for the P0 is delivered, smoke suite passes on the new build, and the environment is confirmed stable - resumption is documented as a comment in the test cycle record',
+        '<strong>Resume when:</strong> environment stability is confirmed by QA and engineering jointly - at least 4 hours of stable operation before test execution restarts',
+        'Suspension and resumption events are logged in Jira against the test cycle ticket, with timestamp, reason, and the name of the person making the call',
+      ],
+    },
+    {
+      title: 'Test Risks and Contingencies',
+      what: 'Our goal here: identify risks to the testing process itself - not product risks, but the things that could prevent QA from executing the plan as written. Each risk has a named mitigation so delays have a documented response, not an improvised one.',
+      nvsight: [
+        '<strong>Risk: Sheba DICOM dataset not available on time.</strong> Mitigation: use de-identified archive data from prior sprints to cover hint types present in the archive; flag any hint types not covered as a gap in the cycle report. UAT schedule negotiated with Sheba with a minimum 2-week lead time and a confirmed SLA.',
+        '<strong>Risk: Siemens angiography simulator unavailable or unstable.</strong> Mitigation: maintain a documented fallback DICOM replay configuration that does not require the physical simulator; integration-layer tests that require the simulator are suspended and rescheduled, not skipped.',
+        '<strong>Risk: PACS test instance instability.</strong> Mitigation: environment health is checked at the start of every test day; if instability threshold is hit (2 unplanned failures), testing is suspended per the suspension criteria above and engineering is engaged same-day.',
+        '<strong>Risk: Key QA resource unavailable mid-cycle.</strong> Mitigation: test execution log and defect notes are maintained in sufficient detail that another team member can pick up from any point without a handover meeting.',
+        '<strong>Risk: Build frequency too high for manual test cycle.</strong> Mitigation: agree with engineering on a build freeze window for the test cycle; QA does not accept a new build mid-cycle without a formal scope impact assessment.',
+      ],
+    },
+    {
       title: 'Test Deliverables',
       what: 'Our goal here: list the artifacts this test cycle must produce. Under 21 CFR Part 820 and IEC 62304, undocumented testing did not happen.',
       nvsight: [
