@@ -546,7 +546,7 @@ function renderBugReporting() {
     {
       label: '↳ Expected Result',
       hint: 'What the system should do - reference the spec or requirement ID where possible',
-      ex: 'All previously rendered hints persist through PACS reconnect. No re-render required. Ref: SRS-RND-042.',
+      ex: 'All previously rendered hints persist through PACS reconnect. No re-render required. Ref: [REQ-042].',
       note: 'Linking to a requirement turns the bug into a traceability artifact - useful for the DHF.',
     },
     {
@@ -869,7 +869,7 @@ function renderTestPlans() {
       title: 'Features Under Test',
       what: 'Our goal here: list what will be tested in this cycle, mapped to requirements. This is not a repeat of the test scope from the strategy - it is the specific feature list for this build, tied to the SRS requirement IDs that apply.',
       nvsight: [
-        'Hint rendering pipeline: all defined hint types (aneurysm marker, occlusion highlight, measurement overlay) - referenced against SRS-RND-001 through SRS-RND-0XX',
+        'Hint rendering pipeline: all defined hint types (aneurysm marker, occlusion highlight, measurement overlay) - referenced against project requirement IDs (exact format confirmed at onboarding)',
         'PACS session management: connect, disconnect, reconnect, hint persistence through reconnect',
         'DICOM ingestion: single-frame and multi-frame series, edge case DICOM tag sets present in the Sheba dataset',
         'End-to-end latency: time from DICOM frame arrival to hint rendered on screen, measured under clinical-representative data load',
@@ -997,7 +997,7 @@ function renderTestCases() {
         '<strong>TC-ID</strong> - unique identifier following the convention [area]-[sequence]: TC-RND-001 (rendering), TC-PAC-001 (PACS), TC-LAT-001 (latency), TC-SEC-001 (security), TC-SES-001 (session). Used for traceability matrix and Jira linking.',
         '<strong>Title</strong> - one sentence, observable behavior: "All defined hint types render on the correct frame after a cold PACS connect." Not "test hint rendering."',
         '<strong>Priority</strong> - P0 / P1 / P2 / P3. Set at authoring time, not after execution. Priority drives regression frequency and release gate conditions.',
-        '<strong>Linked requirement</strong> - SRS or SDS requirement ID this test case covers. If no requirement exists, the test case must not be filed - it signals a gap in the specification.',
+        '<strong>Linked requirement</strong> - requirement ID from the project specification documents this test case covers. If no requirement exists, the test case must not be filed - it signals a gap in the specification.',
         '<strong>Preconditions</strong> - the exact system state before step 1: environment, build version, DICOM dataset loaded, session state, any configuration flags.',
         '<strong>Test steps</strong> - numbered, atomic, unambiguous. Each step is one action. No compound steps like "load the study and start the session."',
         '<strong>Expected result</strong> - defined per step or at the end, tied to the spec. "Hint type: Aneurysm marker appears at coordinates [x,y] on frame 14, within 2 seconds of DICOM delivery" - not "hint appears correctly."',
@@ -1035,7 +1035,7 @@ function renderTestCases() {
       nvsight: [
         'Each step is one action: "Click [Load Study]" - not "Load the study and wait for hints to appear"',
         'Steps that involve timing include a measurement instruction: "Start the timer when the first DICOM frame is delivered. Stop when the hint overlay is visible on the frame."',
-        'Expected results reference the SRS: "Hint overlay for Aneurysm marker appears within 2 seconds of DICOM delivery, at the position defined in SRS-RND-015." Not "hint appears quickly."',
+        'Expected results reference the requirement ID: "Hint overlay for Aneurysm marker appears within 2 seconds of DICOM delivery, at the position defined in [REQ-015]." Not "hint appears quickly."',
         'For negative test cases, the expected result is the error: "System displays an alert: \'PACS connection lost. Please reconnect.\' No hints are lost from the current frame." Silence is not an acceptable result for failure conditions.',
         'Multi-step cases where the pass/fail point is at the end still have observable checkpoints in earlier steps - a tester should never be 10 steps in before knowing if something went wrong',
       ],
