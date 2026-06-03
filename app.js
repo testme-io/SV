@@ -718,7 +718,7 @@ function renderMetrics() {
       id: 'TC',
       title: 'Test Case Execution',
       icon: '✅',
-      desc: 'Tracks how much of the planned test scope has been run. Tells you where you are in the test cycle.',
+      desc: 'Tracks full coverage of the planned test scope: 100% of P0 and P1 test cases executed and passed, zero blocked without documented rationale. If coverage is not complete, the release gate is not met.',
       rows: [
         { label: 'Execution rate', formula: 'Executed TC / Total planned TC × 100', gate: '100% P0+P1 before release', nv: 'All hint type rendering cases + PACS integration cases must be fully executed. Partial execution is not acceptable for P0 coverage.' },
         { label: 'Pass rate', formula: 'Passed TC / Executed TC × 100', gate: '100% P0, ≥95% P1', nv: 'Any P0 failure blocks the release outright. P1 failures require a fix and re-run before sign-off.' },
@@ -831,7 +831,7 @@ function renderMetrics() {
     </div>`).join('');
 
   return `
-    <p class="ts-intro">Metrics make the QA process visible and auditable. For a Class C SaMD, gut feeling is not a release criterion - every gate decision must be backed by a number that can be shown to an auditor. The metrics below track three things: are we executing enough, are we finding and closing defects fast enough, and is the environment stable enough to trust the results.</p>
+    <p class="ts-intro">Metrics make the QA process visible and auditable. For a Class C SaMD, gut feeling is not a release criterion - every gate decision must be backed by a number that can be shown to an auditor. The metrics below must track three things: whether full coverage of the planned test scope is achieved, whether defects are found and resolved fast enough, and whether the environment is stable enough to trust the results.</p>
 
     <div class="br-section-title">Metrics by Category</div>
     <div class="mq-groups">${metricBlocks}</div>
