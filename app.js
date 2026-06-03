@@ -888,8 +888,24 @@ function renderTestPlans() {
       ],
     },
     {
+      title: 'Test Types',
+      what: 'Our goal here: define which types of testing apply to this project and which are in scope for this specific cycle. Not all types run every sprint - scope is stated explicitly per plan.',
+      nvsight: [
+        '<strong>Functional</strong> - core type for every cycle. Validates that the hint rendering pipeline, PACS integration, DICOM ingestion, and session management behave per specification.',
+        '<strong>UI</strong> - validates overlays, measurement display, and visual correctness of hint positioning on screen. Runs every sprint; full scope before release.',
+        '<strong>Performance / Latency</strong> - end-to-end frame-to-hint latency within the clinical window, pipeline throughput. Runs on a defined cadence, not every sprint.',
+        '<strong>Security</strong> - test data de-identification (HIPAA), no PHI in any test environment, access control. Confirmed each cycle; full security review at major releases.',
+        '<strong>Integration</strong> - PACS connectivity, DICOM ingestion handshake, Siemens API interaction. Joint QA and engineering; runs on every build that touches the integration layer.',
+        '<strong>Regression</strong> - re-execution of P0 and P1 test cases after any change. Scope defined per cycle in the test plan: full regression for release, targeted for hotfix.',
+        '<strong>Negative / Boundary</strong> - malformed DICOM, PACS disconnect mid-session, algorithm producing no output. System must fail explicitly, never silently.',
+        '<strong>Exploratory</strong> - structured sessions on areas changed since the last build. Documented with session notes; findings filed as defects or test cases.',
+        '<strong>UAT</strong> - physicians from Sheba execute. QA organises and facilitates. Validates hint delivery from clinical hands. Covered by a separate UAT plan.',
+        '<strong>Out of scope for QA:</strong> penetration testing (security vendor), usability research (IEC 62366 - clinical and UX team), load / stress testing beyond defined latency thresholds (not in current project scope).',
+      ],
+    },
+    {
       title: 'Test Approach',
-      what: 'Our goal here: describe how testing will be done - what techniques, what execution model, and what makes this approach appropriate for the risk level. For a Class C SaMD, "we ran the test cases" is not a sufficient description.',
+      what: 'Our goal here: describe how testing will be done - what techniques and what execution model.',
       nvsight: [
         'Manual system testing on de-identified DICOM datasets from Sheba - each case selected to cover a specific hint type or edge condition',
         'DICOM sequence replay: same study loaded repeatedly under different conditions (reconnect, delay, data interruption) to validate consistency',
