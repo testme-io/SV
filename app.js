@@ -440,6 +440,7 @@ function showSlide(id) {
   else if (id === 'testmatrix')     content = renderTestMatrix();
   else if (id === 'bugreporting')   content = renderBugReporting();
   else if (id === 'metrics')        content = renderMetrics();
+  else if (id === 'testplans')      content = renderTestPlans();
   else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -788,6 +789,136 @@ function renderMetrics() {
     <div class="br-section-title" style="margin-top:28px">Quality Gates</div>
     <p class="ts-intro" style="margin-top:0;margin-bottom:14px">Gates are binary - pass or fail. A gate condition that is "almost met" is a failed gate. Exceptions require documented sign-off from QA lead and Product, not a verbal agreement.</p>
     <div class="mq-gates-row">${gateBlocks}</div>`;
+}
+
+function renderTestPlans() {
+  const mustHave = [
+    {
+      title: 'Scope and Objectives',
+      what: 'Our goal here: define what this specific test plan covers - which build, which sprint or release, which test levels are included. A test plan without a defined scope is a liability: it creates ambiguity about what was tested and what was not, which is exactly what an auditor will ask about.',
+      nvsight: [
+        'Each plan is scoped to a specific build version and sprint - not "NV-Sight in general"',
+        'Test level is stated explicitly: System testing of the hint delivery pipeline / UAT facilitation at Sheba / Integration testing of PACS handshake - one plan per level',
+        'The objective is stated in one sentence: "Validate that all defined hint types are correctly delivered to the physician\'s screen in the Sheba pilot configuration for build v2.4.1"',
+        'Out of scope items are listed by name - clinical accuracy validation, Siemens hardware, hospital network - not left implicit',
+      ],
+    },
+    {
+      title: 'Test Items',
+      what: 'Our goal here: identify exactly what is being tested - build version, component versions, dataset version. Without this, a test report cannot be tied to a specific software state, which breaks the traceability chain required by IEC 62304 and 21 CFR Part 820.',
+      nvsight: [
+        'NV-Sight build version and commit hash',
+        'DICOM dataset version: which de-identified Sheba case set was used, how many cases, which hint types are covered',
+        'Siemens angiography simulator version or confirmed firmware version if using the physical Artis',
+        'PACS test instance version and configuration snapshot',
+        'Operating environment: OS version, client machine spec if relevant to rendering performance',
+      ],
+    },
+    {
+      title: 'Features Under Test',
+      what: 'Our goal here: list what will be tested in this cycle, mapped to requirements. This is not a repeat of the test scope from the strategy - it is the specific feature list for this build, tied to the SRS requirement IDs that apply.',
+      nvsight: [
+        'Hint rendering pipeline: all defined hint types (aneurysm marker, occlusion highlight, measurement overlay) - referenced against SRS-RND-001 through SRS-RND-0XX',
+        'PACS session management: connect, disconnect, reconnect, hint persistence through reconnect',
+        'DICOM ingestion: single-frame and multi-frame series, edge case DICOM tag sets present in the Sheba dataset',
+        'End-to-end latency: time from DICOM frame arrival to hint rendered on screen, measured under clinical-representative data load',
+        'Session state: hint state persistence across user interactions and short interruptions',
+      ],
+    },
+    {
+      title: 'Features Not Under Test',
+      what: 'Our goal here: explicitly state what is not covered by this plan, and why. A blank "not tested" section is not acceptable - it means the author did not think about it, not that everything is covered.',
+      nvsight: [
+        'Clinical accuracy of AI-generated hints - validated by the clinical team at Sheba, not in QA scope',
+        'Algorithm model performance (sensitivity, specificity, AUC) - clinical team and algorithm owner',
+        'Siemens Artis hardware and firmware - vendor responsibility',
+        'Hospital network infrastructure and third-party PACS systems outside the agreed integration plan',
+        'Automated regression coverage - if automation is not yet in place for this cycle, that is stated here, not silently omitted',
+      ],
+    },
+    {
+      title: 'Test Approach',
+      what: 'Our goal here: describe how testing will be done - what techniques, what execution model, and what makes this approach appropriate for the risk level. For a Class C SaMD, "we ran the test cases" is not a sufficient description.',
+      nvsight: [
+        'Manual system testing on de-identified DICOM datasets from Sheba - each case selected to cover a specific hint type or edge condition',
+        'DICOM sequence replay: same study loaded repeatedly under different conditions (reconnect, delay, data interruption) to validate consistency',
+        'Boundary and negative testing for DICOM ingest: malformed tags, unsupported modalities, empty series - system must fail explicitly, not silently',
+        'Latency measurement: automated timing logged per frame from DICOM receipt to hint render, reviewed against the clinical threshold defined in the SRS',
+        'Exploratory testing allocated for each sprint: structured sessions targeting areas that changed since the last build, documented with session notes',
+      ],
+    },
+    {
+      title: 'Entry and Exit Criteria',
+      what: 'Our goal here: define the specific gate conditions for this test cycle. These are more concrete than the strategy-level criteria - they are tied to this build and this dataset.',
+      nvsight: [
+        'Entry: build v[X.X] deployed to QA environment and smoke-tested, de-identified DICOM dataset version [Y] available and confirmed complete, no open P0 defects carried over from previous cycle, QA environment configuration documented',
+        'Exit (standard cycle): all planned test cases executed, 100% P0 and P1 pass rate, zero open P0/P1 defects, traceability matrix updated, test execution report signed by QA lead',
+        'Exit (hotfix): targeted regression on the changed component + full P0 suite executed and green, risk-acceptance documented for any untested area',
+        'A cycle that meets all exit conditions except traceability update is not signed off - the paper trail is part of the deliverable, not optional cleanup',
+      ],
+    },
+    {
+      title: 'Test Deliverables',
+      what: 'Our goal here: list the artifacts this test cycle must produce. Under 21 CFR Part 820 and IEC 62304, undocumented testing did not happen.',
+      nvsight: [
+        'Test case execution report: all cases with pass/fail/blocked status, tester, date, build reference',
+        'Defect list: all bugs filed during the cycle, with current status at cycle close',
+        'Traceability matrix update: requirements linked to test cases, test cases linked to results',
+        'Environment configuration log: what was running, at what version, for the duration of the cycle',
+        'QA sign-off memo: one-page summary of cycle results, open risks, and the release recommendation - signed by QA lead and stored in the DHF',
+      ],
+    },
+    {
+      title: 'Schedule and Resources',
+      what: 'Our goal here: state who runs the tests, how long the cycle takes, and what dependencies exist - so delays have a named cause, not a vague "QA is still testing".',
+      nvsight: [
+        'QA engineer: owns planning, execution, defect filing, and report. For UAT cycles, owns scheduling and facilitation with the Sheba team',
+        'Sheba clinical liaison: required for UAT execution and for DICOM dataset selection (they know which cases are clinically representative)',
+        'Engineering: available for P0 environment issues and DICOM debug sessions during the cycle - not on standby, but with a defined response time',
+        'Cycle duration estimated per sprint size: a full system cycle on a stable build is 3-5 days. A hotfix regression is 1 day. UAT depends on Sheba availability and is planned at least 2 weeks in advance',
+      ],
+    },
+  ];
+
+  const niceToHave = [
+    'Automation Coverage Target for This Cycle - which test cases are candidates for automation, expected coverage delta',
+    'Test Data Creation and Anonymization Log - how new DICOM cases were selected, de-identified, and validated for use',
+    'Defect Triage Schedule - recurring meeting cadence for reviewing open bugs during the cycle',
+    'Performance Baseline Comparison - latency results compared to the previous cycle to detect regressions',
+    'Third-Party Dependency Tracking - outstanding issues with Siemens simulator, PACS test instance, or Sheba coordination',
+  ];
+
+  const sections = mustHave.map(s => `
+    <div class="ts-section">
+      <div class="ts-section-header">
+        <div class="ts-section-title">${s.title}</div>
+      </div>
+      <div class="ts-section-what">${s.what}</div>
+      <div class="ts-nvsight-block">
+        <div class="ts-nvsight-label">Our preliminary example</div>
+        <ul class="ts-nvsight-list">
+          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`).join('');
+
+  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+
+  return `
+    <p class="ts-intro">A Test Plan is the document that operationalises the Test Strategy for a specific build and sprint. Where the strategy defines how we test in general, the plan defines what exactly will be tested, by whom, in what environment, and what constitutes done. Under IEC 62304 and 21 CFR Part 820, a test plan is a required DHF artifact - not internal documentation, but a regulatory record.</p>
+
+    <div class="ts-label-row">
+      <span class="ts-must-label">Must-Have</span>
+      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    </div>
+
+    <div class="ts-sections">${sections}</div>
+
+    <div class="ts-nicehave-block">
+      <div class="ts-nicehave-title">Nice-to-Have sections</div>
+      <p class="ts-nicehave-note">Valuable for a mature process but not blockers for the initial framework. Added as the project progresses and patterns emerge.</p>
+      <ul class="ts-nice-list">${niceList}</ul>
+    </div>`;
 }
 
 function renderBlankSlide() {
