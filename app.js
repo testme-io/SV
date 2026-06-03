@@ -443,8 +443,9 @@ function showSlide(id) {
   else if (id === 'testplans')      content = renderTestPlans();
   else if (id === 'testcases')      content = renderTestCases();
   else if (id === 'automation')     content = renderAutomation();
-  else if (id === 'defectworkflow') content = renderDefectWorkflow();
-  else if (id === 'glossary')       content = renderGlossary();
+  else if (id === 'defectworkflow')   content = renderDefectWorkflow();
+  else if (id === 'releasereadiness') content = renderReleaseReadiness();
+  else if (id === 'glossary')         content = renderGlossary();
   else                              content = renderBlankSlide();
 
   document.getElementById('main').innerHTML = `
@@ -1312,6 +1313,191 @@ function renderDefectWorkflow() {
     <div class="ts-nicehave-block">
       <div class="ts-nicehave-title">Nice-to-Have sections</div>
       <p class="ts-nicehave-note">Operational improvements that add visibility and automation to the workflow. Added after the base process is stable.</p>
+      <ul class="ts-nice-list">${niceList}</ul>
+    </div>`;
+}
+
+function renderReleaseReadiness() {
+
+  // ── Gate checklist blocks ─────────────────────────────────────────────────
+  const gates = [
+    {
+      title: 'QA Gate',
+      icon: '✅',
+      cls: 'rr-gate-qa',
+      items: [
+        '100% of P0 and P1 test cases executed and passed on the release build',
+        'Zero open P0 defects',
+        'Zero open P1 defects',
+        'All P2 defects either closed or risk-accepted with written rationale and named approver',
+        'Full regression suite completed and green (P0 + P1 scope)',
+        'All defined hint types covered by at least one passing test case',
+        'Traceability matrix updated: every P0 requirement linked to a passing test case result',
+        'No test cases in Blocked status without a documented and accepted reason',
+        'Automated P0 smoke suite green on the release build',
+      ],
+    },
+    {
+      title: 'Documentation Gate',
+      icon: '📄',
+      cls: 'rr-gate-doc',
+      items: [
+        'Test execution report complete: all cases with status, tester, date, build reference',
+        'V&V report drafted, reviewed, and signed by QA lead',
+        'Traceability matrix exported and included in the DHF package',
+        'All P0 and P1 defect ticket histories exported and filed in the DHF',
+        'QA sign-off memo written and signed: cycle summary, open risks, release recommendation',
+        'Environment configuration log for the test cycle archived',
+        'CAPA entries for all P0 defects closed in this cycle reviewed and signed',
+        'Won\'t Fix risk-acceptance records for any P2 defects filed in the DHF',
+      ],
+    },
+    {
+      title: 'Engineering Gate',
+      icon: '⚙️',
+      cls: 'rr-gate-eng',
+      items: [
+        'Code freeze confirmed: no uncommitted changes on the release branch',
+        'Release build reproducible from source: the exact build can be regenerated from the tagged commit',
+        'SBOM (Software Bill of Materials) updated to reflect the release version',
+        'Change log complete: every user-facing change and every bug fix listed with ticket reference',
+        'No known security vulnerabilities in the release build above the accepted risk threshold',
+        'CI pipeline green on the release branch: all automated checks pass',
+        'Deployment runbook reviewed and up to date for the Sheba pilot environment',
+      ],
+    },
+    {
+      title: 'Regulatory Gate',
+      icon: '⚖️',
+      cls: 'rr-gate-reg',
+      items: [
+        'IEC 62304 lifecycle documentation current for the release version: requirements, architecture, detailed design, test records',
+        'ISO 14971 risk file updated: new risks identified during the cycle assessed and mitigated, residual risk acceptable',
+        'All open CAPA items from prior releases reviewed - none blocking this release',
+        'HIPAA compliance confirmed: no real patient data used in any test artifact included in the release package',
+        'Design History File (DHF) updated with all artifacts from this release cycle',
+        'If this release introduces a change to the intended use or adds a new hint type: regulatory impact assessment completed',
+      ],
+    },
+    {
+      title: 'Stakeholder Sign-offs',
+      icon: '✍️',
+      cls: 'rr-gate-signoff',
+      items: [
+        'QA lead: signs the V&V report and the QA sign-off memo. Confirms all QA gate conditions are met.',
+        'Engineering lead: confirms code freeze, build integrity, SBOM, and engineering gate conditions.',
+        'Product / Regulatory: confirms the release scope matches what was approved, risk file reviewed, no open regulatory actions.',
+        'Sign-offs are documented in Jira (release ticket) and in the DHF. Verbal sign-offs are not valid.',
+        'All three sign-offs must be in place before the release build is deployed to the Sheba pilot environment. No partial releases.',
+      ],
+    },
+  ];
+
+  const mustHave = [
+    {
+      title: 'What Release Readiness Means for a Class C SaMD',
+      what: 'Our goal here: establish the standard against which every release is measured. For standard software, "ready to release" often means "tests pass and no known critical bugs." For a Class C medical device software, ready to release means all five gate conditions below are met simultaneously - QA, documentation, engineering, regulatory, and stakeholder sign-offs. A release where four of five gates are green is not a release.',
+      nvsight: [
+        'NV-Sight is used intraoperatively. A software regression that causes hint loss or a silent failure during an active procedure has a direct patient safety consequence. The release bar reflects that.',
+        'Release readiness is not a checklist QA completes in isolation. It is a joint confirmation across QA, engineering, and product - each owning their gate, each signing off on their conditions.',
+        'Timeline pressure is not a gate condition. A release date that is missed because a P1 defect was found three days before deployment is a normal outcome of a functioning QA process - not a failure of the process.',
+        'The release readiness review is a scheduled meeting, not an email chain. It happens after the QA gate is confirmed green, before the deployment. Decisions made at the meeting are logged in the release Jira ticket.',
+      ],
+    },
+    {
+      title: 'The Five Gates',
+      what: 'Our goal here: present the full set of conditions that must be met before a release is approved. Each gate is binary - met or not met. The conditions within each gate are listed in the Gate Checklist below.',
+      label: 'gates',
+    },
+    {
+      title: 'Hotfix Release Path',
+      what: 'Our goal here: define the expedited release process for hotfixes, and make explicit what is narrower versus what is the same. A hotfix is not an excuse to skip the regulatory record - it is a scoped release where the QA and documentation scope is narrowed proportionally, but the bar within that scope does not move.',
+      nvsight: [
+        'Scope definition first: a hotfix release must define its scope in writing before testing starts. "Fix for TC-RND-014 regression introduced in v2.4.1" - not "urgent fix."',
+        'QA scope: targeted regression on the changed component + full P0 smoke suite. P1 suite is run if the fix touches a P1 risk area. P2 and P3 suites are not run for a hotfix.',
+        'Documentation scope: a hotfix-specific test execution report (not a full cycle report), a brief QA sign-off note referencing the hotfix scope, traceability matrix updated for the affected test cases only.',
+        'Defect gate: same as a full release - zero open P0 and P1 defects. No exceptions for "it\'s just a hotfix."',
+        'Sign-offs: same three stakeholders, but the sign-off can be completed asynchronously if the hotfix timeline is critical. All three must be documented before deployment.',
+        'Regulatory: if the hotfix changes the behaviour of the hint rendering pipeline or PACS integration, an ISO 14971 risk impact assessment is required even on the hotfix path. A one-line patch to a log message does not require this.',
+      ],
+    },
+    {
+      title: 'Release Blocking Conditions',
+      what: 'Our goal here: list the conditions that block a release outright, with no exception path. These are not judgment calls - they are hard stops. If any of the following is true, the release does not go out, regardless of timeline, business pressure, or how minor the remaining issue appears.',
+      nvsight: [
+        'Any open P0 defect in the release build',
+        'Any open P1 defect in the release build',
+        'P0 or P1 test case not executed (blocked cases without accepted rationale count as not executed)',
+        'Any defined hint type without a passing test case in the release cycle',
+        'V&V report not signed by QA lead',
+        'DHF update not completed for this release cycle',
+        'Any of the three stakeholder sign-offs missing',
+        'ISO 14971 risk file not updated if the release introduces a new feature or changes the hint delivery behaviour',
+        'Real patient data found in any test artifact included in the release package',
+      ],
+    },
+  ];
+
+  const niceToHave = [
+    'Release Readiness Dashboard - a live Jira-based view of all gate conditions with green/red status, updated automatically as tickets are closed and documents are attached',
+    'Automated Gate Verification - CI checks that confirm P0 test suite green, zero open P0/P1 tickets, and traceability matrix timestamp current - before the release meeting is scheduled',
+    'Post-Release Monitoring Criteria - defined signals to watch after deployment to the Sheba pilot: hint delivery failure rate, latency anomalies, physician-reported issues',
+    'Rollback Criteria and Procedure - conditions under which the release is rolled back (P0 defect discovered post-deployment, critical integration failure at Sheba) and the documented rollback procedure',
+    'Release Retrospective Template - a structured debrief after each release covering what blocked the release, what was discovered late, and what process changes would have caught it earlier',
+  ];
+
+  const gateGrid = gates.map(g => `
+    <div class="rr-gate-block ${g.cls}">
+      <div class="rr-gate-header">
+        <span class="rr-gate-icon">${g.icon}</span>
+        <span class="rr-gate-title">${g.title}</span>
+      </div>
+      <ul class="rr-gate-list">
+        ${g.items.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+
+  const sections = mustHave.map(s => {
+    if (s.label === 'gates') {
+      return `
+      <div class="ts-section">
+        <div class="ts-section-header">
+          <div class="ts-section-title">${s.title}</div>
+        </div>
+        <div class="ts-section-what">${s.what}</div>
+        <div class="rr-gates-grid">${gateGrid}</div>
+      </div>`;
+    }
+    return `
+    <div class="ts-section">
+      <div class="ts-section-header">
+        <div class="ts-section-title">${s.title}</div>
+      </div>
+      <div class="ts-section-what">${s.what}</div>
+      <div class="ts-nvsight-block">
+        <div class="ts-nvsight-label">Our preliminary example</div>
+        <ul class="ts-nvsight-list">
+          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`;
+  }).join('');
+
+  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+
+  return `
+    <p class="ts-intro">Release Readiness Criteria define the conditions under which a build is approved for deployment to the Sheba pilot environment. For NV-Sight - a Class C SaMD used intraoperatively - this is not a formality. Every gate condition exists because a gap in any of them creates a patient safety risk, a regulatory exposure, or both.</p>
+
+    <div class="ts-label-row">
+      <span class="ts-must-label">Must-Have</span>
+      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    </div>
+
+    <div class="ts-sections">${sections}</div>
+
+    <div class="ts-nicehave-block">
+      <div class="ts-nicehave-title">Nice-to-Have sections</div>
+      <p class="ts-nicehave-note">Operational maturity improvements for when the core release process is running reliably and the team wants deeper visibility and automation.</p>
       <ul class="ts-nice-list">${niceList}</ul>
     </div>`;
 }

@@ -1372,6 +1372,67 @@ main {
 .dw-st-reopen   .dw-state-label { color: #be123c; }
 .dw-st-reopen   .dw-state-desc  { color: #9f1239; }
 
+/* ── RELEASE READINESS ── */
+.rr-gates-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.rr-gate-block {
+  border-radius: 9px;
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+
+.rr-gate-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 13px;
+  font-weight: 700;
+}
+
+.rr-gate-icon { font-size: 14px; }
+
+.rr-gate-title {
+  font-size: 12.5px;
+  letter-spacing: 0.2px;
+}
+
+.rr-gate-list {
+  padding: 8px 13px 10px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rr-gate-list li {
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.rr-gate-qa      { background: #f0fdf4; border-color: #86efac; }
+.rr-gate-qa      .rr-gate-header { background: #dcfce7; color: #15803d; }
+.rr-gate-qa      .rr-gate-list li { color: #166534; }
+
+.rr-gate-doc     { background: #eff6ff; border-color: #93c5fd; }
+.rr-gate-doc     .rr-gate-header { background: #dbeafe; color: #1d4ed8; }
+.rr-gate-doc     .rr-gate-list li { color: #1e40af; }
+
+.rr-gate-eng     { background: #fffbeb; border-color: #fcd34d; }
+.rr-gate-eng     .rr-gate-header { background: #fef3c7; color: #b45309; }
+.rr-gate-eng     .rr-gate-list li { color: #92400e; }
+
+.rr-gate-reg     { background: #faf5ff; border-color: #c4b5fd; }
+.rr-gate-reg     .rr-gate-header { background: #ede9fe; color: #6d28d9; }
+.rr-gate-reg     .rr-gate-list li { color: #5b21b6; }
+
+.rr-gate-signoff { background: #fff1f2; border-color: #fda4af; }
+.rr-gate-signoff .rr-gate-header { background: #ffe4e6; color: #be123c; }
+.rr-gate-signoff .rr-gate-list li { color: #9f1239; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 800px) {
   main { padding: 20px 16px 40px; }
