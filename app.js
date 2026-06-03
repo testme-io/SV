@@ -438,6 +438,7 @@ function showSlide(id) {
   else if (id.startsWith('std-'))   content = renderStandard(id);
   else if (id === 'teststrategy')   content = renderTestStrategy();
   else if (id === 'testmatrix')     content = renderTestMatrix();
+  else if (id === 'bugreporting')   content = renderBugReporting();
   else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -512,6 +513,151 @@ function renderOverview() {
   });
 
   return html;
+}
+
+function renderBugReporting() {
+  const fields = [
+    {
+      label: 'Title',
+      hint: '[Component] Short description of the observed behavior',
+      ex: '[Rendering] Aneurysm hint missing on frame 14 of series after PACS reconnect',
+      note: 'Describe what the system does, not what you expected. Component tag keeps Jira filterable.',
+    },
+    {
+      label: 'Priority',
+      hint: 'P0 / P1 / P2 / P3 - required at filing time, not "to be determined"',
+      ex: 'P1',
+      note: 'Same scale as test case priority and release gates. If unsure between P0 and P1, pick P0 and discuss - not the other way around.',
+    },
+    {
+      label: 'Build Version',
+      hint: 'Exact build identifier where the defect was first observed',
+      ex: '2.4.1-rc3 (build 20240918)',
+      note: 'Without this, the developer cannot determine if the bug is already fixed in a later build.',
+    },
+    {
+      label: 'Environment',
+      hint: 'QA / UAT / staging - never production (HIPAA)',
+      ex: 'QA env - dedicated Siemens simulator, PACS test instance v3.1',
+      note: 'Include PACS version and Siemens simulator config if the bug is at the integration layer.',
+    },
+    {
+      label: 'Steps to Reproduce',
+      hint: 'Numbered, minimal path to trigger the defect - no assumptions',
+      ex: '1. Load DICOM series [UID]. 2. Wait for hint overlay to render. 3. Simulate PACS disconnect (kill process). 4. Reconnect PACS. 5. Observe hint state.',
+      note: 'If steps cannot be condensed to under 10 lines, the reproduction case is not isolated enough.',
+    },
+    {
+      label: 'Expected Result',
+      hint: 'What the system should do, ideally referencing the spec or requirement ID',
+      ex: 'All previously rendered hints persist through PACS reconnect. No re-render required. Ref: SRS-RND-042.',
+      note: 'Linking to a requirement turns the bug into a traceability artifact - useful for the DHF.',
+    },
+    {
+      label: 'Actual Result',
+      hint: 'What the system actually does - precise, observable, no interpretation',
+      ex: 'Hint overlay clears completely on reconnect. Frame 14 shows no hint after PACS reconnect even though hint was visible before disconnect.',
+      note: 'Avoid "it does not work" or "hint is wrong" - describe what is visible on screen.',
+    },
+    {
+      label: 'DICOM Reference',
+      hint: 'Series UID, frame number, hint type - mandatory for any rendering or pipeline bug',
+      ex: 'Study UID: 1.2.840.xxx | Series UID: 1.2.840.yyy | Frame: 14 | Hint type: Aneurysm marker',
+      note: 'Without a DICOM reference, rendering bugs cannot be reproduced by engineering. This field is non-negotiable for hint delivery defects.',
+    },
+    {
+      label: 'Evidence',
+      hint: 'Screenshot, screen recording, or DICOM viewer export attached to the ticket',
+      ex: 'screen-rec-20240918-frame14-reconnect.mp4 (attached)',
+      note: 'For P0 and P1 bugs, a screen recording of the full reproduction sequence is expected, not just a screenshot of the final state.',
+    },
+    {
+      label: 'Related Test Case',
+      hint: 'Test case ID from the test plan that covers this scenario',
+      ex: 'TC-RND-014',
+      note: 'Required for traceability matrix and V&V report. A bug with no linked test case is a gap in coverage that needs to be explained.',
+    },
+  ];
+
+  const fieldRows = fields.map(f => `
+    <div class="br-field-row">
+      <div class="br-field-label">${f.label}</div>
+      <div class="br-field-body">
+        <div class="br-field-hint">${f.hint}</div>
+        <div class="br-field-ex"><span class="br-ex-tag">e.g.</span> ${f.ex}</div>
+        <div class="br-field-note">${f.note}</div>
+      </div>
+    </div>`).join('');
+
+  const escalation = [
+    {
+      pri: 'P0', cls: 'p0',
+      title: 'Immediate - synchronous',
+      steps: [
+        'File the Jira ticket, mark P0, block the release in Jira',
+        'Ping QA lead + Engineering lead + Product directly (Slack DM, not channel)',
+        'Do not wait for stand-up or sprint planning - P0 does not go async',
+        'Engineering confirms reproduction within the hour or escalates further',
+        'No release goes out while a P0 is open - no exceptions, no business overrides',
+      ],
+    },
+    {
+      pri: 'P1', cls: 'p1',
+      title: 'Same-day - notify leads',
+      steps: [
+        'File in Jira, notify QA lead and Engineering lead in the team channel',
+        'Fix must be scheduled within the current sprint',
+        'QA verifies the fix before the sprint closes',
+        'Release does not go out with an open P1',
+      ],
+    },
+    {
+      pri: 'P2 / P3', cls: 'p2',
+      title: 'Standard triage - next planning',
+      steps: [
+        'File in Jira, assign to the relevant component owner',
+        'Reviewed and prioritised at the next sprint planning session',
+        'P2: requires a documented risk-acceptance if not fixed before release',
+        'P3: fixed when capacity allows, no release gate impact',
+      ],
+    },
+  ];
+
+  const escBlocks = escalation.map(e => `
+    <div class="br-esc-block br-esc-${e.cls}">
+      <div class="br-esc-header">
+        <span class="br-esc-pri tm-pri-${e.cls === 'p2' ? 'p2' : e.cls}">${e.pri}</span>
+        <span class="br-esc-title">${e.title}</span>
+      </div>
+      <ul class="br-esc-list">
+        ${e.steps.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+
+  const oosItems = [
+    'Clinical accuracy of AI-generated hints. If a hint is delivered correctly per specification but a physician disagrees with its medical interpretation - that is a clinical finding, not a QA defect. Route to the clinical team at Sheba, not to engineering.',
+    'Siemens hardware behavior. If the Artis system behaves unexpectedly at the hardware or firmware level - that is a vendor issue, not an NV-Sight bug.',
+    'Hospital network or PACS infrastructure not in the integration plan. External system failures outside the agreed integration scope are not filed as NV-Sight defects.',
+    '"The AI should have detected this." Algorithm sensitivity and specificity are owned by the clinical team. QA validates that what the algorithm produces is delivered correctly - not whether the algorithm should have produced something different.',
+  ];
+
+  return `
+    <p class="ts-intro">Every bug filed against NV-Sight is a potential audit artifact - part of the CAPA chain, the DHF, and the V&V record. A report missing critical fields is returned for completion before it enters the triage queue. The standard below applies to all environments and all priority levels.</p>
+
+    <div class="br-section-title">Mandatory Jira Fields</div>
+    <div class="br-fields-list">${fieldRows}</div>
+
+    <div class="br-section-title" style="margin-top:28px">Escalation Path by Priority</div>
+    <p class="ts-intro" style="margin-top:0;margin-bottom:14px">P0 and P1 are not async. Filing the Jira ticket is step one, not the only step.</p>
+    <div class="br-esc-grid">${escBlocks}</div>
+
+    <div class="br-section-title" style="margin-top:28px">What is Not a QA Bug</div>
+    <div class="br-oos-block">
+      <div class="br-oos-label">📌 Out of QA defect scope</div>
+      <ul class="br-oos-list">
+        ${oosItems.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </div>`;
 }
 
 function renderBlankSlide() {
