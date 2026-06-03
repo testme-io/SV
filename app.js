@@ -831,7 +831,8 @@ function renderMetrics() {
     </div>`).join('');
 
   return `
-    <p class="ts-intro">Metrics make the QA process visible and auditable. For a Class C SaMD, gut feeling is not a release criterion - every gate decision must be backed by a number that can be shown to an auditor. The metrics below must track three things: whether full coverage of the planned test scope is achieved, whether defects are found and resolved fast enough, and whether the environment is stable enough to trust the results.</p>
+    <p class="ts-intro"><strong>Preliminary set - the specific metrics, thresholds, and reporting cadence will be reviewed and expanded during project onboarding based on the actual tooling, team structure, and release cadence.</strong></p>
+    <p class="ts-intro">The metrics below must track three things: whether full coverage of the planned test scope is achieved, whether defects are found and resolved fast enough, and whether the environment is stable enough to trust the results.</p>
 
     <div class="br-section-title">Metrics by Category</div>
     <div class="mq-groups">${metricBlocks}</div>
