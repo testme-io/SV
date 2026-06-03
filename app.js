@@ -1280,138 +1280,177 @@ function renderAutomation_UNUSED() { // kept for reference, not called
 
 function renderDefectWorkflow() {
 
-  // ── Lifecycle states diagram ──────────────────────────────────────────────
-  const states = [
-    { id: 'new',        label: 'New',         desc: 'Filed by QA. Mandatory fields complete. Priority set.',                                         cls: 'dw-st-new' },
-    { id: 'triage',     label: 'Triage',       desc: 'Priority confirmed by QA lead. Assigned to engineering. Sprint scheduled.',                     cls: 'dw-st-triage' },
-    { id: 'inprog',     label: 'In Progress',  desc: 'Engineering owns. Active fix underway. P0 = same-day start.',                                  cls: 'dw-st-inprog' },
-    { id: 'fixed',      label: 'Fixed',        desc: 'Engineering marks fixed, links commit and build number. QA is notified.',                       cls: 'dw-st-fixed' },
-    { id: 'verify',     label: 'In Verify',    desc: 'QA re-executes the original test case on the fix build. Must reproduce the failure first.',     cls: 'dw-st-verify' },
-    { id: 'closed',     label: 'Closed',       desc: 'Fix confirmed. TC result updated. Traceability matrix updated.',                                cls: 'dw-st-closed' },
-    { id: 'rejected',   label: 'Rejected',     desc: 'Not reproducible or filed in error. Reason documented. Original reporter notified.',            cls: 'dw-st-rejected' },
-    { id: 'wontfix',    label: "Won't Fix",    desc: "Risk-accepted. Documented rationale, approver named. P0/P1 cannot be Won't Fixed.",            cls: 'dw-st-wontfix' },
-    { id: 'reopen',     label: 'Reopened',     desc: 'Fix did not resolve the issue. Returned to Triage with a note on why verification failed.',    cls: 'dw-st-reopen' },
+  // ── Board columns ──────────────────────────────────────────────────────────
+  const columns = [
+    { label: 'Backlog',               color: '#94a3b8', bg: '#f8fafc' },
+    { label: 'New',                   color: '#3b82f6', bg: '#eff6ff' },
+    { label: 'Clarification Request', color: '#f59e0b', bg: '#fffbeb' },
+    { label: 'To Do Bug',             color: '#ef4444', bg: '#fef2f2' },
+    { label: 'To Do Task',            color: '#8b5cf6', bg: '#f5f3ff' },
+    { label: 'In Progress',           color: '#f97316', bg: '#fff7ed' },
+    { label: 'Ready to Test',         color: '#10b981', bg: '#ecfdf5' },
+    { label: 'Ready to Deploy',       color: '#0ea5e9', bg: '#f0f9ff' },
+    { label: 'Closed',                color: '#475569', bg: '#f1f5f9' },
   ];
 
-  const stateCards = states.map(s => `
-    <div class="dw-state-card ${s.cls}">
-      <div class="dw-state-label">${s.label}</div>
-      <div class="dw-state-desc">${s.desc}</div>
-    </div>`).join('');
+  const colsHtml = columns.map(c =>
+    `<div class="dw-col-pill" style="border-color:${c.color};background:${c.bg};color:${c.color}">${c.label}</div>`
+  ).join('');
 
-  const mustHave = [
-    {
-      title: 'Defect Lifecycle - Workflow States',
-      what: 'Our goal here: define the states a bug moves through from filing to closure, and what must happen at each transition. State transitions are the audit trail. An auditor reviewing the DHF should be able to reconstruct the full history of any P0 or P1 defect - who filed it, who triaged it, who fixed it, who verified it, and when each step happened.',
-      label: 'states',
-    },
-    {
-      title: 'Triage',
-      what: 'Our goal here: confirm priority, assign ownership, and schedule resolution within one business day of filing. Triage is a decision point, not a rubber stamp. The filed priority can be adjusted at triage - but the adjustment must be documented with a reason.',
-      nvsight: [
-        'Triage is conducted by the QA lead, with engineering present for P0 and P1 bugs. P2 and P3 are triaged asynchronously by QA lead and assigned in the next sprint planning slot.',
-        'At triage: confirm or adjust priority (with reason documented in Jira), assign to the responsible engineering component owner, agree on resolution target (same sprint / next sprint / backlog), identify if a workaround exists for P1 and P2.',
-        'Priority can only be downgraded at triage with written justification and the agreement of both QA lead and Product. Priority cannot be downgraded based on timeline pressure alone.',
-        'P0 bugs skip the triage queue - they are escalated immediately per the escalation path defined in Bug Reporting Standards. Triage for P0 means retrospective confirmation of the priority after the fix is underway, not a gate before the fix starts.',
-        'Every triage decision is logged as a Jira comment, not in a separate doc. The comment format: "Triage [date]: Priority confirmed P1. Assigned to [name]. Target: sprint [X]. Workaround: [none / description]."',
-      ],
-    },
-    {
-      title: 'Fix and Handoff to QA',
-      what: 'Our goal here: define what a complete fix handoff looks like. A bug marked "Fixed" by engineering without the information QA needs to verify it is not fixed - it is deferred work. The handoff standard is agreed before the first sprint starts.',
-      nvsight: [
-        'Engineering transitions the ticket to Fixed and adds a Jira comment with: commit hash or PR link, build number where the fix is included, a brief description of what was changed and why.',
-        'If the fix required a change to the DICOM handling, rendering pipeline, or PACS integration layer - a note on what regression risk the change introduces and which test cases QA should prioritise in verification.',
-        'QA is notified via Jira ticket update. For P0 and P1 fixes, QA lead is also notified in Slack with a direct link to the ticket and the fix build number.',
-        'A fix that changes the expected behaviour of the system (as opposed to restoring it) requires a specification update before QA can verify. QA does not verify against undocumented behaviour.',
-        'For NV-Sight specifically: any fix touching the hint rendering pipeline or PACS session management triggers a targeted regression on the P0 suite, even if the bug was P2.',
-      ],
-    },
-    {
-      title: 'Verification',
-      what: 'Our goal here: define what QA does to confirm a fix is valid. Verification is not a casual rerun of the happy path. For a medical device, a fix that is incorrectly closed as verified is a V&V gap that can surface at audit.',
-      nvsight: [
-        'Verification starts by reproducing the original failure on a pre-fix build (or the build where the failure was first observed). If the failure cannot be reproduced, the test is marked Blocked and the defect is routed back to Triage for a root cause discussion.',
-        'After confirming reproduction, QA applies the fix build and re-runs the original test case. If the original test case passes, the fix is provisionally confirmed.',
-        'For P0 and P1: verification also includes a targeted regression covering adjacent test cases that could have been affected by the fix. The regression scope is determined by the engineering handoff note.',
-        'Verification result is logged as a Jira comment: "Verified [date] on build [X.Y.Z]. Original failure reproduced on [prior build]. Fix confirmed - TC-[ID] passed. Regression: [TC list] - all passed." The ticket is then moved to Closed.',
-        'If verification fails, the ticket is moved to Reopened with a comment explaining what was observed and on which build. The Reopened ticket goes back to Triage, not directly to In Progress - priority is reconfirmed before the next fix attempt.',
-      ],
-    },
-    {
-      title: "Won't Fix and Risk Acceptance",
-      what: "Our goal here: define how defects that will not be fixed are handled. A Won't Fix is not a way to make a bug disappear - it is a documented risk acceptance decision. For a Class C SaMD, an undocumented Won't Fix is an open regulatory risk.",
-      nvsight: [
-        "P0 and P1 defects cannot be Won't Fixed. If a P0 or P1 defect cannot be resolved before release, the release does not go out. There is no documented exception to this.",
-        "P2 Won't Fix: requires written rationale in Jira, named approver (QA lead and Product), and a risk impact statement - what is the clinical consequence of leaving this defect open. Filed in the DHF.",
-        "P3 Won't Fix: requires a Jira comment with rationale. No separate risk document required, but the decision must be visible in the ticket.",
-        "Won't Fix is not the same as Deferred. A deferred bug has a target sprint. A Won't Fix is a final decision. If the decision changes, the ticket is reopened - not a new ticket filed.",
-        "All Won't Fix decisions for P2 defects are reviewed at the start of the next release cycle. A P2 that was Won't Fixed in three consecutive releases needs a product-level decision on whether the underlying issue should be addressed in the spec.",
-      ],
-    },
-    {
-      title: 'Regulatory and Audit Considerations',
-      what: 'Our goal here: make the defect tracking system audit-ready from day one. Under 21 CFR Part 820 (CAPA) and IEC 62304, defect records for a medical device are not internal operational data - they are regulated artifacts that an FDA inspector or notified body auditor can request at any time.',
-      nvsight: [
-        'Every P0 and P1 defect has a CAPA implication: after closure, a brief root cause analysis is documented in the Jira ticket. Not a full CAPA report for every bug - but the root cause category (specification gap, implementation error, test environment issue, regression from prior change) must be tagged.',
-        'Defect records are never deleted from Jira. Incorrectly filed tickets are marked Rejected with a reason. Duplicate tickets are linked and one is closed as Duplicate - both remain in the system.',
-        'The full comment history of every P0 and P1 ticket is part of the DHF. QA exports P0 and P1 ticket histories as part of the V&V report package.',
-        'Jira field changes (priority adjustment, reassignment, state transitions) are logged automatically by Jira. The audit log is not modified. Any bulk state change (e.g. closing old backlog items before a release) is done via a documented triage session, not a silent batch update.',
-        'For NV-Sight: a defect that involves hint rendering failure during a procedure scenario is flagged with the label "patient-safety-relevant" regardless of priority. This label triggers automatic inclusion in the ISO 14971 risk review at the next release cycle.',
-      ],
-    },
-  ];
+  // ── SVG Flowchart ─────────────────────────────────────────────────────────
+  // Layout (viewBox 900 x 330):
+  //   Top  (cy≈61):  [Clarification Request]
+  //   Main (cy≈178): [New] → [To Do Bug / To Do Task] → [In Progress] → [Ready to Test] → [Ready to Deploy] → [Closed]
+  //   Bot  (cy≈296): [Backlog]
+  //
+  // Node x-ranges (left edge, width):
+  //   New:            x=10  w=92
+  //   To Do Bug:      x=135 w=100  y=145 h=36
+  //   To Do Task:     x=135 w=100  y=193 h=36
+  //   In Progress:    x=278 w=122  y=158 h=40
+  //   Ready to Test:  x=445 w=128  y=158 h=40
+  //   Ready to Deploy:x=620 w=138  y=158 h=40
+  //   Closed:         x=805 w=88   y=158 h=40
+  //   CR:             x=180 w=190  y=42  h=38
+  //   Backlog:        x=10  w=92   y=278 h=36
 
-  const niceToHave = [
-    'Defect Aging Report - a weekly automated report of open bugs by priority and age, flagging any P1 that has been open longer than one sprint without a fix build',
-    'Root Cause Category Taxonomy - a defined tag set in Jira (spec gap, implementation error, env issue, regression, data issue) to enable trend analysis across sprints',
-    'SLA Dashboard - live view of mean time to fix and mean time to verify by priority level, used in the QA quality report',
-    'Automated Jira Transitions from CI - CI failure on a linked test case automatically transitions the defect to Reopened if it was in Fixed or Closed state',
-    'Defect Density Trend - sprint-over-sprint defect count by component, used to identify areas of the codebase with structural quality issues',
-  ];
+  const svg = `<svg viewBox="0 0 910 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:910px;display:block;margin:0 auto">
+  <defs>
+    <marker id="dw-a"  markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#94a3b8"/></marker>
+    <marker id="dw-ag" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#10b981"/></marker>
+    <marker id="dw-ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#f43f5e"/></marker>
+    <marker id="dw-aa" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#f59e0b"/></marker>
+  </defs>
 
-  const sections = mustHave.map(s => {
-    if (s.label === 'states') {
-      return `
-      <div class="ts-section">
-        <div class="ts-section-header">
-          <div class="ts-section-title">${s.title}</div>
-        </div>
-        <div class="ts-section-what">${s.what}</div>
-        <div class="dw-states-grid">${stateCards}</div>
-      </div>`;
-    }
-    return `
-    <div class="ts-section">
-      <div class="ts-section-header">
-        <div class="ts-section-title">${s.title}</div>
-      </div>
-      <div class="ts-section-what">${s.what}</div>
-      <div class="ts-nvsight-block">
-        <div class="ts-nvsight-label">Our preliminary example</div>
-        <ul class="ts-nvsight-list">
-          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
-        </ul>
-      </div>
-    </div>`;
-  }).join('');
+  <!-- ── NODES ── -->
 
-  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+  <!-- Clarification Request (top) -->
+  <rect x="180" y="42" width="190" height="38" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="275" y="58" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e" font-family="system-ui,sans-serif">Clarification</text>
+  <text x="275" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e" font-family="system-ui,sans-serif">Request</text>
+
+  <!-- New -->
+  <rect x="10" y="158" width="92" height="40" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="56" y="183" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8" font-family="system-ui,sans-serif">New</text>
+
+  <!-- To Do Bug -->
+  <rect x="135" y="145" width="100" height="36" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+  <text x="185" y="160" text-anchor="middle" font-size="9.5" font-weight="700" fill="#991b1b" font-family="system-ui,sans-serif">To Do</text>
+  <text x="185" y="174" text-anchor="middle" font-size="9.5" font-weight="700" fill="#991b1b" font-family="system-ui,sans-serif">Bug</text>
+
+  <!-- To Do Task -->
+  <rect x="135" y="193" width="100" height="36" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="185" y="208" text-anchor="middle" font-size="9.5" font-weight="700" fill="#5b21b6" font-family="system-ui,sans-serif">To Do</text>
+  <text x="185" y="222" text-anchor="middle" font-size="9.5" font-weight="700" fill="#5b21b6" font-family="system-ui,sans-serif">Task</text>
+
+  <!-- In Progress -->
+  <rect x="278" y="158" width="122" height="40" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <text x="339" y="183" text-anchor="middle" font-size="11" font-weight="700" fill="#c2410c" font-family="system-ui,sans-serif">In Progress</text>
+
+  <!-- Ready to Test -->
+  <rect x="445" y="158" width="128" height="40" rx="6" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  <text x="509" y="175" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46" font-family="system-ui,sans-serif">Ready to</text>
+  <text x="509" y="190" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46" font-family="system-ui,sans-serif">Test</text>
+
+  <!-- Ready to Deploy -->
+  <rect x="621" y="158" width="138" height="40" rx="6" fill="#f0f9ff" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="690" y="175" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0369a1" font-family="system-ui,sans-serif">Ready to</text>
+  <text x="690" y="190" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0369a1" font-family="system-ui,sans-serif">Deploy</text>
+
+  <!-- Closed -->
+  <rect x="808" y="158" width="88" height="40" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+  <text x="852" y="183" text-anchor="middle" font-size="11" font-weight="700" fill="#334155" font-family="system-ui,sans-serif">Closed</text>
+
+  <!-- Backlog (bottom, dashed border = holding area) -->
+  <rect x="10" y="278" width="92" height="36" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="56" y="301" text-anchor="middle" font-size="11" font-weight="700" fill="#64748b" font-family="system-ui,sans-serif">Backlog</text>
+
+  <!-- ── ARROWS ── -->
+
+  <!-- New → To Do Bug (upper branch from New right edge) -->
+  <path d="M102,172 C118,172 118,163 135,163" stroke="#94a3b8" stroke-width="1.5" fill="none" marker-end="url(#dw-a)"/>
+
+  <!-- New → To Do Task (lower branch from New right edge) -->
+  <path d="M102,186 C118,186 118,211 135,211" stroke="#94a3b8" stroke-width="1.5" fill="none" marker-end="url(#dw-a)"/>
+
+  <!-- Label: assign responsible (above the two branches) -->
+  <text x="118" y="140" text-anchor="middle" font-size="8" fill="#94a3b8" font-style="italic" font-family="system-ui,sans-serif">assign responsible</text>
+
+  <!-- New → Backlog (future sprint, dashed) -->
+  <path d="M56,198 L56,278" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#dw-a)"/>
+  <text x="68" y="240" text-anchor="start" font-size="8" fill="#94a3b8" font-style="italic" font-family="system-ui,sans-serif">future sprint</text>
+
+  <!-- New → Clarification Request (behavior undefined, amber) -->
+  <path d="M56,158 C56,98 214,98 214,80" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#dw-aa)"/>
+  <text x="82" y="108" text-anchor="start" font-size="8" fill="#b45309" font-style="italic" font-family="system-ui,sans-serif">behavior undefined</text>
+
+  <!-- Clarification Request → To Do group (resolves as Bug or Task) -->
+  <path d="M275,80 C275,118 185,118 185,145" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#dw-aa)"/>
+  <text x="246" y="113" text-anchor="middle" font-size="8" fill="#b45309" font-style="italic" font-family="system-ui,sans-serif">→ Bug or Task</text>
+
+  <!-- Ready to Test → Clarification Request (question during testing) -->
+  <path d="M509,158 C509,98 372,98 372,80" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#dw-aa)"/>
+  <text x="456" y="104" text-anchor="middle" font-size="8" fill="#b45309" font-style="italic" font-family="system-ui,sans-serif">question during testing</text>
+
+  <!-- To Do Bug → In Progress -->
+  <path d="M235,163 C257,163 257,172 278,172" stroke="#94a3b8" stroke-width="1.5" fill="none" marker-end="url(#dw-a)"/>
+
+  <!-- To Do Task → In Progress -->
+  <path d="M235,211 C257,211 257,186 278,186" stroke="#94a3b8" stroke-width="1.5" fill="none" marker-end="url(#dw-a)"/>
+
+  <!-- Label: dev lead distributes (between To Do and In Progress) -->
+  <text x="257" y="205" text-anchor="middle" font-size="8" fill="#94a3b8" font-style="italic" font-family="system-ui,sans-serif">dev lead</text>
+  <text x="257" y="215" text-anchor="middle" font-size="8" fill="#94a3b8" font-style="italic" font-family="system-ui,sans-serif">distributes</text>
+
+  <!-- In Progress → Ready to Test -->
+  <path d="M400,178 L445,178" stroke="#94a3b8" stroke-width="1.5" fill="none" marker-end="url(#dw-a)"/>
+
+  <!-- Ready to Test → Ready to Deploy (pass, green) -->
+  <path d="M573,178 L621,178" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#dw-ag)"/>
+  <text x="597" y="172" text-anchor="middle" font-size="9" fill="#059669" font-weight="700" font-family="system-ui,sans-serif">pass ✓</text>
+
+  <!-- Ready to Deploy → Closed -->
+  <path d="M759,178 L808,178" stroke="#94a3b8" stroke-width="1.5" fill="none" marker-end="url(#dw-a)"/>
+
+  <!-- Reopen loop: Ready to Test → In Progress (below row, dashed red) -->
+  <path d="M509,198 C509,252 339,252 339,198" stroke="#f43f5e" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#dw-ar)"/>
+  <text x="424" y="262" text-anchor="middle" font-size="9" fill="#e11d48" font-weight="600" font-family="system-ui,sans-serif">reopen ↺</text>
+</svg>`;
 
   return `
-    <p class="ts-intro">A defect workflow is the process that governs a bug from the moment it is filed to the moment it is closed or formally risk-accepted. For NV-Sight, defect records are regulatory artifacts: every P0 and P1 defect is part of the CAPA chain and the DHF. The workflow below ensures that nothing falls through the cracks, and that every decision - fix, defer, reject, or risk-accept - is documented and traceable.</p>
+    <p class="ts-intro">Jira board structure for NV-Sight. <strong>Rejected</strong> and <strong>Won\'t Fix</strong> are labels on Closed tickets - no separate columns. The board stays lean and auditable.</p>
 
-    <div class="ts-label-row">
-      <span class="ts-must-label">Must-Have</span>
-      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    <div class="dw-col-label">Board Columns</div>
+    <div class="dw-cols-strip">${colsHtml}</div>
+
+    <div class="dw-env-note">
+      <strong>STG / PROD testing:</strong> when staging or production testing is in scope, the columns <em>Ready to Test</em>, <em>In Progress</em>, and <em>Ready to Deploy</em> are duplicated per environment (e.g. <em>Ready to Test STG</em>, <em>Ready to Deploy PROD</em>). The flow stays the same.
     </div>
 
-    <div class="ts-sections">${sections}</div>
+    <div class="dw-chart-label">Flow Diagram</div>
+    ${svg}
 
-    <div class="ts-nicehave-block">
-      <div class="ts-nicehave-title">Nice-to-Have sections</div>
-      <p class="ts-nicehave-note">Operational improvements that add visibility and automation to the workflow. Added after the base process is stable.</p>
-      <ul class="ts-nice-list">${niceList}</ul>
+    <div class="dw-flow-notes">
+      <div class="dw-flow-note-item">
+        <span class="dw-fn-dot" style="background:#94a3b8"></span>
+        <span><strong>assign responsible</strong> - at New: QA or PM assigns the ticket owner (developer or team lead) before it moves to To Do or Backlog</span>
+      </div>
+      <div class="dw-flow-note-item">
+        <span class="dw-fn-dot" style="background:#f97316"></span>
+        <span><strong>dev lead distributes</strong> - at To Do: the engineering lead assigns the ticket to the developer for the current sprint</span>
+      </div>
+      <div class="dw-flow-note-item">
+        <span class="dw-fn-dot" style="background:#f59e0b"></span>
+        <span><strong>Clarification Request</strong> - used when expected behavior is not defined (from New) or a question arises during testing (from Ready to Test). Once resolved, the ticket becomes a Bug or Task and re-enters the main flow</span>
+      </div>
+      <div class="dw-flow-note-item">
+        <span class="dw-fn-dot" style="background:#475569"></span>
+        <span><strong>Rejected</strong> - applied as a Jira label on Closed: ticket was not reproducible or filed in error. Reason documented in the ticket. No separate column</span>
+      </div>
+      <div class="dw-flow-note-item">
+        <span class="dw-fn-dot" style="background:#8b5cf6"></span>
+        <span><strong>Won\'t Fix</strong> - applied as a Jira label on Closed: P2/P3 risk-accepted with named approver and written rationale. P0/P1 cannot be Won\'t Fixed - release is blocked until resolved</span>
+      </div>
     </div>`;
 }
 
