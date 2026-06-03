@@ -29,282 +29,282 @@ function doLogin() {
 // ─── STANDARDS DATA ────────────────────────────────────────────────────────
 const STANDARDS_DATA = {
   'std-820': {
-    type: 'Закон FDA', typeClass: 'law',
+    type: 'FDA Regulation', typeClass: 'law',
     subtitle: 'Quality System Regulation',
-    what: 'Американский закон для производителей медустройств. Раздел 820.30 (Design Controls) - ключевой для QA: требует документировать все этапы от требований до верификации и валидации. В 2024 году приведён в соответствие с ISO 13485.',
+    what: 'US federal regulation for medical device manufacturers. Section 820.30 (Design Controls) is the key section for QA: it requires documenting every stage from requirements through verification and validation. Updated in 2024 to align with ISO 13485.',
     reqs: [
-      { h: 'Design Controls (820.30)', d: 'Весь цикл разработки документируется - требования, архитектура, верификация, валидация. Без этого submission невозможен.' },
-      { h: 'Document Control (820.40)', d: 'Версионирование, approval и контроль всей документации. Каждая версия документа должна быть прослеживаема.' },
-      { h: 'CAPA (820.100)', d: 'Corrective and Preventive Action для каждого дефекта и несоответствия. Root cause + действия + подтверждение закрытия.' },
-      { h: 'Complaint Files (820.198)', d: 'Фиксация и анализ жалоб и adverse events. Для клинического AI это включает feedback от врачей из пилота.' },
-      { h: 'V&V Records', d: 'Результаты каждого теста хранятся как часть Design History File. Не "тест прошёл", а подписанный отчёт.' },
+      { h: 'Design Controls (820.30)', d: 'The full development cycle is documented - requirements, architecture, verification, validation. Without this, premarket submission is not possible.' },
+      { h: 'Document Control (820.40)', d: 'Versioning, approval, and control of all documentation. Every document version must be traceable.' },
+      { h: 'CAPA (820.100)', d: 'Corrective and Preventive Action for every defect and non-conformance. Root cause analysis, corrective actions, and confirmation of closure.' },
+      { h: 'Complaint Files (820.198)', d: 'Recording and analysis of complaints and adverse events. For a clinical AI product, this includes feedback from physicians at the pilot site.' },
+      { h: 'V&V Records', d: 'Results of every test are stored as part of the Design History File. Not just "test passed" - a signed, documented report.' },
     ],
     docs: ['teststrategy', 'traceability', 'vnvreport', 'dhf', 'qualityreport'],
     pitfalls: [
-      'Многие воспринимают 820 как список документов, которые нужно подготовить перед подачей. FDA смотрит иначе - они хотят видеть живую систему: как принимались решения, почему тестировалось именно это, кто и когда что подписал. Наличие документа без реального процесса за ним - красный флаг на аудите.',
-      'Самая частая причина замечаний - нет прослеживаемости между требованием, тест-кейсом и результатом теста. Нельзя просто сказать "мы тестировали функцию X". Нужно показать: вот требование, вот тест-кейс под него, вот результат выполнения. Без этой цепочки submission уязвим.',
-      'Разработчики регулярно делают небольшие правки алгоритма не думая о документировании. По 820 любое изменение в design - даже минорное - должно пройти через change control с оценкой влияния на верификацию и валидацию. Это дисциплина которую нужно выстраивать с самого начала, потому что восстановить историю изменений задним числом очень сложно.',
+      'Many teams treat 21 CFR Part 820 as a checklist of documents to prepare before submission. FDA sees it differently - they want to see a living system: how decisions were made, why specific things were tested, who signed off and when. A document without a real process behind it is a red flag at audit.',
+      'The most common audit finding: no traceability between requirement, test case, and test result. Saying "we tested feature X" is not enough. The chain must be visible - here is the requirement, here is the test case written against it, here is the executed result. Without this chain, the submission is vulnerable.',
+      'Developers regularly make small algorithm changes without thinking about documentation. Under 21 CFR Part 820, any design change - even a minor one - must go through change control with an impact assessment on verification and validation. This discipline needs to be built from day one, because reconstructing a change history retroactively is extremely difficult.',
     ],
     refs: ['std-13485', 'std-62304'],
   },
   'std-62304': {
     type: 'Consensus Standard', typeClass: 'standard',
     subtitle: 'Medical Device Software Lifecycle Processes',
-    what: 'Международный стандарт жизненного цикла ПО медустройств. FDA признаёт как consensus standard. Определяет классификацию ПО по уровням риска и требования к документации на каждом уровне.',
+    what: 'International standard for the software lifecycle of medical devices. Recognized by FDA as a consensus standard. Defines software classification by risk level and documentation requirements at each level.',
     reqs: [
-      { h: 'Классификация: Class C (почти точно NV-Sight)', d: 'Ошибка AI при детекции окклюзии во время процедуры = серьёзный вред пациенту. Class C - наивысший уровень, полная документация обязательна.' },
-      { h: 'Software Development Plan', d: 'Как организована разработка и тестирование - документируется до начала работ.' },
-      { h: 'Unit + Integration + System Tests', d: 'Планы и отчёты по каждому уровню тестирования. Все результаты хранятся, не только итоговый вывод.' },
-      { h: 'Anomaly Records', d: 'Каждый обнаруженный дефект документируется - статус, root cause, resolution. Без этого submission не пройдёт.' },
-      { h: 'Full Traceability', d: 'Требования → архитектура → тест-кейсы → результаты - связь на всех уровнях.' },
+      { h: 'Classification: Class C (most likely NV-Sight)', d: 'A system failure during an active procedure (pipeline crash, hints not rendered) = serious patient harm. Class C is the highest level - full documentation is mandatory.' },
+      { h: 'Software Development Plan', d: 'How development and testing are organized - documented before work begins.' },
+      { h: 'Unit + Integration + System Tests', d: 'Plans and reports at every testing level. All results are stored, not just the final verdict.' },
+      { h: 'Anomaly Records', d: 'Every defect found is documented - status, root cause, resolution. Without this, submission will not pass review.' },
+      { h: 'Full Traceability', d: 'Requirements - architecture - test cases - results: connected at every level.' },
     ],
     docs: ['teststrategy', 'testplans', 'testcases', 'defectworkflow', 'traceability', 'vnvreport'],
     pitfalls: [
-      'Когда команда видит какой объём документации требует Class C, возникает соблазн обосновать Class B. Проблема в том что FDA при review смотрит на реальный сценарий использования. Для NV-Sight: ошибка детекции во время активной stroke-процедуры - это potential serious harm. Если FDA не согласится с классификацией, придётся переделывать всю документацию.',
-      'Unit-тесты часто воспринимаются как внутренняя практика разработки, не требующая формального документирования. По IEC 62304 для Class C это не так - нужны не просто тесты, а задокументированные планы и отчёты на каждом уровне: unit, integration, system. Это нужно планировать заранее, а не восстанавливать задним числом.',
-      'Закрыть дефект в Jira с комментарием "fixed" - недостаточно. Для каждого значимого дефекта нужен root cause analysis: что именно сломалось, почему это произошло, что сделано чтобы не повторилось. Без этого defect record не проходит аудит.',
+      'When a team sees how much documentation Class C requires, the temptation arises to justify Class B. The problem is that FDA looks at the actual use scenario during review. For NV-Sight: system failure during an active stroke procedure = potential serious harm. If FDA disagrees with the classification, all documentation must be redone.',
+      'Unit tests are often treated as an internal development practice that does not require formal documentation. Under IEC 62304 for Class C this is not the case - documented plans and reports are required at every level: unit, integration, system. This must be planned upfront, not reconstructed after the fact.',
+      'Closing a defect in Jira with a comment of "fixed" is not enough. For every significant defect, a root cause analysis is required: what exactly broke, why it happened, what was done to prevent recurrence. Without this, the defect record does not pass audit.',
     ],
     refs: ['std-14971', 'std-820'],
   },
   'std-14971': {
     type: 'Consensus Standard', typeClass: 'standard',
     subtitle: 'Risk Management for Medical Devices',
-    what: 'Стандарт управления рисками. FDA признаёт. QA не ведёт risk file самостоятельно - это зона engineering team. Но QA обеспечивает доказательства: тест-результаты подтверждающие что mitigation работает.',
+    what: 'Risk management standard. FDA recognized. QA does not own the risk file independently - that is engineering team territory. But QA provides the evidence: test results confirming that mitigations work.',
     reqs: [
-      { h: 'Risk Framework', d: 'Hazard → Hazardous Situation → Harm. Для каждого: Severity × Probability = Risk Level → приемлем или требует mitigation.' },
-      { h: 'Risk Controls', d: 'Mitigation меры для неприемлемых рисков. QA тестирует что они работают - это и есть QA contribution в risk file.' },
-      { h: 'Residual Risk', d: 'После mitigation - документируется остаточный риск и принимается решение о приемлемости.' },
-      { h: 'QA Contribution', d: 'Failure modes найденные в тестировании → в risk file. Тест-отчёты = evidence для risk controls.' },
+      { h: 'Risk Framework', d: 'Hazard - Hazardous Situation - Harm. For each: Severity x Probability = Risk Level - acceptable or requires mitigation.' },
+      { h: 'Risk Controls', d: 'Mitigation measures for unacceptable risks. QA tests that they work - this is the QA contribution to the risk file.' },
+      { h: 'Residual Risk', d: 'After mitigation - residual risk is documented and an acceptability decision is made.' },
+      { h: 'QA Contribution', d: 'Failure modes found in testing feed into the risk file. Test reports are the evidence for risk controls.' },
     ],
     docs: ['testcases', 'vnvreport', 'riskcontrib', 'traceability'],
     pitfalls: [
-      'QA команды часто думают что risk management - это задача инженеров или product owner, а QA только тестирует по готовым тест-кейсам. На самом деле risk file без QA evidence неполный: каждый risk control должен иметь тест-доказательство что он работает. Если QA не предоставляет эти данные - submission неполный.',
-      'Когда в тестировании находится новый failure mode которого не было в risk analysis - это не просто баг, это потенциально новый hazard. Его нужно добавить в risk file, оценить severity и probability, определить mitigation. Если этого не делать, risk file постепенно устаревает и перестаёт отражать реальную картину.',
-      'В hazard analysis описаны конкретные опасные сценарии: ложно-отрицательная детекция при определённом типе изображения, например. Именно эти сценарии и нужно тестировать в первую очередь. Если тест-кейсы не связаны с hazard analysis - часть реальных рисков остаётся непроверенной.',
-      'Для AI/ML продуктов failure modes вероятностные, не детерминированные. Классическое "запустил тест - получил pass/fail" здесь недостаточно. Нужны статистические подходы: на каком объёме данных тестировали, какой доверительный интервал у метрик, как обеспечивали representative sample.',
+      'QA teams often assume risk management is the job of engineers or product owners, and QA just executes test cases. In fact, a risk file without QA evidence is incomplete: every risk control must have a test result proving it works. If QA does not provide this data, the submission is incomplete.',
+      'When testing uncovers a new failure mode not in the risk analysis, this is not just a bug - it is potentially a new hazard. It must be added to the risk file, assessed for severity and probability, and a mitigation defined. Skipping this means the risk file gradually diverges from reality.',
+      'The hazard analysis describes specific dangerous scenarios - for NV-Sight: pipeline fails silently during an active procedure, hint not rendered on the correct frame. These are exactly the scenarios that must be tested first. If test cases are not tied to the hazard analysis, some real risks remain uncovered.',
+      'For AI/ML products, failure modes are probabilistic, not deterministic. Classic pass/fail testing is not sufficient. Statistical approaches are needed: how many samples were tested, what confidence intervals the metrics have, how a representative sample was ensured.',
     ],
     refs: ['std-62304', 'std-62366', 'std-820'],
   },
   'std-62366': {
     type: 'Consensus Standard', typeClass: 'standard',
     subtitle: 'Usability Engineering for Medical Devices',
-    what: 'Стандарт usability engineering. FDA признаёт. Цель: убедиться что пользователь не причинит вред через use error - не просто что интерфейс удобен.',
+    what: 'Usability engineering standard. FDA recognized. The goal: ensure users do not cause harm through use error - not just that the interface is convenient.',
     reqs: [
-      { h: 'Formative Testing', d: 'В процессе разработки - итерационная проверка UI. Выявление usability hazards на ранних стадиях.' },
-      { h: 'Summative Testing', d: 'Финальная валидация с реальными пользователями (врачами). Обязательна для submission - симуляция не засчитывается.' },
-      { h: 'Use Specification', d: 'Кто пользователь, в каких условиях работает, какие критические задачи выполняет.' },
-      { h: 'Usability Hazards → Risk File', d: 'Каждый выявленный usability hazard идёт в ISO 14971 risk file с оценкой severity.' },
+      { h: 'Formative Testing', d: 'Iterative UI checks during development. Identifies usability hazards early.' },
+      { h: 'Summative Testing', d: 'Final validation with real users (physicians). Required for submission - simulation does not count.' },
+      { h: 'Use Specification', d: 'Who the user is, in what conditions they work, what critical tasks they perform.' },
+      { h: 'Usability Hazards - Risk File', d: 'Every identified usability hazard goes into the ISO 14971 risk file with a severity assessment.' },
     ],
     docs: ['usability', 'riskcontrib', 'vnvreport'],
     pitfalls: [
-      'IEC 62366 про безопасность, не про удобство. Вопрос не "удобно ли врачу работать с интерфейсом", а "может ли врач совершить use error который приведёт к вреду пациенту". Это другой тип тестирования с другими сценариями - сфокусированными на critical tasks и потенциально опасных ошибках.',
-      'Formative testing - это итерационная работа в процессе разработки, summative - финальная валидация перед submission. Часто formative делают, а summative откладывают или пропускают. FDA не примет submission только с formative результатами - summative обязателен.',
-      'Врачи должны участвовать в summative testing лично. Нельзя заменить их другими пользователями или симуляцией. Это организационный вызов - нужно привлечь реальных специалистов, согласовать время, провести сессии. Чем раньше это планировать, тем лучше.',
-      'Для NV-Sight это особенно важно: врач интерпретирует AI output во время активной intraoperative процедуры, под временным давлением, с высокой когнитивной нагрузкой. Тест-сценарии usability должны моделировать именно эти условия, а не спокойное изучение интерфейса в офисе.',
+      'IEC 62366 is about safety, not convenience. The question is not "is the interface comfortable for the physician" but "can the physician make a use error that leads to patient harm." This is a different type of testing with different scenarios - focused on critical tasks and potentially dangerous mistakes.',
+      'Formative testing is iterative work during development, summative is final validation before submission. Formative is often done, summative is often deferred or skipped. FDA will not accept a submission with only formative results - summative is mandatory.',
+      'Physicians must participate in summative testing in person. They cannot be replaced by other users or simulation. This is an organizational challenge - real specialists must be recruited, schedules coordinated, sessions conducted. The earlier this is planned, the better.',
+      'For NV-Sight this is especially important: the physician interprets AI output during an active intraoperative procedure, under time pressure, with high cognitive load. Usability test scenarios must model exactly these conditions - not a calm review of the interface in an office.',
     ],
     refs: ['std-14971', 'std-820'],
   },
   'std-13485': {
     type: 'Consensus Standard', typeClass: 'standard',
     subtitle: 'Quality Management Systems for Medical Devices',
-    what: 'QMS стандарт для медустройств. После обновления 21 CFR Part 820 в 2024 году практически идентичен по структуре. Сертификация по ISO 13485 упрощает выход на международные рынки в будущем.',
+    what: 'QMS standard for medical devices. After the 2024 update to 21 CFR Part 820, structurally nearly identical. ISO 13485 certification simplifies entry into international markets in the future.',
     reqs: [
-      { h: 'Документированные процедуры', d: 'Все quality activities имеют задокументированные процедуры - не просто делаются, а описаны как делаются.' },
-      { h: 'Internal Audits', d: 'Планируются и документируются - проверка что QMS реально применяется, а не существует на бумаге.' },
-      { h: 'CAPA', d: 'Для любых несоответствий - с root cause analysis и evidence закрытия.' },
-      { h: 'Management Review', d: 'QA метрики регулярно докладываются руководству. Quality Report - основной инструмент для этого.' },
+      { h: 'Documented Procedures', d: 'All quality activities have documented procedures - not just performed, but described in writing how they are performed.' },
+      { h: 'Internal Audits', d: 'Planned and documented - verifying that the QMS is actually applied, not just exists on paper.' },
+      { h: 'CAPA', d: 'For any non-conformance - with root cause analysis and evidence of closure.' },
+      { h: 'Management Review', d: 'QA metrics are regularly reported to leadership. The Quality Report is the primary tool for this.' },
     ],
     docs: ['teststrategy', 'metrics', 'qualityreport', 'defectworkflow'],
     pitfalls: [
-      'Сертификация ISO 13485 это хорошо, но сама по себе не означает что QMS работает. При recertification аудите проверяют реальные примеры: покажите CAPA который открывали в последнем квартале, покажите результаты internal audit, покажите management review записи. Если система только на бумаге - это выявится.',
-      'CAPA - это не просто "нашли проблему, починили". Нужен root cause analysis, план действий, сроки, ответственные, и главное - evidence что проблема действительно устранена и не повторится. Без всего этого CAPA формально не закрыт и аудитор его не засчитает.',
+      'ISO 13485 certification is valuable, but by itself does not mean the QMS works. At recertification audits, real examples are checked: show a CAPA opened in the last quarter, show internal audit results, show management review records. If the system exists only on paper, it will be found.',
+      'CAPA is not just "found a problem, fixed it." A root cause analysis is required, an action plan, deadlines, responsible parties, and most importantly - evidence that the problem was actually resolved and will not recur. Without all of this, the CAPA is formally not closed and an auditor will not accept it.',
     ],
     refs: ['std-820', 'std-62304'],
   },
   'std-samd': {
     type: 'FDA Guidance', typeClass: 'guidance',
     subtitle: 'Software as a Medical Device - Clinical Evaluation',
-    what: 'FDA guidance по клинической оценке SaMD. Не закон, но FDA следует этому при review - игнорировать нельзя. Определяет что именно нужно доказать клиническими данными.',
+    what: 'FDA guidance on clinical evaluation of SaMD. Not a law, but FDA follows this during review - ignoring it is not an option. Defines what must be proven with clinical data.',
     reqs: [
-      { h: 'Analytical Performance', d: 'Как работает модель технически - accuracy, sensitivity, specificity, recall, precision на тестовом датасете.' },
-      { h: 'Clinical Performance', d: 'Как AI влияет на клинические решения врача. Аналитического одного недостаточно - нужно показать clinical benefit.' },
-      { h: 'Independent Test Set', d: 'Валидационный датасет не должен участвовать в обучении. Mount Sinai + St. Vincent - именно independent validation sets.' },
-      { h: 'Subgroup Analysis', d: 'Производительность на подгруппах: демография, типы патологии, тип оборудования.' },
+      { h: 'Analytical Performance', d: 'How the model performs technically - accuracy, sensitivity, specificity, recall, precision on the test dataset.' },
+      { h: 'Clinical Performance', d: 'How the AI affects clinical decisions by the physician. Analytical performance alone is not enough - clinical benefit must be demonstrated.' },
+      { h: 'Independent Test Set', d: 'The validation dataset must not have been used in training. Mount Sinai and St. Vincent are exactly independent validation sets.' },
+      { h: 'Subgroup Analysis', d: 'Performance across subgroups: demographics, pathology types, equipment type.' },
     ],
     docs: ['vnvreport', 'testcases', 'testplans'],
     pitfalls: [
-      'Команды часто показывают accuracy модели на том же датасете на котором её обучали или валидировали. FDA такой результат не засчитает - нужен independent test set, данные из которого модель не видела ни разу в процессе обучения. Для NV-Sight это данные из Mount Sinai и St. Vincent, которые должны быть строго изолированы от обучения с самого начала.',
-      'Хорошая accuracy в среднем по датасету не означает что модель одинаково хорошо работает для всех пациентов. FDA будет смотреть на subgroup analysis: как модель работает для разных возрастных групп, типов патологии, оборудования. Если subgroup performance не проверялась - это пробел который обнаружится при review.',
-      'Аналитическая производительность (технические метрики модели) - это только часть картины. FDA хочет видеть clinical performance: как наличие AI ассистента влияет на решения врача и исходы для пациента. Без этого компонента clinical evaluation считается неполной.',
+      'Teams often present model accuracy on the same dataset used for training or validation. FDA will not accept this result - an independent test set is required, data the model has never seen during training. For NV-Sight, this is data from Mount Sinai and St. Vincent, which must be strictly isolated from training from the very beginning.',
+      'Good average accuracy across the dataset does not mean the model performs equally well for all patients. FDA will look at subgroup analysis: how the model performs for different age groups, pathology types, equipment. If subgroup performance was not checked, this is a gap that will be found during review.',
+      'Analytical performance (technical model metrics) is only part of the picture. FDA wants to see clinical performance: how the presence of an AI assistant affects physician decisions and patient outcomes. Without this component, the clinical evaluation is considered incomplete.',
     ],
     refs: ['std-aiml', 'std-14971'],
   },
   'std-aiml': {
     type: 'FDA Guidance', typeClass: 'guidance',
     subtitle: 'AI/ML-Based Software as a Medical Device - Action Plan',
-    what: 'FDA guidance специфично для AI/ML устройств. Определяет как FDA смотрит на AI: разработка, тестирование и жизненный цикл модели после выхода на рынок.',
+    what: 'FDA guidance specifically for AI/ML devices. Defines how FDA views AI: development, testing, and the model lifecycle after market entry.',
     reqs: [
-      { h: 'Good Machine Learning Practice (GMLP)', d: 'Стандарты разработки модели - качество данных, воспроизводимость, оценка производительности.' },
-      { h: 'Bias & Generalizability', d: 'Модель работает на разных популяциях - демография, оборудование, клиники. Проверяется тестированием.' },
-      { h: 'Real-World Performance Monitoring', d: 'После deployment - план мониторинга производительности и триггеры для re-evaluation.' },
-      { h: 'Transparency', d: 'Что делает модель, как интерпретировать output, где границы применимости - документируется.' },
+      { h: 'Good Machine Learning Practice (GMLP)', d: 'Model development standards - data quality, reproducibility, performance evaluation.' },
+      { h: 'Bias & Generalizability', d: 'The model works across different populations - demographics, equipment, clinics. Verified through testing.' },
+      { h: 'Real-World Performance Monitoring', d: 'After deployment - a monitoring plan for performance and triggers for re-evaluation.' },
+      { h: 'Transparency', d: 'What the model does, how to interpret its output, where the limits of applicability are - documented.' },
     ],
     docs: ['vnvreport', 'testplans', 'testcases', 'pccp'],
     pitfalls: [
-      'Если тестировать только на основной популяции из Sheba - это не покрывает все требования FDA. Нужно показать что модель работает корректно на разных подгруппах: разная демография, разные типы сосудистых аномалий, разное оборудование. Bias в одной подгруппе может стать причиной отклонения submission.',
-      'FDA AI/ML Action Plan явно требует план реального мониторинга производительности после deployment. Это значит: определить метрики для мониторинга, частоту проверки, пороговые значения, действия при деградации. Без этого плана submission неполон - нельзя просто выпустить продукт и не следить за ним.',
-      'AI модель - это black box с точки зрения традиционного тестирования. FDA требует документировать known failure modes: при каких условиях модель работает хуже, какие типы входных данных дают ненадёжные результаты, какие есть ограничения применимости. Это честность перед регулятором и врачом.',
+      'Testing only on the primary population from Sheba does not cover all FDA requirements. It must be shown that the model works correctly across different subgroups: demographics, types of vascular abnormalities, equipment. Bias in one subgroup can be grounds for rejecting the submission.',
+      'The FDA AI/ML Action Plan explicitly requires a real-world performance monitoring plan after deployment. This means defining metrics to monitor, check frequency, threshold values, and actions if performance degrades. Without this plan, the submission is incomplete - you cannot simply release a product and not monitor it.',
+      'An AI model is a black box from the perspective of traditional testing. FDA requires documenting known failure modes: under what conditions the model performs worse, what types of input produce unreliable results, what the limits of applicability are. This is honesty toward the regulator and the physician.',
     ],
     refs: ['std-samd', 'std-pccp', 'std-62366'],
   },
   'std-pccp': {
     type: 'FDA Guidance', typeClass: 'guidance',
     subtitle: 'Predetermined Change Control Plan',
-    what: 'Обязателен если AI модель будет обновляться после market clearance. Включается в original submission. Без PCCP - каждое обновление модели = новый 510(k) = год+ ожидания перед каждым улучшением.',
+    what: 'Required if the AI model will be updated after market clearance. Included in the original submission. Without PCCP, every model update = a new 510(k) = a year or more of waiting before each improvement.',
     reqs: [
-      { h: 'Pre-approved Changes', d: 'Какие изменения разрешены без нового submission: retrain на большем датасете, threshold adjustments и т.п.' },
-      { h: 'Performance Metrics & Triggers', d: 'При каком падении метрик требуется re-submission или дополнительный review.' },
-      { h: 'Change Methodology', d: 'Как оцениваются изменения - тест-протокол, датасет, критерии приёмки.' },
-      { h: 'Scope Definition', d: 'Чёткие границы что входит и не входит в PCCP - FDA будет проверять соответствие при каждом изменении.' },
+      { h: 'Pre-approved Changes', d: 'Which changes are permitted without a new submission: retraining on a larger dataset, threshold adjustments, etc.' },
+      { h: 'Performance Metrics & Triggers', d: 'At what performance drop a re-submission or additional review is required.' },
+      { h: 'Change Methodology', d: 'How changes are evaluated - test protocol, dataset, acceptance criteria.' },
+      { h: 'Scope Definition', d: 'Clear boundaries of what is and is not in the PCCP - FDA will verify compliance at each change.' },
     ],
     docs: ['pccp', 'vnvreport', 'testplans'],
     pitfalls: [
-      'PCCP должен быть частью original submission - это не документ который можно добавить позже. Если планируете обновлять AI модель после выхода (а планируете - иначе зачем данные из новых клиник), PCCP нужно писать одновременно с основным submission пакетом, не после.',
-      'Слишком широкий PCCP - например "мы можем менять модель если performance не ухудшается" - FDA при review ограничит: потребует конкретные метрики, конкретные пороги, конкретные протоколы оценки. Чем расплывчатее написан PCCP, тем больше правок потребует review.',
-      'Слишком узкий PCCP оставит команду без возможности обновлять модель в ответ на новые данные без нового 510(k). Каждый новый 510(k) - это как минимум несколько месяцев ожидания. Баланс между широким и узким PCCP - это ключевой архитектурный вопрос.',
-      'NV-Sight будет накапливать данные из Mount Sinai и St. Vincent. Почти наверняка модель захочется переобучить на более богатом датасете. PCCP нужно писать уже сейчас с прицелом на эти сценарии - иначе окажется что такое изменение требует нового submission.',
+      'The PCCP must be part of the original submission - it is not a document that can be added later. If you plan to update the AI model after launch (and you do - otherwise why collect data from new clinics), the PCCP must be written in parallel with the main submission package, not afterward.',
+      'A PCCP that is too broad - for example "we can change the model if performance does not degrade" - FDA will constrain during review: specific metrics, specific thresholds, specific evaluation protocols will be required. The more vague the PCCP, the more revisions the review will require.',
+      'A PCCP that is too narrow leaves the team unable to update the model in response to new data without a new 510(k). Each new 510(k) means at least several months of waiting. The balance between broad and narrow PCCP is a key architectural question.',
+      'NV-Sight will accumulate data from Mount Sinai and St. Vincent. Almost certainly the model will need to be retrained on a richer dataset. The PCCP needs to be written now with these scenarios in mind - otherwise it may turn out that such a change requires a new submission.',
     ],
     refs: ['std-aiml', 'std-62304'],
   },
   'std-cyber': {
     type: 'FDA Guidance', typeClass: 'guidance',
     subtitle: 'Cybersecurity in Medical Devices (2023)',
-    what: 'С 2023 года обязательно включать в premarket submission. Кибербезопасность рассматривается как patient safety issue, а не IT задача. Client-server архитектура NV-Sight = расширенная attack surface.',
+    what: 'Mandatory in premarket submissions since 2023. Cybersecurity is treated as a patient safety issue, not an IT task. NV-Sight\'s client-server architecture = expanded attack surface.',
     reqs: [
-      { h: 'Threat Modeling', d: 'STRIDE или аналог - документировать угрозы и mitigations для каждой точки входа: PACS, сеть больницы, клиентский ноутбук.' },
-      { h: 'SBOM', d: 'Software Bill of Materials - полный список всех компонентов включая open source зависимости.' },
-      { h: 'Cybersecurity Testing', d: 'Penetration testing, vulnerability scanning - результаты входят в submission.' },
-      { h: 'Post-Market Monitoring', d: 'План реагирования на уязвимости и patch management process после выхода.' },
+      { h: 'Threat Modeling', d: 'STRIDE or equivalent - document threats and mitigations for each entry point: PACS, hospital network, client laptop.' },
+      { h: 'SBOM', d: 'Software Bill of Materials - a complete list of all components including open source dependencies.' },
+      { h: 'Cybersecurity Testing', d: 'Penetration testing, vulnerability scanning - results are included in the submission.' },
+      { h: 'Post-Market Monitoring', d: 'A plan for responding to vulnerabilities and a patch management process after launch.' },
     ],
     docs: ['teststrategy', 'testplans', 'vnvreport', 'dhf'],
     pitfalls: [
-      'Кибербезопасность медустройств - это ответственность производителя устройства, а не IT-отдела. FDA требует включить результаты cybersecurity testing в premarket submission. Это значит что QA должен планировать и документировать security testing наравне с функциональным - это часть V&V, а не отдельная история.',
-      'SBOM (Software Bill of Materials) - это полный список всего ПО в продукте, включая все open source зависимости и их версии. Команды часто не имеют актуального SBOM потому что зависимости меняются в процессе разработки. Без SBOM submission неполон, а при появлении уязвимости непонятно даже затронут ли ею продукт.',
-      'Client-server архитектура NV-Sight означает несколько точек соединения: ноутбук - сервер, сервер - PACS, PACS - ангиограф. Каждое из этих соединений - потенциальный attack vector. Threat modeling должен охватить все точки, а не только клиентскую часть.',
-      'FDA требует не просто хорошую security при выходе, но и задокументированный план на случай когда после выхода обнаружат уязвимость. Нужен процесс: как мониторим vulnerabilities в зависимостях, как быстро выпускаем патч, как уведомляем клинические сайты.',
+      'Medical device cybersecurity is the responsibility of the device manufacturer, not the IT department. FDA requires including cybersecurity testing results in the premarket submission. This means QA must plan and document security testing on par with functional testing - it is part of V&V, not a separate topic.',
+      'SBOM is a complete list of all software in the product, including all open source dependencies and their versions. Teams often do not have an up-to-date SBOM because dependencies change during development. Without an SBOM the submission is incomplete, and when a vulnerability appears it is unclear whether the product is even affected.',
+      'NV-Sight\'s client-server architecture means several connection points: laptop - server, server - PACS, PACS - angiograph. Each of these connections is a potential attack vector. Threat modeling must cover all points, not just the client side.',
+      'FDA requires not just good security at launch, but a documented plan for when a vulnerability is discovered after launch. A process is needed: how vulnerabilities in dependencies are monitored, how quickly a patch is released, how clinical sites are notified.',
     ],
     refs: ['std-62304', 'std-hipaa'],
   },
   'std-hipaa': {
-    type: 'Операционный (Закон)', typeClass: 'operational',
+    type: 'Operational (Law)', typeClass: 'operational',
     subtitle: 'Health Insurance Portability and Accountability Act',
-    what: 'Закон США о защите данных пациентов (PHI - Protected Health Information). Напрямую влияет на работу QA с тестовыми данными из клиник. Нарушение - крупные штрафы.',
+    what: 'US law protecting patient data (PHI - Protected Health Information). Directly affects QA work with test data from clinical sites. Violation = substantial fines.',
     reqs: [
-      { h: 'De-identification (Safe Harbor)', d: 'Удалить 18 идентификаторов из данных пациента. Только после этого можно использовать для тестирования без Business Associate Agreement.' },
-      { h: 'Business Associate Agreement (BAA)', d: 'Если QA-команда работает с реальными PHI данными из клиник - нужен BAA с каждой клиникой.' },
-      { h: 'Data Handling', d: 'PHI нельзя хранить на личных устройствах или незащищённых системах. Влияет на организацию тест-окружения.' },
+      { h: 'De-identification (Safe Harbor)', d: 'Remove 18 patient identifiers. Only then can the data be used for testing without a Business Associate Agreement.' },
+      { h: 'Business Associate Agreement (BAA)', d: 'If the QA team works with real PHI data from clinics, a BAA is required with each clinic.' },
+      { h: 'Data Handling', d: 'PHI cannot be stored on personal devices or unsecured systems. This affects how the test environment is organized.' },
     ],
     docs: ['testplans', 'testcases', 'sat'],
     pitfalls: [
-      'Убрать имя пациента из файла - это не деидентификация. DICOM файлы содержат десятки тегов с PHI: дата рождения, дата процедуры, ID исследования, ID врача, ID аппарата, институция и многое другое. HIPAA Safe Harbor требует удалить конкретный список из 18 идентификаторов - и это нужно делать инструментом, а не вручную, потому что некоторые теги неочевидны и легко пропустить.',
-      'Когда команда берёт данные из Sheba для тестирования, кажется что это внутренний процесс и никаких проблем нет. Но если QA-инженер работает вне Израиля, или данные копируются на устройство без надлежащей защиты, или нет подписанного BAA между CoPilotMD и клиникой - это уже нарушение. Нужно либо работать только с деидентифицированными данными, либо иметь оформленный BAA и понимать какие системы хранения PHI разрешены.',
-      'Тестовые данные это не только production данные которые скопировали. Это ещё синтетические данные, данные из открытых датасетов, mock-данные. Для каждой категории свои правила: синтетические можно хранить без ограничений, реальные PHI - только в защищённой среде с контролем доступа. Отсутствие формального процесса что именно как хранится и кто имеет доступ - это нарушение которое аудит HIPAA обнаруживает первым делом.',
+      'Removing a patient\'s name from a file is not de-identification. DICOM files contain dozens of tags with PHI: date of birth, procedure date, study ID, physician ID, equipment ID, institution name, and more. HIPAA Safe Harbor requires removing a specific list of 18 identifiers - this must be done with a tool, not manually, because some tags are non-obvious and easy to miss.',
+      'When a team takes data from Sheba for testing, it seems like an internal process with no issues. But if the QA engineer works outside Israel, or data is copied to a device without adequate protection, or there is no signed BAA between CoPilotMD and the clinic - this is already a violation. Either work only with de-identified data, or have a formal BAA in place and understand which PHI storage systems are permitted.',
+      'Test data is not only production data that was copied. It also includes synthetic data, data from open datasets, mock data. Each category has its own rules: synthetic can be stored without restrictions, real PHI - only in a secured environment with access control. The absence of a formal process defining what is stored how and who has access is a violation that a HIPAA audit will find immediately.',
     ],
     refs: ['std-dicom', 'std-cyber'],
   },
   'std-dicom': {
-    type: 'Операционный (Стандарт)', typeClass: 'operational',
+    type: 'Operational (Standard)', typeClass: 'operational',
     subtitle: 'Digital Imaging and Communications in Medicine',
-    what: 'Стандарт хранения и передачи медицинских изображений. Не regulatory требование, но весь imaging pipeline NV-Sight работает с DICOM. QA должен понимать формат чтобы правильно строить тест-сценарии.',
+    what: 'Standard for storing and transmitting medical images. Not a regulatory requirement, but the entire NV-Sight imaging pipeline works with DICOM. QA must understand the format to build correct test scenarios.',
     reqs: [
-      { h: 'Структура', d: 'Patient → Study → Series → Instance (image). Понимание иерархии критично для корректных тест-сценариев.' },
-      { h: 'PHI в тегах', d: 'DICOM содержит сотни тегов, многие с данными пациента. De-identification обязательна перед тестированием.' },
-      { h: 'Transfer Syntax', d: 'Форматы сжатия изображений - pipeline должен корректно обрабатывать все варианты которые генерируют Siemens аппараты.' },
-      { h: 'DICOM over Network (DIMSE)', d: 'Передача через PACS - задержки при передаче через сеть больницы учитываются в performance тест-сценариях.' },
+      { h: 'Structure', d: 'Patient - Study - Series - Instance (image). Understanding the hierarchy is critical for correct test scenarios.' },
+      { h: 'PHI in Tags', d: 'DICOM contains hundreds of tags, many with patient data. De-identification is mandatory before testing.' },
+      { h: 'Transfer Syntax', d: 'Image compression formats - the pipeline must correctly handle all variants generated by Siemens equipment.' },
+      { h: 'DICOM over Network (DIMSE)', d: 'Transmission via PACS - network transfer delays are accounted for in performance test scenarios.' },
     ],
     docs: ['testplans', 'testcases', 'testmatrix', 'sat'],
     pitfalls: [
-      'В разработке обычно тестируют на нескольких "хороших" DICOM файлах которые корректно открываются и красиво выглядят. В реальной клинике приходят файлы с битыми тегами, нестандартными значениями, редкими transfer syntax, артефактами сжатия от конкретного поколения аппарата. Если pipeline не обрабатывает такие случаи, он упадёт именно в момент реальной процедуры. Тест-матрица должна включать edge cases форматов, а не только happy path.',
-      'NV-Sight работает intraoperative - то есть AI даёт результат пока процедура идёт. Задержка в несколько секунд в тестовой среде где PACS рядом и сеть быстрая - это не показатель. Реальная задержка складывается из: передача от ангиографа до PACS, с PACS на сервер NV-Sight, обработка моделью, обратно на клиентский ноутбук. Всё это через больничную сеть которая может быть загружена. Нужно тестировать performance именно в условиях близких к реальным, иначе на первом же клиническом сайте будет сюрприз.',
-      'DICOM файл с удалённым именем пациента - это не деидентифицированный DICOM файл. Внутри DICOM структуры несколько сотен потенциальных тегов, из которых десятки содержат PHI: PatientBirthDate, InstitutionName, PerformingPhysicianName, StationName, DeviceSerialNumber и другие. Для тестирования нужен специальный инструмент деидентификации который обрабатывает все теги по списку, а не ручное удаление очевидных полей.',
-      'Siemens выпускает разные серии ангиографов и каждая генерирует DICOM немного по-разному: разные значения в служебных тегах, разные варианты сжатия, иногда vendor-specific расширения протокола. Команда ориентируется на конкретный набор аппаратов в Sheba - это хорошо. Но тест-матрица должна покрывать все типы которые планируются к использованию, потому что pipeline который работает на одной серии может падать на другой.',
+      'In development, testing is typically done on a few "good" DICOM files that open correctly and look clean. In a real clinic, files arrive with broken tags, non-standard values, rare transfer syntax, compression artifacts from a specific generation of equipment. If the pipeline does not handle these cases, it will fail exactly at the moment of a real procedure. The test matrix must include format edge cases, not just the happy path.',
+      'NV-Sight operates intraoperatively - meaning results are delivered while the procedure is in progress. A delay of a few seconds in a test environment where PACS is nearby and the network is fast is not representative. Real delay is the sum of: transfer from the angiograph to PACS, from PACS to the NV-Sight server, processing, back to the client laptop - all through the hospital network which may be under load. Performance must be tested in conditions close to real ones.',
+      'A DICOM file with the patient name removed is not a de-identified DICOM file. Inside the DICOM structure there are several hundred potential tags, of which dozens contain PHI: PatientBirthDate, InstitutionName, PerformingPhysicianName, StationName, DeviceSerialNumber, and others. A specialized de-identification tool is required that processes all tags by the list - not manual removal of obvious fields.',
+      'Siemens produces different angiograph series and each generates DICOM slightly differently: different values in service tags, different compression variants, sometimes vendor-specific protocol extensions. The test matrix must cover all equipment types planned for use, because a pipeline that works on one series may fail on another.',
     ],
     refs: ['std-hipaa', 'std-cyber'],
   },
 };
 
 // ─── STANDARDS CROSS-REFERENCES ───────────────────────────────────────────
-// rel types: 'Общее' | 'Дополнение' | 'Взаимозависимость'
+// rel types: 'General' | 'Complement' | 'Interdependency'
 const STANDARDS_REFS = {
   'std-820': [
-    { id: 'std-13485', rel: 'Общее',
-      note: 'После 2024 обновления 820 и 13485 структурно совпадают - выполняя одно, закрываешь большинство требований второго. Различие: 13485 международный, 820 только для США.' },
-    { id: 'std-62304', rel: 'Дополнение',
-      note: '820 задаёт общие Design Controls для любого медустройства, 62304 конкретизирует их применительно к ПО - что именно документировать на каждом этапе разработки.' },
+    { id: 'std-13485', rel: 'General',
+      note: 'After the 2024 update, 820 and 13485 are structurally aligned - complying with one covers most requirements of the other. The difference: 13485 is international, 820 is US-only.' },
+    { id: 'std-62304', rel: 'Complement',
+      note: '820 sets general Design Controls for any medical device, 62304 specifies how to apply them to software - what to document at each stage of development.' },
   ],
   'std-62304': [
-    { id: 'std-14971', rel: 'Взаимозависимость',
-      note: 'Уровень риска из 14971 определяет Software Class в 62304 (A/B/C). Без risk assessment нельзя правильно классифицировать ПО - объём документации вытекает из этой связи.' },
-    { id: 'std-820', rel: 'Дополнение',
-      note: '820 требует Design Controls в общем виде, 62304 описывает конкретные шаги для ПО внутри этих controls.' },
+    { id: 'std-14971', rel: 'Interdependency',
+      note: 'The risk level from 14971 determines the Software Class in 62304 (A/B/C). Without risk assessment, software cannot be correctly classified - the documentation scope follows from this relationship.' },
+    { id: 'std-820', rel: 'Complement',
+      note: '820 requires Design Controls in general terms, 62304 describes the specific steps for software within those controls.' },
   ],
   'std-14971': [
-    { id: 'std-62304', rel: 'Взаимозависимость',
-      note: 'Класс ПО (62304) вытекает из оценки риска (14971). Замкнутый цикл: риск → software class → объём документации и тестирования.' },
-    { id: 'std-62366', rel: 'Дополнение',
-      note: '62366 выявляет usability hazards, которые как input идут в risk file (14971). Два независимых источника рисков: технические и пользовательские - оба обязательны.' },
-    { id: 'std-820', rel: 'Общее',
-      note: 'Оба требуют документировать risk mitigation и доказательства что controls работают. 14971 детализирует risk framework, 820 требует итоговый результат.' },
+    { id: 'std-62304', rel: 'Interdependency',
+      note: 'Software class (62304) follows from risk assessment (14971). A closed loop: risk - software class - documentation and testing scope.' },
+    { id: 'std-62366', rel: 'Complement',
+      note: '62366 identifies usability hazards, which feed into the risk file (14971) as input. Two independent sources of risk: technical and user-related - both are required.' },
+    { id: 'std-820', rel: 'General',
+      note: 'Both require documenting risk mitigation and evidence that controls work. 14971 provides the risk framework, 820 requires the final result.' },
   ],
   'std-62366': [
-    { id: 'std-14971', rel: 'Дополнение',
-      note: '62366 находит usability hazards, 14971 принимает их как input и оценивает риск. Однонаправленная связь: 62366 поставляет данные, 14971 управляет ими.' },
-    { id: 'std-820', rel: 'Дополнение',
-      note: '820.30(g) требует design validation - 62366 описывает как именно проводить usability validation для медустройств с UI.' },
+    { id: 'std-14971', rel: 'Complement',
+      note: '62366 finds usability hazards, 14971 accepts them as input and assesses the risk. A one-directional relationship: 62366 supplies the data, 14971 manages it.' },
+    { id: 'std-820', rel: 'Complement',
+      note: '820.30(g) requires design validation - 62366 describes how to conduct usability validation specifically for medical devices with a UI.' },
   ],
   'std-13485': [
-    { id: 'std-820', rel: 'Общее',
-      note: 'Структурно практически идентичны после 2024. Единственное практическое отличие: 13485 международный, 820 только для США. При глобальном выходе нужны оба.' },
-    { id: 'std-62304', rel: 'Дополнение',
-      note: '13485 описывает QMS в целом, 62304 детализирует требования к software lifecycle внутри этой системы.' },
+    { id: 'std-820', rel: 'General',
+      note: 'Structurally nearly identical after 2024. The only practical difference: 13485 is international, 820 is US-only. For global market entry, both are needed.' },
+    { id: 'std-62304', rel: 'Complement',
+      note: '13485 describes the QMS as a whole, 62304 details the software lifecycle requirements within that system.' },
   ],
   'std-samd': [
-    { id: 'std-aiml', rel: 'Дополнение',
-      note: 'SaMD guidance - базовый framework clinical evaluation для любого SaMD. AI/ML Action Plan - надстройка с требованиями специфичными именно для AI модели. Читать оба вместе.' },
-    { id: 'std-14971', rel: 'Дополнение',
-      note: 'Clinical performance data из SaMD guidance используется как evidence в risk file. Недостаточная производительность модели = risk, должен быть задокументирован и mitigated.' },
+    { id: 'std-aiml', rel: 'Complement',
+      note: 'SaMD guidance is the base clinical evaluation framework for any SaMD. The AI/ML Action Plan is an extension with requirements specific to AI models. Both must be read together.' },
+    { id: 'std-14971', rel: 'Complement',
+      note: 'Clinical performance data from SaMD guidance is used as evidence in the risk file. Insufficient model performance = risk, which must be documented and mitigated.' },
   ],
   'std-aiml': [
-    { id: 'std-samd', rel: 'Дополнение',
-      note: 'SaMD guidance - основа, AI/ML Action Plan - расширение для AI-специфичных требований. Неотделимы при работе с AI medical device.' },
-    { id: 'std-pccp', rel: 'Взаимозависимость',
-      note: 'AI/ML Action Plan вводит концепцию PCCP и объясняет зачем он нужен. PCCP guidance описывает как его составить. Концепция + реализация.' },
-    { id: 'std-62366', rel: 'Дополнение',
-      note: 'AI/ML требует прозрачное взаимодействие врача с AI output. 62366 описывает как проверить это через usability testing - в т.ч. интерпретацию вывода под временным давлением.' },
+    { id: 'std-samd', rel: 'Complement',
+      note: 'SaMD guidance is the foundation, AI/ML Action Plan is the extension for AI-specific requirements. Inseparable when working with an AI medical device.' },
+    { id: 'std-pccp', rel: 'Interdependency',
+      note: 'AI/ML Action Plan introduces the concept of PCCP and explains why it is needed. PCCP guidance describes how to write it. Concept + implementation.' },
+    { id: 'std-62366', rel: 'Complement',
+      note: 'AI/ML requires transparent interaction between the physician and AI output. 62366 describes how to verify this through usability testing - including interpretation of output under time pressure.' },
   ],
   'std-pccp': [
-    { id: 'std-aiml', rel: 'Взаимозависимость',
-      note: 'AI/ML Action Plan вводит требование PCCP, PCCP guidance даёт детальный формат. Неотделимы: без контекста AI/ML непонятно зачем PCCP, без PCCP guidance непонятно как его писать.' },
-    { id: 'std-62304', rel: 'Дополнение',
-      note: 'Каждое изменение из PCCP должно следовать change management процессу 62304. PCCP определяет ЧТО и при каких условиях меняем, 62304 - КАК документируем это изменение.' },
+    { id: 'std-aiml', rel: 'Interdependency',
+      note: 'AI/ML Action Plan introduces the PCCP requirement, PCCP guidance provides the detailed format. Inseparable: without the AI/ML context, the purpose of PCCP is unclear; without PCCP guidance, it is unclear how to write it.' },
+    { id: 'std-62304', rel: 'Complement',
+      note: 'Every change from the PCCP must follow the change management process of 62304. PCCP defines WHAT and under what conditions we change, 62304 defines HOW to document that change.' },
   ],
   'std-cyber': [
-    { id: 'std-62304', rel: 'Дополнение',
-      note: '62304 требует документировать software components (основа для SBOM) и change management (для security patches). Cybersecurity - часть software lifecycle, а не отдельная дисциплина.' },
-    { id: 'std-hipaa', rel: 'Дополнение',
-      note: 'Оба про защиту данных пациента, но с разных сторон: HIPAA - privacy, Cybersecurity - security системы. Нарушение security (взлом, утечка) автоматически становится HIPAA violation.' },
+    { id: 'std-62304', rel: 'Complement',
+      note: '62304 requires documenting software components (the basis for SBOM) and change management (for security patches). Cybersecurity is part of the software lifecycle, not a separate discipline.' },
+    { id: 'std-hipaa', rel: 'Complement',
+      note: 'Both address patient data protection, but from different angles: HIPAA - privacy, Cybersecurity - system security. A security breach automatically becomes a HIPAA violation.' },
   ],
   'std-hipaa': [
-    { id: 'std-dicom', rel: 'Взаимозависимость',
-      note: 'PHI теги встроены прямо в DICOM файлы. Деидентификация по HIPAA невозможна без точного знания какие именно DICOM теги содержат PHI и как их удалять.' },
-    { id: 'std-cyber', rel: 'Дополнение',
-      note: 'HIPAA защищает PHI со стороны privacy, Cybersecurity - со стороны security. Нарушение Cybersecurity (взлом системы) автоматически становится нарушением HIPAA.' },
+    { id: 'std-dicom', rel: 'Interdependency',
+      note: 'PHI tags are embedded directly in DICOM files. HIPAA de-identification is impossible without precise knowledge of which DICOM tags contain PHI and how to remove them.' },
+    { id: 'std-cyber', rel: 'Complement',
+      note: 'HIPAA protects PHI from the privacy side, Cybersecurity from the security side. A Cybersecurity breach (system hack) automatically becomes a HIPAA violation.' },
   ],
   'std-dicom': [
-    { id: 'std-hipaa', rel: 'Взаимозависимость',
-      note: 'PHI теги встроены в DICOM структуру. Корректная деидентификация по HIPAA требует детального знания DICOM - без этого невозможно гарантировать что все идентификаторы удалены.' },
-    { id: 'std-cyber', rel: 'Дополнение',
-      note: 'DICOM over network (DIMSE protocol) - это attack surface. FDA Cybersecurity требует threat modeling для всех сетевых протоколов, включая DICOM-соединение между аппаратом и PACS.' },
+    { id: 'std-hipaa', rel: 'Interdependency',
+      note: 'PHI tags are embedded in the DICOM structure. Correct HIPAA de-identification requires detailed knowledge of DICOM - without this it is impossible to guarantee that all identifiers have been removed.' },
+    { id: 'std-cyber', rel: 'Complement',
+      note: 'DICOM over network (DIMSE protocol) is an attack surface. FDA Cybersecurity requires threat modeling for all network protocols, including the DICOM connection between equipment and PACS.' },
   ],
 };
 
@@ -643,10 +643,10 @@ function renderTestStrategy() {
 
 // ─── STANDARDS RENDER ──────────────────────────────────────────────────────
 const TYPE_LABELS = {
-  law:        'Закон FDA',
+  law:        'FDA Regulation',
   standard:   'Consensus Standard',
   guidance:   'FDA Guidance',
-  operational:'Операционный',
+  operational:'Operational',
 };
 
 function renderStandardOverview() {
@@ -671,7 +671,7 @@ function renderStandardOverview() {
 
 function renderStandard(id) {
   const d = STANDARDS_DATA[id];
-  if (!d) return `<p class="slide-placeholder">Данные не найдены</p>`;
+  if (!d) return `<p class="slide-placeholder">Data not found</p>`;
 
   const docChip = (docId) => {
     const s = SLIDES.find(sl => sl.id === docId);
@@ -679,9 +679,9 @@ function renderStandard(id) {
   };
 
   const REL_CLASS = {
-    'Общее':            'rel-obshhee',
-    'Дополнение':       'rel-dopolnenie',
-    'Взаимозависимость':'rel-vzaimozavis',
+    'General':          'rel-obshhee',
+    'Complement':       'rel-dopolnenie',
+    'Interdependency':  'rel-vzaimozavis',
   };
 
   const refs = STANDARDS_REFS[id] || [];
@@ -702,7 +702,7 @@ function renderStandard(id) {
     <span class="std-type-badge tc-${d.typeClass}">${d.type}</span>
     <p class="std-what">${d.what}</p>
 
-    <div class="std-section-title">Ключевые требования к QA</div>
+    <div class="std-section-title">Key QA Requirements</div>
     <div class="std-reqs">
       ${d.reqs.map(r => `
         <div class="std-req-item">
@@ -711,14 +711,14 @@ function renderStandard(id) {
         </div>`).join('')}
     </div>
 
-    <div class="std-section-title">Влияет на документы</div>
+    <div class="std-section-title">Related Documents</div>
     <div class="std-chip-row" style="margin-bottom:20px">${d.docs.map(docChip).join('')}</div>
 
-    <div class="std-section-title">Пересечения со стандартами</div>
+    <div class="std-section-title">Standard Cross-References</div>
     <div class="std-refs-list" style="margin-bottom:20px">${refRows}</div>
 
     <div class="std-pitfall-block">
-      <div class="std-section-title">⚠️ Подводные камни</div>
+      <div class="std-section-title">⚠️ Common Pitfalls</div>
       <ul class="std-pitfall-list">
         ${d.pitfalls.map(p => `<li>${p}</li>`).join('')}
       </ul>
