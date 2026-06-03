@@ -846,7 +846,7 @@ function renderTestPlans() {
   const mustHave = [
     {
       title: 'Scope and Objectives',
-      what: 'Our goal here: define what this specific test plan covers - which build, which sprint or release, which test levels are included. A test plan without a defined scope is a liability: it creates ambiguity about what was tested and what was not, which is exactly what an auditor will ask about.',
+      what: 'Our goal here: define what this specific test plan covers - which build, which sprint or release, which test levels are included.',
       nvsight: [
         'Each plan is scoped to a specific build version and sprint - not "NV-Sight in general"',
         'Test level is stated explicitly: System testing of the hint delivery pipeline / UAT facilitation at Sheba / Integration testing of PACS handshake - one plan per level',
