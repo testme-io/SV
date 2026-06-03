@@ -441,6 +441,7 @@ function showSlide(id) {
   else if (id === 'bugreporting')   content = renderBugReporting();
   else if (id === 'metrics')        content = renderMetrics();
   else if (id === 'testplans')      content = renderTestPlans();
+  else if (id === 'testcases')      content = renderTestCases();
   else if (id === 'glossary')       content = renderGlossary();
   else                              content = renderBlankSlide();
 
@@ -917,6 +918,137 @@ function renderTestPlans() {
     <div class="ts-nicehave-block">
       <div class="ts-nicehave-title">Nice-to-Have sections</div>
       <p class="ts-nicehave-note">Valuable for a mature process but not blockers for the initial framework. Added as the project progresses and patterns emerge.</p>
+      <ul class="ts-nice-list">${niceList}</ul>
+    </div>`;
+}
+
+function renderTestCases() {
+  const mustHave = [
+    {
+      title: 'Test Case Structure - Mandatory Fields',
+      what: 'Our goal here: define what every test case must contain so that any tester can execute it without asking questions, any developer can reproduce from it, and any auditor can trace it. A test case missing mandatory fields is not a test case - it is a note. Under IEC 62304 and 21 CFR Part 820, undocumented or untraceable test cases do not count as V&V evidence.',
+      nvsight: [
+        '<strong>TC-ID</strong> - unique identifier following the convention [area]-[sequence]: TC-RND-001 (rendering), TC-PAC-001 (PACS), TC-LAT-001 (latency), TC-SEC-001 (security), TC-SES-001 (session). Used for traceability matrix and Jira linking.',
+        '<strong>Title</strong> - one sentence, observable behavior: "All defined hint types render on the correct frame after a cold PACS connect." Not "test hint rendering."',
+        '<strong>Priority</strong> - P0 / P1 / P2 / P3. Set at authoring time, not after execution. Priority drives regression frequency and release gate conditions.',
+        '<strong>Linked requirement</strong> - SRS or SDS requirement ID this test case covers. If no requirement exists, the test case must not be filed - it signals a gap in the specification.',
+        '<strong>Preconditions</strong> - the exact system state before step 1: environment, build version, DICOM dataset loaded, session state, any configuration flags.',
+        '<strong>Test steps</strong> - numbered, atomic, unambiguous. Each step is one action. No compound steps like "load the study and start the session."',
+        '<strong>Expected result</strong> - defined per step or at the end, tied to the spec. "Hint type: Aneurysm marker appears at coordinates [x,y] on frame 14, within 2 seconds of DICOM delivery" - not "hint appears correctly."',
+        '<strong>Pass / Fail / Blocked</strong> - the outcome field. Blocked requires a note explaining the blocker. No "in progress" at cycle close.',
+        '<strong>Tester and date</strong> - who ran it and when. Required for the execution report.',
+        '<strong>Evidence</strong> - screenshot or recording attached for P0 and P1 cases. Optional for P2/P3 unless the result is ambiguous.',
+      ],
+      label: 'entry',
+    },
+    {
+      title: 'Naming and ID Convention',
+      what: 'Our goal here: establish a consistent identifier system so test cases can be referenced unambiguously across the traceability matrix, Jira, and the V&V report. An ad-hoc naming scheme becomes unmanageable the moment a second person joins the project.',
+      nvsight: [
+        'Format: TC-[AREA]-[NNN] - two to four letter area code, three-digit sequence number with leading zeros',
+        'Area codes: RND (rendering), PAC (PACS integration), LAT (latency/performance), SES (session management), SEC (security/data privacy), UI (display and overlays), NEG (negative and boundary)',
+        'Sequences are never reused: a retired test case gets a "DEPRECATED" status tag, not a new case in its slot',
+        'Jira test case tickets use the TC-ID in the ticket title and as a label for filter queries',
+        'Example IDs: TC-RND-001 through TC-RND-0XX for the full rendering suite, TC-PAC-001 for basic PACS connect, TC-NEG-001 for malformed DICOM tag handling',
+      ],
+    },
+    {
+      title: 'Preconditions',
+      what: 'Our goal here: make sure the test starts from a known state every time. A precondition that is ambiguous or assumed by the author but not written down is a source of inconsistent results - especially critical when the same test case is run by different people or across different build versions.',
+      nvsight: [
+        'Environment: QA env with Siemens angiography simulator running at version [X], PACS test instance at version [Y], NV-Sight build [Z] installed and smoke-tested',
+        'Dataset: DICOM series [Series UID] loaded to PACS test instance, confirmed to contain hint types: [list]. Dataset version noted in the test case header.',
+        'Session state: system is at the login screen / case is open / no active session - stated explicitly, not assumed',
+        'No carry-over state: if the previous test case could leave residual state (open session, cached data, error flag), a reset step is listed in preconditions',
+        'For latency test cases: network conditions noted (local LAN, simulated 10ms delay), no background processes on the client machine that would distort timing',
+      ],
+    },
+    {
+      title: 'Test Steps and Expected Results',
+      what: 'Our goal here: write steps that are reproducible by anyone on the team, without prior context. The expected result must reference the specification - not the tester\'s memory of how the system worked last sprint. For a medical device, "looks correct" is not an expected result.',
+      nvsight: [
+        'Each step is one action: "Click [Load Study]" - not "Load the study and wait for hints to appear"',
+        'Steps that involve timing include a measurement instruction: "Start the timer when the first DICOM frame is delivered. Stop when the hint overlay is visible on the frame."',
+        'Expected results reference the SRS: "Hint overlay for Aneurysm marker appears within 2 seconds of DICOM delivery, at the position defined in SRS-RND-015." Not "hint appears quickly."',
+        'For negative test cases, the expected result is the error: "System displays an alert: \'PACS connection lost. Please reconnect.\' No hints are lost from the current frame." Silence is not an acceptable result for failure conditions.',
+        'Multi-step cases where the pass/fail point is at the end still have observable checkpoints in earlier steps - a tester should never be 10 steps in before knowing if something went wrong',
+      ],
+    },
+    {
+      title: 'Priority Classification and Regression Frequency',
+      what: 'Our goal here: make explicit how priority drives not just the release gate but the frequency of execution. P0 test cases run on every build. P1 runs every sprint. P2 and P3 run on a defined schedule. This is how risk-based testing is operationalised - not as a policy statement, but as a concrete execution cadence.',
+      nvsight: [
+        'P0 test cases: hint pipeline completeness, silent failure detection, PACS connect/disconnect, system crash recovery - run on every build handed to QA. Any P0 failure blocks the build.',
+        'P1 test cases: latency measurement suite, all defined hint types under normal conditions, DICOM ingestion for the standard Sheba dataset - run every sprint cycle.',
+        'P2 test cases: edge case DICOM formats, rare rendering scenarios, non-standard Siemens config - run at the start of each major release cycle and when the affected component changes.',
+        'P3 test cases: UI layout checks, log completeness, non-critical display elements - run before a full release, skipped for hotfixes.',
+        'Regression scope for hotfix: full P0 suite + targeted execution of cases covering the changed component. Scope is documented in the test plan for that hotfix.',
+      ],
+    },
+    {
+      title: 'Test Data Requirements',
+      what: 'Our goal here: define what DICOM data each test case needs and ensure that data is available, versioned, and compliant. NV-Sight test cases are unusable without a properly prepared DICOM dataset - this is not a dependency that can be deferred.',
+      nvsight: [
+        'Each test case that requires DICOM data references the dataset by version and series UID - not "use any case from Sheba"',
+        'Dataset must cover all defined hint types: if a hint type is not present in the dataset, the test case for that hint type cannot be executed - this is a P0 blocker for test planning',
+        'All DICOM data used in testing is de-identified per the de-identification protocol (HIPAA). No real patient data in QA or UAT environments.',
+        'Dataset version is logged alongside the test execution result. A result tied to dataset v1 is not automatically valid when dataset v2 is introduced.',
+        'Negative test cases that use malformed or edge-case DICOM (missing tags, unsupported modality, empty series) maintain a separate "negative data" set, also versioned and documented.',
+      ],
+    },
+    {
+      title: 'Traceability',
+      what: 'Our goal here: make it possible to answer three auditor questions at any point in the project: which requirement does this test case cover, which test case covers this requirement, and what was the result of the last execution. Without bidirectional traceability, the V&V report cannot be signed and the DHF is incomplete.',
+      nvsight: [
+        'Every test case has exactly one "Linked Requirement" field populated. A test case without a requirement link is not filed until the gap is resolved - either the requirement is added to the SRS or the test case is rejected.',
+        'Every SRS requirement that has a QA coverage obligation appears in the traceability matrix with at least one linked test case. Requirements with no linked test case are flagged as coverage gaps.',
+        'Jira test case tickets are linked to the requirement ticket in Jira. The traceability matrix is generated from this linkage, not maintained as a separate spreadsheet.',
+        'When a defect is found, it is linked in Jira to the test case that discovered it. When the defect is fixed and verified, the test case result is updated.',
+        'The traceability matrix is updated at the end of each sprint cycle, not at the end of the project. An outdated matrix is a DHF finding.',
+      ],
+    },
+  ];
+
+  const niceToHave = [
+    'Automation Candidate Tagging - a label on each test case marking it as a candidate for automation, with an estimated automation effort score',
+    'Exploratory Session Charters - structured exploratory testing sessions that complement scripted test cases, with session notes filed as test artifacts',
+    'Parametrized Test Case Variants - a single TC-ID with a data table of DICOM variants, covering multiple hint types or series formats without duplicating the full step sequence',
+    'Test Case Review and Approval Workflow - a formal review gate before a test case is marked "active," with a second QA reviewer or engineering sign-off for P0 cases',
+    'Defect-Triggered Test Case Creation Log - a record of test cases added as a direct result of a bug found in testing, showing coverage improvement over time',
+  ];
+
+  const sections = mustHave.map(s => {
+    const isEntry = s.label === 'entry';
+    return `
+    <div class="ts-section">
+      <div class="ts-section-header">
+        <div class="ts-section-title">${s.title}</div>
+      </div>
+      <div class="ts-section-what">${s.what}</div>
+      <div class="ts-nvsight-block${isEntry ? ' ts-entry-block' : ''}">
+        <div class="ts-nvsight-label">${isEntry ? 'Required fields' : 'Our preliminary example'}</div>
+        <ul class="ts-nvsight-list">
+          ${s.nvsight.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`;
+  }).join('');
+
+  const niceList = niceToHave.map(n => `<li class="ts-nice-item">${n}</li>`).join('');
+
+  return `
+    <p class="ts-intro">A test case is the atomic unit of QA work - the smallest thing that can be executed, recorded, and traced. For NV-Sight, test cases are not internal checklists: they are regulatory artifacts that go into the V&V report and the DHF. A test case that cannot be traced to a requirement, or whose expected result cannot be verified without asking the author, is not fit for purpose in this context.</p>
+
+    <div class="ts-label-row">
+      <span class="ts-must-label">Must-Have</span>
+      <span class="ts-label-sub">sections with preliminary NV-Sight content</span>
+    </div>
+
+    <div class="ts-sections">${sections}</div>
+
+    <div class="ts-nicehave-block">
+      <div class="ts-nicehave-title">Nice-to-Have sections</div>
+      <p class="ts-nicehave-note">These practices strengthen the test case suite over time but are not required to start executing and reporting.</p>
       <ul class="ts-nice-list">${niceList}</ul>
     </div>`;
 }
