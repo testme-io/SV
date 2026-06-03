@@ -832,7 +832,7 @@ function renderMetrics() {
 
   return `
     <p class="ts-intro"><strong>Preliminary set - the specific metrics, thresholds, and reporting cadence will be reviewed and expanded during project onboarding based on the actual tooling, team structure, and release cadence.</strong></p>
-    <p class="ts-intro">The metrics below must track three things: whether full coverage of the planned test scope is achieved, whether defects are found and resolved fast enough, and whether the environment is stable enough to trust the results.</p>
+    <p class="ts-intro">The metrics below must track three things: full coverage of the planned test scope, defect resolution velocity, and environment stability - each of these must be demonstrable with a number at any release decision point.</p>
 
     <div class="br-section-title">Metrics by Category</div>
     <div class="mq-groups">${metricBlocks}</div>
