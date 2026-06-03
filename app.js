@@ -555,11 +555,12 @@ function renderTestStrategy() {
       title: 'Risk-Based Test Prioritization',
       what: 'IEC 62304 and ISO 14971 both require a risk-based approach to testing: effort is distributed proportionally to the consequence of failure, not spread equally across all features. To implement this, we use a P0-P3 priority scale. This is the single classification system that runs through everything - it determines the priority of test cases we write, the severity of bugs we log in Jira, how often each area is tested, and what blocks a release. The higher the risk, the deeper the coverage and the stricter the release gate.',
       nvsight: [
-        'P0 - release blocker, no exceptions. If a P0 issue is open, the release does not go out. <span class="ts-nv-label">For NV-Sight:</span> hints do not reach the screen, pipeline fails silently, system crashes mid-procedure - physician loses the tool during an active intervention.',
-        'P1 - must be fixed before release, but does not stop work while the fix is in progress. <span class="ts-nv-label">For NV-Sight:</span> hints arrive but with latency above the clinical threshold, PACS connection drops during a session.',
-        'P2 - real problem, not clinically critical. Documented and fixed in planned order. <span class="ts-nv-label">For NV-Sight:</span> hints overlap in a rare rendering scenario, an unusual Siemens DICOM format renders slightly off.',
-        'P3 - system works correctly, but something could be better. Logged and fixed when there is capacity. <span class="ts-nv-label">For NV-Sight:</span> incomplete logs, minor UI layout issues, non-critical display elements.',
-        'This same P0-P3 scale applies consistently to test cases, Jira bug reports, regression run frequency, and release sign-off criteria - one language across QA, engineering, and product.',
+        'P0 (pipeline crash, silent failure, complete hint rendering loss during procedure) - immediate escalation, release is blocked, no exceptions',
+        'P1 (hint rendering incorrect or incomplete: wrong overlay, missing hint type, hint on wrong frame; latency above clinical threshold) - must be resolved before release',
+        'P2 (edge case rendering issues, rare DICOM format problems, non-blocking functional gaps) - risk-accepted with documented rationale, fixed in planned order',
+        'P3 (UI polish, logging gaps, non-critical display issues) - logged in Jira, fixed when there is capacity',
+        'All defects in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference where applicable',
+        'Clinical accuracy of AI output is not a QA defect category - tracked separately by the clinical team at Sheba',
       ],
     },
     {
@@ -576,12 +577,11 @@ function renderTestStrategy() {
       title: 'Defect Management',
       what: 'Our goal here: define how bugs are classified, who escalates what, and what the resolution standard looks like at each level. We use the same P0-P3 scale as test prioritization - one language across test cases, bug reports, and release decisions. No separate severity vs priority split at this stage.',
       nvsight: [
-        'P0 (pipeline crash, silent failure, complete hint rendering loss during procedure) - immediate escalation, release is blocked, no exceptions',
-        'P1 (hint rendering incorrect or incomplete: wrong overlay, missing hint type, hint on wrong frame; latency above clinical threshold) - must be resolved before release',
-        'P2 (edge case rendering issues, rare DICOM format problems, non-blocking functional gaps) - risk-accepted with documented rationale, fixed in planned order',
-        'P3 (UI polish, logging gaps, non-critical display issues) - logged in Jira, fixed when there is capacity',
-        'All defects in Jira with mandatory fields: steps to reproduce, affected build, DICOM sequence or frame reference where applicable',
-        'Clinical accuracy of AI output is not a QA defect category - tracked separately by the clinical team at Sheba',
+        'P0 - release blocker, no exceptions. If a P0 issue is open, the release does not go out. <span class="ts-nv-label">For NV-Sight:</span> hints do not reach the screen, pipeline fails silently, system crashes mid-procedure - physician loses the tool during an active intervention.',
+        'P1 - must be fixed before release, but does not stop work while the fix is in progress. <span class="ts-nv-label">For NV-Sight:</span> hints arrive but with latency above the clinical threshold, PACS connection drops during a session.',
+        'P2 - real problem, not clinically critical. Documented and fixed in planned order. <span class="ts-nv-label">For NV-Sight:</span> hints overlap in a rare rendering scenario, an unusual Siemens DICOM format renders slightly off.',
+        'P3 - system works correctly, but something could be better. Logged and fixed when there is capacity. <span class="ts-nv-label">For NV-Sight:</span> incomplete logs, minor UI layout issues, non-critical display elements.',
+        'This same P0-P3 scale applies consistently to test cases, Jira bug reports, regression run frequency, and release sign-off criteria - one language across QA, engineering, and product.',
       ],
     },
     {
@@ -832,6 +832,7 @@ function renderTestMatrix() {
 
   return `
     <p class="ts-intro">Maps test coverage across features and test levels. Shows what is tested, at which level, and at what priority - and makes explicit what falls outside QA scope.</p>
+    <p class="ts-intro"><strong>Preliminary matrix - compiled on the basis of CTO conversations, the company presentation, and a short domain investigation. The actual matrix will be built after a full project onboarding.</strong></p>
     <div class="tm-legend">${legendHtml}</div>
     <div class="tm-table-wrap">
       <table class="tm-table">
