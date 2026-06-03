@@ -525,16 +525,34 @@ function renderOverview() {
 function renderBugReporting() {
   const fields = [
     {
-      label: 'Title',
-      hint: '[Component] Short description of the observed behavior',
-      ex: '[Rendering] Aneurysm hint missing on frame 14 of series after PACS reconnect',
-      note: 'Describe what the system does, not what you expected. Component tag keeps Jira filterable.',
+      label: 'Summary',
+      hint: '[WBS] What - Where - When: one sentence that makes the problem clear without opening the ticket',
+      ex: '[Rendering] Aneurysm hint missing on frame 14 (Where) after PACS reconnect mid-session (When)',
+      note: 'What = what is broken or absent. Where = which component, frame, or screen. When = under what condition or trigger. A summary that answers all three makes triage faster and the Jira backlog readable at a glance. WBS tag keeps the board filterable by work area.',
+    },
+    {
+      label: 'Description',
+      hint: 'Full detail of the defect: actual result, expected result, screenshots or video if needed, possible root cause',
+      ex: 'Actual: hint overlay clears on PACS reconnect - frame 14 shows no hint. Expected: hints persist through reconnect per SRS-RND-042. Attachments: screen-rec-20240918.mp4. Possible cause: session state not preserved across PACS disconnect/reconnect cycle.',
+      note: 'Actual and expected results are mandatory in every description. Screenshots are optional for P2/P3; for P0 and P1 a screen recording of the full reproduction sequence is expected. Root cause is a hypothesis - mark it as such. It gives the developer a starting point without locking in the diagnosis.',
     },
     {
       label: 'Priority',
       hint: 'P0 / P1 / P2 / P3 - required at filing time, not "to be determined"',
       ex: 'P1',
       note: 'Same scale as test case priority and release gates. If unsure between P0 and P1, pick P0 and discuss - not the other way around.',
+    },
+    {
+      label: 'Labels',
+      hint: 'Two label groups: (1) severity - Blocker / Critical / Major / Minor / Trivial mapped to P0-P3; (2) context - Smoke / Regression / UAT / build number or other tags per project conventions',
+      ex: 'Critical, Regression, build-2.4.1',
+      note: 'Severity labels (Blocker = P0, Critical = P1, Major = P2, Minor = P3, Trivial = P3 cosmetic) align the ticket with standard Jira workflows. Context labels (Smoke, Regression, UAT, build tag) make the backlog filterable by test type and release. The exact context label set is defined at project onboarding based on how the team organises the board.',
+    },
+    {
+      label: 'Assignee',
+      hint: 'The engineer responsible for investigating and fixing the defect - set at triage, not left unassigned',
+      ex: 'Assigned to: [component owner] at triage. QA lead notified as watcher.',
+      note: 'An unassigned bug is a bug no one owns. Assignee is set during triage for P1-P3, and immediately for P0. QA lead is added as a watcher on all P0 and P1 tickets to receive status updates without being the fix owner.',
     },
     {
       label: 'Build Version',
@@ -544,9 +562,9 @@ function renderBugReporting() {
     },
     {
       label: 'Environment',
-      hint: 'QA / UAT / staging - never production (HIPAA)',
-      ex: 'QA env - dedicated Siemens simulator, PACS test instance v3.1',
-      note: 'Include PACS version and Siemens simulator config if the bug is at the integration layer.',
+      hint: 'Dev / Staging / Prod - depending on project setup. Never assume the environment; state it explicitly.',
+      ex: 'Staging - Siemens angiography simulator, PACS test instance v3.1',
+      note: 'The environment tier structure (dev / staging / prod or QA / UAT / prod) is defined at project onboarding. Include component versions - PACS, simulator config, OS - if the bug is at the integration layer. Never use production environment for bug reproduction (HIPAA).',
     },
     {
       label: 'Steps to Reproduce',
@@ -583,6 +601,14 @@ function renderBugReporting() {
       hint: 'Test case ID from the test plan that covers this scenario',
       ex: 'TC-RND-014',
       note: 'Required for traceability matrix and V&V report. A bug with no linked test case is a gap in coverage that needs to be explained.',
+    },
+    {
+      label: 'Comments',
+      hint: 'Verification status updates posted as Jira comments throughout the ticket lifecycle - not in the description field',
+      ex: `<strong>Verified</strong> [date] - build 2.4.2, Staging, Siemens simulator v4.1. Hint persists after PACS reconnect on frame 14. Screen recording attached. TC-RND-014 passed. → Closing.<br>
+           <strong>Reopened</strong> [date] - build 2.4.3, Staging. Failure reproduced again on frame 22 in a different series. New recording attached. Returning to Triage.<br>
+           <strong>Not Relevant</strong> [date] - Staging env config mismatch (PACS v2 vs. test requirement PACS v3). Not reproducible on correct environment. Closing as env issue.`,
+      note: 'Every verification attempt is a comment, not a silent status change. Include: outcome (Verified / Reopened / Not Relevant), build version, environment tier, devices or simulator version, and attached evidence. This comment history is the audit trail for the fix cycle and goes into the DHF for P0 and P1 tickets.',
     },
   ];
 
