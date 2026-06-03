@@ -1968,6 +1968,7 @@ function renderTestMatrix() {
     <p class="ts-intro">Maps test coverage across features and test levels. Shows what is tested, at which level, and at what priority - and makes explicit what falls outside QA scope.</p>
     <p class="ts-intro"><strong>Preliminary matrix - compiled on the basis of CTO conversations, the company presentation, and a short domain investigation. The actual matrix will be built after a full project onboarding.</strong></p>
     <div class="tm-legend">${legendHtml}</div>
+    <div class="tm-legend-note">Priority badges (P0-P3) follow the Risk-Based Test Prioritization scale defined in the <span class="tm-legend-link" onclick="showSlide('teststrategy')">Test Strategy</span>: P0 = release blocker, P1 = must fix before release, P2 = fix in planned order, P3 = fix when capacity allows.</div>
     <div class="tm-table-wrap">
       <table class="tm-table">
         <thead>
