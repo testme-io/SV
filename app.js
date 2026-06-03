@@ -1120,6 +1120,17 @@ function renderTestCases() {
 }
 
 function renderAutomation() {
+  return `
+    <div class="ov-scope-note" style="margin-bottom:24px">
+      <div class="ov-scope-label">📌 Current scope - agreed with CTO</div>
+      <p class="ov-scope-text">Automation is not being considered in full scope at this stage of the project. The decision was made jointly with the CTO at the initial interview.</p>
+      <p class="ov-scope-text" style="margin-top:10px">The maximum currently on the table: <strong>API tests covering smoke scenarios, or contract testing to run before the smoke suite</strong> - effectively a pre-P0 gate. This catches integration-layer failures before manual testing begins, without committing to a full automation framework.</p>
+      <p class="ov-scope-text" style="margin-top:10px">Full automation coverage - framework, test cases, CI integration, and regulatory traceability - will be addressed in a dedicated documentation phase once the project is in a stable state.</p>
+      <p class="ov-scope-text ov-scope-key" style="margin-top:12px"><strong>Preliminary stack: Python + Playwright. To be confirmed and adjusted after full project onboarding.</strong></p>
+    </div>`;
+}
+
+function renderAutomation_UNUSED() { // kept for reference, not called
   const mustHave = [
     {
       title: 'Automation Scope and Boundaries',
