@@ -349,6 +349,7 @@ const SLIDES = [
   { id: 'usability',        icon: '👁️', title: 'Usability Testing (IEC 62366)',    group: 'Regulatory' },
   { id: 'pccp',             icon: '🔁', title: 'PCCP — Predetermined Change Control Plan', group: 'Regulatory' },
   // Plan & Estimation
+  { id: 'plan30_90_180',   icon: '📅', title: '30 / 90 / 180 Day Plan',             group: 'Plan & Estimation' },
   { id: 'docregistry',     icon: '📋', title: 'Document Registry',                  group: 'Plan & Estimation', wide: true },
   { id: 'fdasubplan',     icon: '🗓️', title: 'FDA Submission Plan & Estimation',   group: 'Plan & Estimation', wide: true, star: true },
   // Reference
@@ -469,6 +470,7 @@ function showSlide(id) {
   else if (id === 'sat')              content = renderSat();
   else if (id === 'usability')        content = renderUsability();
   else if (id === 'pccp')             content = renderPccp();
+  else if (id === 'plan30_90_180')    content = renderPlan30_90_180();
   else if (id === 'docregistry')      content = renderDocRegistry();
   else if (id === 'fdasubplan')       content = renderFdaSubPlan();
   else if (id === 'glossary')         content = renderGlossary();
@@ -2881,6 +2883,102 @@ function renderPlanEstimation() {
 
     <div class="pe-total-note">
       Total setup investment: <strong>~100h</strong> across the first 3 weeks. Ongoing steady-state: <strong>~30-35h per sprint</strong> (2-week sprints), scaling with test case count and release frequency. These numbers assume a single QA lead. If a second QA resource joins, execution and reporting effort distributes accordingly.
+    </div>`;
+}
+
+function renderPlan30_90_180() {
+  return `
+    <p class="ts-intro">Three milestones. Each builds on the previous. By Day 180 the product is validated, documented, and ready for submission.</p>
+
+    <div class="p3-grid">
+
+      <div class="p3-col p3-col-30">
+        <div class="p3-header">
+          <div class="p3-days">30 days</div>
+          <div class="p3-theme">I understand the product</div>
+        </div>
+        <div class="p3-body">
+          <div class="p3-section-label">What I do</div>
+          <ul class="p3-list">
+            <li>Read all technical and product documentation</li>
+            <li>Meet dev team, PM, Sheba coordinator</li>
+            <li>Set up Jira: bug workflow, priority labels, board columns</li>
+            <li>Write first P0 test cases — the most critical paths</li>
+            <li>Run first test cycle on the current build</li>
+            <li>File every defect found, prioritized by severity</li>
+          </ul>
+          <div class="p3-section-label">What the team gets</div>
+          <ul class="p3-list">
+            <li>First quality report — what works, what doesn't, what's critical</li>
+            <li>Structured defect backlog in Jira, ready for sprint planning</li>
+            <li>A QA process that runs from day one</li>
+          </ul>
+          <div class="p3-outcome">
+            <span class="p3-outcome-icon">✓</span>
+            First bugs caught. Team knows what's blocking release.
+          </div>
+        </div>
+      </div>
+
+      <div class="p3-col p3-col-90">
+        <div class="p3-header">
+          <div class="p3-days">90 days</div>
+          <div class="p3-theme">QA is running at full speed</div>
+        </div>
+        <div class="p3-body">
+          <div class="p3-section-label">What I do</div>
+          <ul class="p3-list">
+            <li>Full P0 + P1 test coverage across all product areas</li>
+            <li>Every sprint has a test cycle — defects tracked end to end</li>
+            <li>Regression suite: run after every significant build</li>
+            <li>Traceability: every requirement has a test, every test has a result</li>
+            <li>First regulatory documents drafted — V&V Report template, Risk File evidence</li>
+            <li>SAT plan agreed with Sheba site coordinator</li>
+          </ul>
+          <div class="p3-section-label">What the team gets</div>
+          <ul class="p3-list">
+            <li>Sprint quality reports — visibility into product health every 2 weeks</li>
+            <li>Release readiness criteria: clear go/no-go for every release</li>
+            <li>No surprises at release — issues caught early in the sprint</li>
+          </ul>
+          <div class="p3-outcome">
+            <span class="p3-outcome-icon">✓</span>
+            Predictable releases. Quality is measurable, not a feeling.
+          </div>
+        </div>
+      </div>
+
+      <div class="p3-col p3-col-180">
+        <div class="p3-header">
+          <div class="p3-days">180 days</div>
+          <div class="p3-theme">Ready for submission</div>
+        </div>
+        <div class="p3-body">
+          <div class="p3-section-label">What I do</div>
+          <ul class="p3-list">
+            <li>Complete V&V Report — all requirements tested, results documented, signed</li>
+            <li>SAT executed at Sheba — real hardware, real physicians, signed off</li>
+            <li>Risk File closed — every risk has a test that proves mitigation works</li>
+            <li>Design History File complete — full record of how the product was built and validated</li>
+            <li>Usability testing with physicians documented</li>
+          </ul>
+          <div class="p3-section-label">What the team gets</div>
+          <ul class="p3-list">
+            <li>A complete, audit-ready documentation package</li>
+            <li>FDA submission supported by evidence, not assumptions</li>
+            <li>A QA process that continues post-submission for ongoing updates</li>
+          </ul>
+          <div class="p3-outcome">
+            <span class="p3-outcome-icon">✓</span>
+            Submission-ready. Every claim backed by a test result.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="p3-note">
+      Timeline assumes: SRS is structured, Risk File exists, compliance consultant is engaged, and Sheba testing windows are available. These factors determine whether 180 days is the floor or the target.
     </div>`;
 }
 
