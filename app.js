@@ -477,7 +477,9 @@ function showSlide(id) {
   else if (id === 'refdocs')          content = renderRefDocs();
   else                              content = renderBlankSlide();
 
-  document.getElementById('main').innerHTML = `
+  const mainEl = document.getElementById('main');
+  mainEl.scrollTop = 0;
+  mainEl.innerHTML = `
     <div class="slide-progress">
       <div class="slide-progress-fill" style="width:${pct}%"></div>
     </div>
@@ -2916,12 +2918,12 @@ function renderPlan30_90_180() {
           <div class="p3-docs">
             <div class="p3-docs-label">Documents produced</div>
             <div class="p3-docs-list">
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('bugreporting');return false;"><span class="p3-doc-cat p3-doc-cat-f">F</span>Bug Reporting Standards</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('defectworkflow');return false;"><span class="p3-doc-cat p3-doc-cat-o">O</span>Defect Tracking Workflow</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('dhf');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>DHF structure</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('metrics');return false;"><span class="p3-doc-cat p3-doc-cat-f">F</span>Quality Gates v1</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('testcases');return false;"><span class="p3-doc-cat p3-doc-cat-o">O</span>Test Cases - P0 suite</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('qualityreport');return false;"><span class="p3-doc-cat p3-doc-cat-o">O</span>Quality Report #1</a>
+              <a class="p3-doc p3-doc-link" href="#bugreporting"><span class="p3-doc-cat p3-doc-cat-f">F</span>Bug Reporting Standards</a>
+              <a class="p3-doc p3-doc-link" href="#defectworkflow"><span class="p3-doc-cat p3-doc-cat-o">O</span>Defect Tracking Workflow</a>
+              <a class="p3-doc p3-doc-link" href="#dhf"><span class="p3-doc-cat p3-doc-cat-r">R</span>DHF structure</a>
+              <a class="p3-doc p3-doc-link" href="#metrics"><span class="p3-doc-cat p3-doc-cat-f">F</span>Quality Gates v1</a>
+              <a class="p3-doc p3-doc-link" href="#testcases"><span class="p3-doc-cat p3-doc-cat-o">O</span>Test Cases - P0 suite</a>
+              <a class="p3-doc p3-doc-link" href="#qualityreport"><span class="p3-doc-cat p3-doc-cat-o">O</span>Quality Report #1</a>
             </div>
           </div>
           <div class="p3-outcome">
@@ -2955,13 +2957,13 @@ function renderPlan30_90_180() {
           <div class="p3-docs">
             <div class="p3-docs-label">Documents produced</div>
             <div class="p3-docs-list">
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('teststrategy');return false;"><span class="p3-doc-cat p3-doc-cat-f">F</span>Test Strategy</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('testmatrix');return false;"><span class="p3-doc-cat p3-doc-cat-f">F</span>Test Matrix</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('testcases');return false;"><span class="p3-doc-cat p3-doc-cat-o">O</span>Test Cases - P1 suite</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('traceability');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>Traceability Matrix v1</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('releasereadiness');return false;"><span class="p3-doc-cat p3-doc-cat-o">O</span>Release Readiness Criteria</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('qualityreport');return false;"><span class="p3-doc-cat p3-doc-cat-o">O</span>Quality Reports - ongoing</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('vnvreport');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>V&amp;V Report template</a>
+              <a class="p3-doc p3-doc-link" href="#teststrategy"><span class="p3-doc-cat p3-doc-cat-f">F</span>Test Strategy</a>
+              <a class="p3-doc p3-doc-link" href="#testmatrix"><span class="p3-doc-cat p3-doc-cat-f">F</span>Test Matrix</a>
+              <a class="p3-doc p3-doc-link" href="#testcases"><span class="p3-doc-cat p3-doc-cat-o">O</span>Test Cases - P1 suite</a>
+              <a class="p3-doc p3-doc-link" href="#traceability"><span class="p3-doc-cat p3-doc-cat-r">R</span>Traceability Matrix v1</a>
+              <a class="p3-doc p3-doc-link" href="#releasereadiness"><span class="p3-doc-cat p3-doc-cat-o">O</span>Release Readiness Criteria</a>
+              <a class="p3-doc p3-doc-link" href="#qualityreport"><span class="p3-doc-cat p3-doc-cat-o">O</span>Quality Reports - ongoing</a>
+              <a class="p3-doc p3-doc-link" href="#vnvreport"><span class="p3-doc-cat p3-doc-cat-r">R</span>V&amp;V Report template</a>
             </div>
           </div>
           <div class="p3-outcome">
@@ -2994,12 +2996,12 @@ function renderPlan30_90_180() {
           <div class="p3-docs">
             <div class="p3-docs-label">Documents produced</div>
             <div class="p3-docs-list">
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('vnvreport');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>V&amp;V Report - final, signed</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('sat');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>SAT Report - signed by Sheba</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('usability');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>Usability Testing Report</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('riskcontrib');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>Risk File - QA evidence complete</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('traceability');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>Traceability Matrix - final</a>
-              <a class="p3-doc p3-doc-link" href="#" onclick="showSlide('dhf');return false;"><span class="p3-doc-cat p3-doc-cat-r">R</span>DHF - complete</a>
+              <a class="p3-doc p3-doc-link" href="#vnvreport"><span class="p3-doc-cat p3-doc-cat-r">R</span>V&amp;V Report - final, signed</a>
+              <a class="p3-doc p3-doc-link" href="#sat"><span class="p3-doc-cat p3-doc-cat-r">R</span>SAT Report - signed by Sheba</a>
+              <a class="p3-doc p3-doc-link" href="#usability"><span class="p3-doc-cat p3-doc-cat-r">R</span>Usability Testing Report</a>
+              <a class="p3-doc p3-doc-link" href="#riskcontrib"><span class="p3-doc-cat p3-doc-cat-r">R</span>Risk File - QA evidence complete</a>
+              <a class="p3-doc p3-doc-link" href="#traceability"><span class="p3-doc-cat p3-doc-cat-r">R</span>Traceability Matrix - final</a>
+              <a class="p3-doc p3-doc-link" href="#dhf"><span class="p3-doc-cat p3-doc-cat-r">R</span>DHF - complete</a>
             </div>
           </div>
           <div class="p3-outcome">
@@ -3849,6 +3851,14 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     if (idx > 0) showSlide(SLIDES[idx - 1].id);
   }
+});
+
+// ─── HASH NAVIGATION ───────────────────────────────────────────────────────
+window.addEventListener('hashchange', () => {
+  if (!checkAuth()) return;
+  const id = location.hash.slice(1);
+  const valid = SLIDES.find(s => s.id === id);
+  if (valid) showSlide(id);
 });
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
