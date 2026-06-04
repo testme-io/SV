@@ -2913,6 +2913,17 @@ function renderPlan30_90_180() {
             <li>Structured defect backlog in Jira, ready for sprint planning</li>
             <li>A QA process that runs from day one</li>
           </ul>
+          <div class="p3-docs">
+            <div class="p3-docs-label">Documents produced</div>
+            <div class="p3-docs-list">
+              <span class="p3-doc">Bug Reporting Standards</span>
+              <span class="p3-doc">Defect Tracking Workflow</span>
+              <span class="p3-doc">DHF structure</span>
+              <span class="p3-doc">Quality Gates v1</span>
+              <span class="p3-doc">Test Cases — P0 suite</span>
+              <span class="p3-doc">Quality Report #1</span>
+            </div>
+          </div>
           <div class="p3-outcome">
             <span class="p3-outcome-icon">✓</span>
             First bugs caught. Team knows what's blocking release.
@@ -2941,6 +2952,18 @@ function renderPlan30_90_180() {
             <li>Release readiness criteria: clear go/no-go for every release</li>
             <li>No surprises at release — issues caught early in the sprint</li>
           </ul>
+          <div class="p3-docs">
+            <div class="p3-docs-label">Documents produced</div>
+            <div class="p3-docs-list">
+              <span class="p3-doc">Test Strategy</span>
+              <span class="p3-doc">Test Matrix</span>
+              <span class="p3-doc">Test Cases — P1 suite</span>
+              <span class="p3-doc">Traceability Matrix v1</span>
+              <span class="p3-doc">Release Readiness Criteria</span>
+              <span class="p3-doc">Quality Reports — ongoing</span>
+              <span class="p3-doc">V&amp;V Report template</span>
+            </div>
+          </div>
           <div class="p3-outcome">
             <span class="p3-outcome-icon">✓</span>
             Predictable releases. Quality is measurable, not a feeling.
@@ -2968,6 +2991,17 @@ function renderPlan30_90_180() {
             <li>FDA submission supported by evidence, not assumptions</li>
             <li>A QA process that continues post-submission for ongoing updates</li>
           </ul>
+          <div class="p3-docs">
+            <div class="p3-docs-label">Documents produced</div>
+            <div class="p3-docs-list">
+              <span class="p3-doc">V&amp;V Report — final, signed</span>
+              <span class="p3-doc">SAT Report — signed by Sheba</span>
+              <span class="p3-doc">Usability Testing Report</span>
+              <span class="p3-doc">Risk File — QA evidence complete</span>
+              <span class="p3-doc">Traceability Matrix — final</span>
+              <span class="p3-doc">DHF — complete</span>
+            </div>
+          </div>
           <div class="p3-outcome">
             <span class="p3-outcome-icon">✓</span>
             Submission-ready. Every claim backed by a test result.
