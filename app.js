@@ -2903,13 +2903,13 @@ function renderPlan30_90_180() {
             <li>Read all technical and product documentation</li>
             <li>Meet dev team, PM, Sheba coordinator</li>
             <li>Set up Jira: bug workflow, priority labels, board columns</li>
-            <li>Write first P0 test cases — the most critical paths</li>
+            <li>Write first P0 test cases - the most critical paths</li>
             <li>Run first test cycle on the current build</li>
             <li>File every defect found, prioritized by severity</li>
           </ul>
           <div class="p3-section-label">What the team gets</div>
           <ul class="p3-list">
-            <li>First quality report — what works, what doesn't, what's critical</li>
+            <li>First quality report - what works, what doesn't, what's critical</li>
             <li>Structured defect backlog in Jira, ready for sprint planning</li>
             <li>A QA process that runs from day one</li>
           </ul>
@@ -2920,7 +2920,7 @@ function renderPlan30_90_180() {
               <span class="p3-doc">Defect Tracking Workflow</span>
               <span class="p3-doc">DHF structure</span>
               <span class="p3-doc">Quality Gates v1</span>
-              <span class="p3-doc">Test Cases — P0 suite</span>
+              <span class="p3-doc">Test Cases - P0 suite</span>
               <span class="p3-doc">Quality Report #1</span>
             </div>
           </div>
@@ -2940,27 +2940,27 @@ function renderPlan30_90_180() {
           <div class="p3-section-label">What I do</div>
           <ul class="p3-list">
             <li>Full P0 + P1 test coverage across all product areas</li>
-            <li>Every sprint has a test cycle — defects tracked end to end</li>
+            <li>Every sprint has a test cycle - defects tracked end to end</li>
             <li>Regression suite: run after every significant build</li>
             <li>Traceability: every requirement has a test, every test has a result</li>
-            <li>First regulatory documents drafted — V&V Report template, Risk File evidence</li>
+            <li>First regulatory documents drafted - V&V Report template, Risk File evidence</li>
             <li>SAT plan agreed with Sheba site coordinator</li>
           </ul>
           <div class="p3-section-label">What the team gets</div>
           <ul class="p3-list">
-            <li>Sprint quality reports — visibility into product health every 2 weeks</li>
+            <li>Sprint quality reports - visibility into product health every 2 weeks</li>
             <li>Release readiness criteria: clear go/no-go for every release</li>
-            <li>No surprises at release — issues caught early in the sprint</li>
+            <li>No surprises at release - issues caught early in the sprint</li>
           </ul>
           <div class="p3-docs">
             <div class="p3-docs-label">Documents produced</div>
             <div class="p3-docs-list">
               <span class="p3-doc">Test Strategy</span>
               <span class="p3-doc">Test Matrix</span>
-              <span class="p3-doc">Test Cases — P1 suite</span>
+              <span class="p3-doc">Test Cases - P1 suite</span>
               <span class="p3-doc">Traceability Matrix v1</span>
               <span class="p3-doc">Release Readiness Criteria</span>
-              <span class="p3-doc">Quality Reports — ongoing</span>
+              <span class="p3-doc">Quality Reports - ongoing</span>
               <span class="p3-doc">V&amp;V Report template</span>
             </div>
           </div>
@@ -2979,10 +2979,10 @@ function renderPlan30_90_180() {
         <div class="p3-body">
           <div class="p3-section-label">What I do</div>
           <ul class="p3-list">
-            <li>Complete V&V Report — all requirements tested, results documented, signed</li>
-            <li>SAT executed at Sheba — real hardware, real physicians, signed off</li>
-            <li>Risk File closed — every risk has a test that proves mitigation works</li>
-            <li>Design History File complete — full record of how the product was built and validated</li>
+            <li>Complete V&V Report - all requirements tested, results documented, signed</li>
+            <li>SAT executed at Sheba - real hardware, real physicians, signed off</li>
+            <li>Risk File closed - every risk has a test that proves mitigation works</li>
+            <li>Design History File complete - full record of how the product was built and validated</li>
             <li>Usability testing with physicians documented</li>
           </ul>
           <div class="p3-section-label">What the team gets</div>
@@ -2994,12 +2994,12 @@ function renderPlan30_90_180() {
           <div class="p3-docs">
             <div class="p3-docs-label">Documents produced</div>
             <div class="p3-docs-list">
-              <span class="p3-doc">V&amp;V Report — final, signed</span>
-              <span class="p3-doc">SAT Report — signed by Sheba</span>
+              <span class="p3-doc">V&amp;V Report - final, signed</span>
+              <span class="p3-doc">SAT Report - signed by Sheba</span>
               <span class="p3-doc">Usability Testing Report</span>
-              <span class="p3-doc">Risk File — QA evidence complete</span>
-              <span class="p3-doc">Traceability Matrix — final</span>
-              <span class="p3-doc">DHF — complete</span>
+              <span class="p3-doc">Risk File - QA evidence complete</span>
+              <span class="p3-doc">Traceability Matrix - final</span>
+              <span class="p3-doc">DHF - complete</span>
             </div>
           </div>
           <div class="p3-outcome">
